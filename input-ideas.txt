@@ -1,0 +1,43 @@
+Starting point:
+
+<some code>
+
+Programmer's thought: I need a class Customer with attribute name and method get_balance
+
+Result of programmer input (We'll call this "quick input" or something):
+
+<some code>
+'''
+|Customer
+|name
+|get_balance()
+'''
+
+Programmer hits PREXEL button (hopefully....otherwise an equivalent). The result is that
+a Customer class with attribute name and method get_balance is created if it does not
+already exist, and the source is pretty-printed as in the paper (or much nicer).
+
+
+<some code>
+'''
+ _____________
+|__Customer___|
+|    name     |
+|get_balance()|
+ -------------
+'''
+
+PREXEL works with pretty-printed UML as well as quick input.
+Other examples of quick input:
+
+Airplane<>-wing-->Wing
+
+Person
+^
+Employee
+
+If the developer places more than one of these in a single quote section, they are combined into a single class
+figure.
+
+We can also move on to other UML diagrams after this. Maybe.
+
