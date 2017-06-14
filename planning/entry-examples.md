@@ -138,9 +138,9 @@ Easy-entry code:
 Pretty-printed UML:
 
     """
-                          ________
-    Airplane<>---wing--->|  Wing  |
-                          --------
+     __________               ________
+    | Airplane |<>---wing--->|  Wing  |
+     ----------               --------
     """
 
 Source code generated:
@@ -152,8 +152,65 @@ Source code generated:
     class Wing:
         pass
           
+          
+## Example 5 - Association
 
-## Example 5 - Aggregation and Inheritance 
+Easy-entry code:
+
+    """
+        
+    Employer--Employee
+        
+    """
+
+Pretty-printed UML:
+
+    """
+     __________       __________
+    | Employer |-----| Employee |
+     ----------       ----------
+     
+    """
+
+Source code generated:
+
+    class Employer:
+        def __init__(self, employee):
+            self.employee = employee
+        
+    class Employee:
+        def __init__(self, employer):
+            self.employer = employer
+
+## Example 6 - Multiplicity
+
+Easy-entry code:
+
+    """
+        
+    Employer<>1-*>Employee
+        
+    """
+
+Pretty-printed UML:
+
+    """
+     __________ 1     *  __________
+    | Employer |<>----->| Employee |
+     ----------          ----------
+     
+    """
+
+Source code generated:
+
+    class Employer:
+        def __init__(self, employees):
+            self.employees = []
+        
+    class Employee:
+        pass
+
+## Example 7 - Aggregation and Inheritance 
 
 Easy-entry code:
 
@@ -164,7 +221,6 @@ Easy-entry code:
     =XCabinet=
     ^
     AntiqueXCabinet|ModernXCabinet
-    
         
     |AntiqueXCabinet
     |place_antique_x_cabinet()
@@ -177,10 +233,10 @@ Easy-entry code:
 Pretty-printed UML:
 
     """
-                       _________________
-    Kitchen<>-------->|     XCabinet    |
-                      | << interface >> |
-                       -----------------
+     _________             _________________
+    | Kitchen |<>-------->|     XCabinet    |
+     ---------            | << interface >> |
+                           -----------------
      _________________________ ^ ________________________
     |    AntiqueXCabinet      | |    ModernXCabinet      |
     |-------------------------| |------------------------|
@@ -221,3 +277,9 @@ Source code generated:
 ## TODOs
 
 * How should we denote abstract classes and interfaces
+
+## Ideas
+
+* I could see the benefit of also going from pretty-printed to easy-entry. For instance
+if you wanted to make a major update to the pretty-printed UML it might easier to 
+get it back into easy-entry, make your additions, and recreate the pretty-printed UML
