@@ -1,7 +1,7 @@
 # Entry examples
 
 Below are some examples of easy entry for Prexel. Using easy entry, the developer
-can quickly create UML fragments inside of the source file.
+can quickly create UML fragments inside of source file comments. It will also generate source code based on the UML diagrams generated.
 
 ## Example 1 - Basic Class
 
