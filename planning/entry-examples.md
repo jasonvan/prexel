@@ -3,9 +3,7 @@
 Below are some examples of easy entry for Prexel. Using easy entry, the developer
 can quickly create UML fragments inside of the source file.
 
-## Examples
-
-### Example 1 - Basic Class
+## Example 1 - Basic Class
 
 Easy-entry code:
 
@@ -27,7 +25,7 @@ Pretty-printed UML generated:
     |arrange_kitchen()    |
     |place_floor_cabinet()|
     |place_wall_cabinet() |
-    |_____________________|
+     --------------------- 
         
     
     """
@@ -45,7 +43,7 @@ Source code generated:
             pass
 
 
-### Example 2 - Multiple Classes with inheritence
+## Example 2 - Multiple Classes with Inheritance
 
 Easy-entry code:
 
@@ -94,7 +92,7 @@ Source code generated:
             self.job_title = job_title
             
 
-### Example 3 - Dependence
+## Example 3 - Dependence
 
 Easy-entry code:
 
@@ -127,7 +125,7 @@ Source code generated:
     class XCabinet:
         pass
 
-### Example 3 - Aggregation
+## Example 4 - Aggregation
 
 Easy-entry code:
 
@@ -155,7 +153,7 @@ Source code generated:
         pass
           
 
-### Example 4 - Aggregation and Inheritence 
+## Example 5 - Aggregation and Inheritance 
 
 Easy-entry code:
 
@@ -178,6 +176,7 @@ Easy-entry code:
 
 Pretty-printed UML:
 
+    """
                        _________________
     Kitchen<>-------->|     XCabinet    |
                       | << interface >> |
@@ -193,7 +192,12 @@ Pretty-printed UML:
 Source code generated:
 
     
+    import abc.ABCMeta
+        
     class Kitchen:
+        def __init__(self, xcabinet):
+            self.xcabinet = xcabinet
+            
         def arrange_kitchen(self):
             pass
             
@@ -201,6 +205,17 @@ Source code generated:
             pass
             
         def place_wall_cabinet(self):
+            pass
+            
+    class XCabinet(metaclass=ABCMeta):
+        pass
+        
+    class AntiqueXCabinet(XCabinet):
+        def place_antique_x_cabinet():
+            pass
+        
+    class ModernXCabinet(XCabinet):
+        def place_modern_x_cabinet():
             pass
 
 ## TODOs
