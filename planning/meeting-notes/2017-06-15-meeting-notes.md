@@ -14,7 +14,7 @@ E: **What is tbd is how much--if at all--we expect to combine parts within the c
 
 Also, I've reviewed both the Java tutorial and the GoF book and I don't know if either will be a good place to draw some common code samples from. The Java tutorials OO section is too brief and all the original code in the GoF book is in C++ and Smalltalk.  Any reason why we can't develop our own classes for the experiment? 
 
-E: ** Perhaps to begin with. But the paper would be much better if it dealt with a published design, preferably something that has already been referred to. It dramatically increases chances for acceptance. If we were to find one, we could start with it, otherwise use our own to get started while we search.**
+E: **Perhaps to begin with. But the paper would be much better if it dealt with a published design, preferably something that has already been referred to. It dramatically increases chances for acceptance. If we were to find one, we could start with it, otherwise use our own to get started while we search.**
 
 ## TODOs
 * Send example of docstring conventions
