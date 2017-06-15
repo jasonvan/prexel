@@ -139,7 +139,7 @@ Pretty-printed UML:
 
     """
      __________               ________
-    | Airplane |<>---wing--->|  Wing  |
+    | Airplane |<>--wing--->|  Wing  |
      ----------               --------
     """
 
