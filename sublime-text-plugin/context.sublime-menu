@@ -1,0 +1,12 @@
+[
+	{
+		"caption":"Prexel",
+		"id": "prexel",
+		"children": [
+			{
+				"caption": "Generate UML",
+				"command": "generate_uml"
+			}
+		]
+	}
+]

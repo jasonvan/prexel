@@ -14,6 +14,8 @@
 #### Convert easy-entry into an XML representation of the fragment
 
 * Write code to process the different easy-entry strings
+    * Create a test setup
+    * Determine regex that is need for processing the easy-entry strings
 * Write code to generate XMI
 
 #### Use XML fragment to generate pretty-printed version of the diagram
