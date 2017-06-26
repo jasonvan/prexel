@@ -5,6 +5,8 @@
 ### Planning
 
 * Research the structure of XMI
+    * https://www.ibm.com/developerworks/library/x-wxxm24/index.html
+    * http://www.omg.org/spec/DD/1.0/
 * Review Sublime text's plugin architecture
 
 ### Implementation
