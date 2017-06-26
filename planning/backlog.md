@@ -34,3 +34,4 @@ one of these relationships as the main diagram form and other relationships woul
 ## Misc
 
 * Take a look at https://www.genmymodel.com/staruml
+* Update README for project
