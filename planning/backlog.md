@@ -16,6 +16,7 @@
 * Write code to process the different easy-entry strings
     * Create a test setup
     * Determine regex that is need for processing the easy-entry strings
+    * Add Linux and Windows .sublime-keymap files
 * Write code to generate XMI
 
 #### Use XML fragment to generate pretty-printed version of the diagram
