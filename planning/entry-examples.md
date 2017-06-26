@@ -280,6 +280,3 @@ Source code generated:
 
 ## Ideas
 
-* I could see the benefit of also going from pretty-printed to easy-entry. For instance
-if you wanted to make a major update to the pretty-printed UML it might easier to 
-get it back into easy-entry, make your additions, and recreate the pretty-printed UML
