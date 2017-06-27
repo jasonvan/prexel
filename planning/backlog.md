@@ -4,6 +4,8 @@
 
 ### Planning
 
+* Create class model for prexel plugin [ IN PROGRESS ]
+    * https://drive.google.com/file/d/0B9_FGv0nRq5hSGJlbm5WVC1BMG8/view?usp=sharing
 * Research the structure of XMI
     * https://www.ibm.com/developerworks/library/x-wxxm24/index.html
     * http://www.omg.org/spec/DD/1.0/
@@ -13,7 +15,7 @@
 
 #### Convert easy-entry into an XML representation of the fragment
 
-* Write code to process the different easy-entry strings
+* Write code to process the different easy-entry strings [ IN PROGRESS ]
     * Create a test setup
     * Determine regex that is need for processing the easy-entry strings
     * Add Linux and Windows .sublime-keymap files
