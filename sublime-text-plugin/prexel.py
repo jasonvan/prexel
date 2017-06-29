@@ -33,15 +33,3 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
 
                     print(class_name)
                     print(methods)
-
-
-class Diagram:
-    pass
-
-
-class ClassBox:
-    pass
-
-
-class XMLGenerator:
-    pass
