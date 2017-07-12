@@ -1,5 +1,5 @@
 import unittest
-from prexel.plugin.encoders import PrettyPrintEncoder
+from prexel.plugin.encoders import PrettyPrintEncoder, SourceCodeEncoder
 
 
 class TestPrettyPrintEncoder(unittest.TestCase):
@@ -53,6 +53,39 @@ class TestPrettyPrintEncoder(unittest.TestCase):
 """
         encoder = PrettyPrintEncoder()
         actual = encoder.generate_class(diagram_element)
+
+        self.assertEqual(expected, actual)
+
+
+class TestSourceCodeEncoder(unittest.TestCase):
+    def test_generate_class(self):
+        diagram_element = {
+            "name":"Kitchen",
+            "type":"class",
+            "methods": [
+                "arrange_kitchen()",
+                "place_floor_cabinet()",
+                "place_wall_cabinet()"
+            ],
+        }
+
+        expected = """class Kitchen:
+    def arrange_kitchen(self):
+        pass
+
+    def place_floor_cabinet(self):
+        pass
+
+    def place_wall_cabinet(self):
+        pass
+
+"""
+
+        encoder = SourceCodeEncoder()
+        actual = encoder.generate_class(diagram_element)
+
+        print(expected)
+        print(actual)
 
         self.assertEqual(expected, actual)
 

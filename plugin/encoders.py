@@ -1,3 +1,5 @@
+INDENTATAION = "    "
+
 class PrettyPrintEncoder:
     def generate_class(self, diagram_element):
         items_to_measure = []
@@ -58,3 +60,39 @@ class PrettyPrintEncoder:
         bottom = bottom_formatter.format("")
 
         return top + middle + bottom
+
+
+class SourceCodeEncoder:
+
+    def generate_class(self, diagram_element):
+        try:
+            name = diagram_element["name"]
+        except KeyError as error:
+            pass  # TODO deal with this error
+
+        output = "class {}:\n".format(name)
+
+        try:
+            fields = diagram_element["fields"]
+        except KeyError as error:
+            pass  # TODO deal with this error
+        else:
+            if fields:
+                output += INDENTATAION + "def __init__(self,{})\n".format(
+                    ", ".join(fields))
+                for field in fields:
+                    output += INDENTATAION*2 + "self.{} = {}\n".format(field)
+
+        try:
+            methods = diagram_element["methods"]
+        except KeyError as error:
+            pass  # TODO deal with this error
+        else:
+            if methods:
+                for method in methods:
+                    # TODO need to handle method arguments
+                    method = method.replace("()", "")
+                    output += INDENTATAION + "def {}(self):\n".format(method)
+                    output += INDENTATAION*2 + "pass\n\n".format(method)
+
+        return output
