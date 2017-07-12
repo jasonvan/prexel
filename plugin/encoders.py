@@ -64,7 +64,7 @@ class PrettyPrintEncoder:
         """
         TODO
         """
-        top_formatter = "\n {:_^" + str(max_length) + "} \n"
+        top_formatter = " {:_^" + str(max_length) + "} \n"
         middle_formatter = "|{:^" + str(max_length) + "}|\n"
         bottom_formatter = "|{:-^" + str(max_length) + "}|\n"
 
@@ -80,21 +80,36 @@ class SourceCodeEncoder:
     TODO
     """
     def generate_class(self, diagram_element):
-        """
-        TODO
-        """
+        # Process the dictionary values
         try:
             name = diagram_element["name"]
-        except KeyError as error:
-            pass  # TODO deal with this error
+        except KeyError:
+            raise Exception("Diagram element must specify a \"name\" key")
 
-        output = "class {}:\n".format(name)
+        try:
+            extends = diagram_element["extends"]
+        except KeyError:
+            extends = None
 
         try:
             fields = diagram_element["fields"]
-        except KeyError as error:
-            pass  # TODO deal with this error
-        else:
+        except KeyError:
+            fields = None
+
+        try:
+            methods = diagram_element["methods"]
+        except KeyError:
+            methods = None
+
+        # Format the output
+        output = "class {}".format(name)
+
+        if extends:
+            output += "({})".format(extends)
+
+        output += ":\n"
+
+        if fields or methods:
             if fields:
                 output += INDENTATION + "def __init__(self, {}):\n".format(
                     ", ".join(fields))
@@ -103,11 +118,6 @@ class SourceCodeEncoder:
                     if index == len(fields) - 1:
                         output += "\n"
 
-        try:
-            methods = diagram_element["methods"]
-        except KeyError as error:
-            pass  # TODO deal with this error
-        else:
             if methods:
                 for index, method in enumerate(methods):
                     # TODO need to handle method arguments
@@ -117,5 +127,7 @@ class SourceCodeEncoder:
 
                     if index != len(methods) - 1:
                         output += "\n"
+        else:
+            output += INDENTATION + "pass\n"
 
         return output
