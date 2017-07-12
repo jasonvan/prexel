@@ -1,14 +1,15 @@
+"""
+The classes in this file are responsible for processing a dictionary of values
+that describe how the pretty-printed and source code versions should be 
+generated. This dictionary of values would come from the XMLAdapator class
+which would convert from an XMI format to a dictionary.
+"""
+
 INDENTATION = "    "
 
 
 class PrettyPrintEncoder:
-    """
-    TODO
-    """
     def generate_class(self, diagram_element):
-        """
-        TODO
-        """
         items_to_measure = []
 
         try:
@@ -42,9 +43,6 @@ class PrettyPrintEncoder:
         return class_header + class_body
 
     def generate_class_body(self, max_length, methods=[], fields=[]):
-        """
-        TODO
-        """
         middle_formatter = "|{:<" + str(max_length) + "}|\n"
         bottom_formatter = " {:-^" + str(max_length) + "} \n"
 
@@ -61,9 +59,6 @@ class PrettyPrintEncoder:
         return middle + bottom
 
     def generate_class_header(self, max_length, name):
-        """
-        TODO
-        """
         top_formatter = " {:_^" + str(max_length) + "} \n"
         middle_formatter = "|{:^" + str(max_length) + "}|\n"
         bottom_formatter = "|{:-^" + str(max_length) + "}|\n"
@@ -76,9 +71,6 @@ class PrettyPrintEncoder:
 
 
 class SourceCodeEncoder:
-    """
-    TODO
-    """
     def generate_class(self, diagram_element):
         # Process the dictionary values
         try:
