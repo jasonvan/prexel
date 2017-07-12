@@ -13,15 +13,23 @@
 
 ### Implementation
 
+#### General
+
+* Create a test setup [ COMPLETE ]
+* Add Linux and Windows .sublime-keymap files
+
 #### Convert easy-entry into an XML representation of the fragment
 
-* Write code to process the different easy-entry strings [ IN PROGRESS ]
-    * Create a test setup [ COMPLETE ]
-    * Determine regex that is need for processing the easy-entry strings
-    * Add Linux and Windows .sublime-keymap files
+* Create parser for easy-entry strings
+* Write code to process the different easy-entry strings
 * Write code to generate XMI
 
 #### Use XML fragment to generate pretty-printed version of the diagram
+
+* Write code to take XML fragment and create pretty-printed version of diagram
+* Write code to take XML fragment and create source code version.
+* Write an adaptor to convert the XMI to some sort of object that each of the 
+encoders knows how to handle. This way we can swapped out XMI setups if require.
 
 [TODO:Determine tasks]
 
