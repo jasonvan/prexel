@@ -26,8 +26,13 @@
 
 #### Use XML fragment to generate pretty-printed version of the diagram
 
+* Add docstrings to encoders.py
 * Write code to take XML fragment and create pretty-printed version of diagram
+    * Basic Class diagram [ COMPLETE ]
+    * Multiple classes with inheritance [ IN PROGESS ]
 * Write code to take XML fragment and create source code version.
+    * Basic Class [ COMPLETE ]
+    * Multiple classes with inheritance [ IN PROGRESS ]
 * Write an adaptor to convert the XMI to some sort of object that each of the 
 encoders knows how to handle. This way we can swapped out XMI setups if require.
 

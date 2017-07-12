@@ -56,6 +56,10 @@ class TestPrettyPrintEncoder(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_generate_multiple_classes(self):
+        # see https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md#example-2---multiple-classes-with-inheritance
+        pass
+
 
 class TestSourceCodeEncoder(unittest.TestCase):
     def test_generate_class(self):
@@ -92,6 +96,10 @@ class TestSourceCodeEncoder(unittest.TestCase):
         actual = encoder.generate_class(diagram_element)
 
         self.assertEqual(expected, actual)
+
+    def test_generate_multiple_classes(self):
+        # see https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md#example-2---multiple-classes-with-inheritance
+        pass
 
 if __name__ == '__main__':
     unittest.main()

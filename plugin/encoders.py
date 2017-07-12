@@ -1,7 +1,14 @@
-INDENTATAION = "    "
+INDENTATION = "    "
+
 
 class PrettyPrintEncoder:
+    """
+    TODO
+    """
     def generate_class(self, diagram_element):
+        """
+        TODO
+        """
         items_to_measure = []
 
         try:
@@ -35,6 +42,9 @@ class PrettyPrintEncoder:
         return class_header + class_body
 
     def generate_class_body(self, max_length, methods=[], fields=[]):
+        """
+        TODO
+        """
         middle_formatter = "|{:<" + str(max_length) + "}|\n"
         bottom_formatter = " {:-^" + str(max_length) + "} \n"
 
@@ -51,6 +61,9 @@ class PrettyPrintEncoder:
         return middle + bottom
 
     def generate_class_header(self, max_length, name):
+        """
+        TODO
+        """
         top_formatter = "\n {:_^" + str(max_length) + "} \n"
         middle_formatter = "|{:^" + str(max_length) + "}|\n"
         bottom_formatter = "|{:-^" + str(max_length) + "}|\n"
@@ -63,7 +76,13 @@ class PrettyPrintEncoder:
 
 
 class SourceCodeEncoder:
+    """
+    TODO
+    """
     def generate_class(self, diagram_element):
+        """
+        TODO
+        """
         try:
             name = diagram_element["name"]
         except KeyError as error:
@@ -77,10 +96,10 @@ class SourceCodeEncoder:
             pass  # TODO deal with this error
         else:
             if fields:
-                output += INDENTATAION + "def __init__(self, {}):\n".format(
+                output += INDENTATION + "def __init__(self, {}):\n".format(
                     ", ".join(fields))
                 for index, field in enumerate(fields):
-                    output += INDENTATAION*2 + "self.{0} = {0}\n".format(field)
+                    output += INDENTATION * 2 + "self.{0} = {0}\n".format(field)
                     if index == len(fields) - 1:
                         output += "\n"
 
@@ -93,8 +112,8 @@ class SourceCodeEncoder:
                 for index, method in enumerate(methods):
                     # TODO need to handle method arguments
                     method = method.replace("()", "")
-                    output += INDENTATAION + "def {}(self):\n".format(method)
-                    output += INDENTATAION*2 + "pass\n".format(method)
+                    output += INDENTATION + "def {}(self):\n".format(method)
+                    output += INDENTATION * 2 + "pass\n".format(method)
 
                     if index != len(methods) - 1:
                         output += "\n"
