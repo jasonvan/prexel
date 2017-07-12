@@ -63,7 +63,6 @@ class PrettyPrintEncoder:
 
 
 class SourceCodeEncoder:
-
     def generate_class(self, diagram_element):
         try:
             name = diagram_element["name"]
@@ -78,10 +77,12 @@ class SourceCodeEncoder:
             pass  # TODO deal with this error
         else:
             if fields:
-                output += INDENTATAION + "def __init__(self,{})\n".format(
+                output += INDENTATAION + "def __init__(self, {}):\n".format(
                     ", ".join(fields))
-                for field in fields:
-                    output += INDENTATAION*2 + "self.{} = {}\n".format(field)
+                for index, field in enumerate(fields):
+                    output += INDENTATAION*2 + "self.{0} = {0}\n".format(field)
+                    if index == len(fields) - 1:
+                        output += "\n"
 
         try:
             methods = diagram_element["methods"]
@@ -89,10 +90,13 @@ class SourceCodeEncoder:
             pass  # TODO deal with this error
         else:
             if methods:
-                for method in methods:
+                for index, method in enumerate(methods):
                     # TODO need to handle method arguments
                     method = method.replace("()", "")
                     output += INDENTATAION + "def {}(self):\n".format(method)
-                    output += INDENTATAION*2 + "pass\n\n".format(method)
+                    output += INDENTATAION*2 + "pass\n".format(method)
+
+                    if index != len(methods) - 1:
+                        output += "\n"
 
         return output

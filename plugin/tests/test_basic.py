@@ -62,6 +62,10 @@ class TestSourceCodeEncoder(unittest.TestCase):
         diagram_element = {
             "name":"Kitchen",
             "type":"class",
+            "fields": [
+                "width",
+                "height"
+            ],
             "methods": [
                 "arrange_kitchen()",
                 "place_floor_cabinet()",
@@ -70,6 +74,10 @@ class TestSourceCodeEncoder(unittest.TestCase):
         }
 
         expected = """class Kitchen:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
     def arrange_kitchen(self):
         pass
 
@@ -78,14 +86,10 @@ class TestSourceCodeEncoder(unittest.TestCase):
 
     def place_wall_cabinet(self):
         pass
-
 """
 
         encoder = SourceCodeEncoder()
         actual = encoder.generate_class(diagram_element)
-
-        print(expected)
-        print(actual)
 
         self.assertEqual(expected, actual)
 
