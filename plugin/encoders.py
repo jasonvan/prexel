@@ -3,6 +3,8 @@ The classes in this file are responsible for processing a dictionary of values
 that describe how the pretty-printed and source code versions should be 
 generated. This dictionary of values would come from the XMLAdapator class
 which would convert from an XMI format to a dictionary.
+
+Output based on this: https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
 """
 
 INDENTATION = "    "
@@ -112,10 +114,28 @@ class SourceCodeEncoder:
 
             if methods:
                 for index, method in enumerate(methods):
-                    # TODO need to handle method arguments
-                    method = method.replace("()", "")
-                    output += INDENTATION + "def {}(self):\n".format(method)
-                    output += INDENTATION * 2 + "pass\n".format(method)
+                    if type(method) is dict:
+                        try:
+                            name = method["name"]
+                        except KeyError:
+                            name = None
+
+                        try:
+                            body = method["body"]
+                        except KeyError:
+                            body = None
+
+                        if name:
+                            name = name.replace("()", "")
+                            output += INDENTATION + "def {}(self):\n".format(name)
+
+                        if body:
+                            output += INDENTATION * 2 + "{}\n".format(body)
+                    else:
+                        # TODO need to handle method arguments
+                        method = method.replace("()", "")
+                        output += INDENTATION + "def {}(self):\n".format(method)
+                        output += INDENTATION * 2 + "pass\n".format(method)
 
                     if index != len(methods) - 1:
                         output += "\n"

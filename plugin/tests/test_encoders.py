@@ -131,7 +131,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_empty_class(self):
-        airplace_element = {
+        airplane_element = {
             "name": "Airplane",
             "type": "class",
             "fields": [
@@ -152,10 +152,45 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     "    pass\n")
 
         encoder = SourceCodeEncoder()
-        airplane = encoder.generate_class(airplace_element)
+        airplane = encoder.generate_class(airplane_element)
         wing = encoder.generate_class(wing_element)
 
         actual = airplane + wing
+        self.assertEqual(expected, actual)
+
+    def test_generate_class_with_dependence(self):
+        """
+        TODO
+        1) Update all classes to return a newline after class
+        :return:
+        """
+        style_element = {
+            "name": "Style",
+            "type": "class",
+            "methods": [
+                {"name": "get_cabinet()", "body": "return XCabinet()"}
+            ]
+        }
+
+        xcabinet_element = {
+            "name": "XCabinet",
+            "type": "class"
+        }
+
+        expected = ("class Style:\n"
+                    "    def get_cabinet(self):\n"
+                    "        return XCabinet()\n"
+                    "class XCabinet:\n"
+                    "    pass\n"
+                    )
+
+        encoder = SourceCodeEncoder()
+        style = encoder.generate_class(style_element)
+        xcabinet = encoder.generate_class(xcabinet_element)
+
+        actual = style + xcabinet
+
+        print("\n"+ actual)
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
