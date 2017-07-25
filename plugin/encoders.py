@@ -7,139 +7,189 @@ which would convert from an XMI format to a dictionary.
 Output based on this: https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
 """
 
-INDENTATION = "    "
+import re
 
 
 class PrettyPrintEncoder:
-    def generate_class(self, diagram_element):
+    """
+    PrettyPrintEncoder is responsible for taking a diagram element
+    and creating a pretty-printed version of the element.
+     ----------------------
+    |  PrettyPrintEncoder  |
+    |----------------------|------>|Diagram
+    |generate_class()      |
+     ______________________
+    """
+    def generate_class(self, diagram):
+        """
+        This method returns a pretty-printed class diagram based on
+        the provided diagram object.
+
+        Precondition: Well-formed diagram element
+        Returns: pretty-printed diagram
+        """
+
+        # Need to measure the different elements of the diagram to see
+        # which is the longest string
         items_to_measure = []
 
-        try:
-            name = diagram_element["name"]
-        except KeyError as error:
-            pass  # TODO deal with this error
-        else:
-            items_to_measure += [name]
+        # Name
+        items_to_measure.append(diagram.name)
 
-        try:
-            methods = diagram_element["methods"]
-        except KeyError as error:
-            pass  # TODO deal with this error
-        else:
-            items_to_measure += methods
+        # Methods
+        if diagram.methods:
+            for method in diagram.methods:
+                items_to_measure.append(method)
 
-        try:
-            fields = diagram_element["fields"]
-        except KeyError as error:
-            pass  # TODO deal with this error
-        else:
-            items_to_measure += fields
+        # Fields
+        if diagram.fields:
+            for field in diagram.fields:
+                items_to_measure.append(field)
 
         # Determine max length of longest string in class
         max_length = len(max(items_to_measure, key=len))
 
         # Create the class header and the body
-        class_header = self.generate_class_header(max_length, name)
-        class_body = self.generate_class_body(max_length, methods)
+        result = ""
+        result += self.generate_class_header(max_length, diagram.name)
+        result += self.generate_class_body(max_length, diagram)
 
-        return class_header + class_body
+        return result
 
-    def generate_class_body(self, max_length, methods=[], fields=[]):
+    def generate_class_body(self, max_length, diagram):
+        """
+        Generate the class body string for the provided diagram.
+
+        Returns: class body string
+        """
+
+        # Create formatters that will properly space the body string
         middle_formatter = "|{:<" + str(max_length) + "}|\n"
-        bottom_formatter = " {:-^" + str(max_length) + "} \n"
+        bottom_formatter = " {:_^" + str(max_length) + "} \n"
 
-        middle = ""
+        # Generate the body string
+        body = ""
 
-        for field in fields:
-            middle += middle_formatter.format(field)
+        if diagram.fields:
+            for field in diagram.fields:
+                body += middle_formatter.format(field)
 
-        for method in methods:
-            middle += middle_formatter.format(method)
+        if diagram.methods:
+            for method in diagram.methods:
+                body += middle_formatter.format(method)
 
-        bottom = bottom_formatter.format("")
+        body += bottom_formatter.format("")
 
-        return middle + bottom
+        return body
 
     def generate_class_header(self, max_length, name):
+        """
+        Generate the class header from the provided diagram name.
+
+        Returns: class header string
+        """
+
+        # Create formatters
         top_formatter = " {:_^" + str(max_length) + "} \n"
         middle_formatter = "|{:^" + str(max_length) + "}|\n"
         bottom_formatter = "|{:-^" + str(max_length) + "}|\n"
 
-        top = top_formatter.format("")
-        middle = middle_formatter.format(name)
-        bottom = bottom_formatter.format("")
+        # Generate header string
+        header = ""
+        header += top_formatter.format("")
+        header += middle_formatter.format(name)
+        header += bottom_formatter.format("")
 
-        return top + middle + bottom
+        return header
 
 
 class SourceCodeEncoder:
-    def generate_class(self, diagram_element):
-        # Process the dictionary values
-        try:
-            name = diagram_element["name"]
-        except KeyError:
-            raise Exception("Diagram element must specify a \"name\" key")
+    """
+    SourceCodeEncoder is responsible for taking a diagram element
+    and create the appropriate source code.
+     ----------------------
+    |  SourceCodeEncoder   |
+    |----------------------|------>|Diagram
+    |generate_class()      |
+     ______________________
+    """
 
-        try:
-            extends = diagram_element["extends"]
-        except KeyError:
-            extends = None
+    def generate_class(self, diagram):
+        """
+        Generate a class from the provided diagram.
 
-        try:
-            fields = diagram_element["fields"]
-        except KeyError:
-            fields = None
+        Returns: a class string
+        """
 
-        try:
-            methods = diagram_element["methods"]
-        except KeyError:
-            methods = None
+        # Cache diagram values to local variables
+        name = diagram.name
+        extends = diagram.extends
+        fields = diagram.fields
+        methods = diagram.methods
 
-        # Format the output
-        output = "class {}".format(name)
+        # Set default indentation
+        indentation = "    "
+
+        # Argument regex
+        method_arguments = re.compile("\({}\)")
+
+        # Format the class output
+        result = "class {}".format(name)
 
         if extends:
-            output += "({})".format(extends)
+            result += "({})".format(extends)
 
-        output += ":\n"
+        result += ":\n"
 
+        # Add fields and methods
         if fields or methods:
+            # Create a __init__ method if fields are provided
             if fields:
-                output += INDENTATION + "def __init__(self, {}):\n".format(
+                result += indentation + "def __init__(self, {}):\n".format(
                     ", ".join(fields))
                 for index, field in enumerate(fields):
-                    output += INDENTATION * 2 + "self.{0} = {0}\n".format(field)
+                    result += indentation * 2 + "self.{0} = {0}\n".format(field)
                     if index == len(fields) - 1:
-                        output += "\n"
+                        result += "\n"
 
+            # Create methods if methods values are provided
             if methods:
                 for index, method in enumerate(methods):
+                    # If a dictionary is provided for method process the
+                    # extra information.
                     if type(method) is dict:
+                        # TODO need to handle method arguments
+                        # Check for name key in dict
                         try:
                             name = method["name"]
                         except KeyError:
-                            name = None
+                            pass
+                        else:
+                            argument = str(name)
+                            name = name.replace("()", "")
+                            result += indentation + "def {}(self):\n".format(name)
 
+                        # Check for body key in dict
                         try:
                             body = method["body"]
                         except KeyError:
-                            body = None
-
-                        if name:
-                            name = name.replace("()", "")
-                            output += INDENTATION + "def {}(self):\n".format(name)
-
-                        if body:
-                            output += INDENTATION * 2 + "{}\n".format(body)
+                            pass  # Don't do anything if body is missin
+                            # body = None
+                        else:
+                            result += indentation * 2 + "{}\n".format(body)
                     else:
+                        # Process method as is since no dictionary was provided
                         # TODO need to handle method arguments
                         method = method.replace("()", "")
-                        output += INDENTATION + "def {}(self):\n".format(method)
-                        output += INDENTATION * 2 + "pass\n".format(method)
+                        result += indentation + "def {}(self):\n".format(method)
+                        result += indentation * 2 + "pass\n".format(method)
 
                     if index != len(methods) - 1:
-                        output += "\n"
+                        result += "\n"
         else:
-            output += INDENTATION + "pass\n"
+            result += indentation + "pass\n"
 
-        return output
+        # Add a newline after class
+        result += "\n"
+
+        return result

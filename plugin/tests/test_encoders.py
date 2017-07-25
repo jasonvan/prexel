@@ -1,5 +1,6 @@
 import unittest
 from prexel.plugin.encoders import PrettyPrintEncoder, SourceCodeEncoder
+from prexel.plugin.diagram import Diagram
 
 
 class TestPrettyPrintEncoder(unittest.TestCase):
@@ -17,28 +18,25 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         expected = ("|arrange_kitchen()    |\n"
                     "|place_floor_cabinet()|\n"
                     "|place_wall_cabinet() |\n"
-                    " --------------------- \n")
-        methods = [
+                    " _____________________ \n")
+
+        diagram = Diagram("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
-        ]
+        ])
 
         encoder = PrettyPrintEncoder()
-        actual = encoder.generate_class_body(21, methods, [])
+        actual = encoder.generate_class_body(21, diagram)
 
         self.assertEqual(actual, expected)
 
     def test_generate_class(self):
-        diagram_element = {
-            "name":"Kitchen",
-            "type":"class",
-            "methods": [
-                "arrange_kitchen()",
-                "place_floor_cabinet()",
-                "place_wall_cabinet()"
-            ],
-        }
+        diagram = Diagram("Kitchen", methods=[
+            "arrange_kitchen()",
+            "place_floor_cabinet()",
+            "place_wall_cabinet()"
+        ])
 
         expected = (" _____________________ \n"
                     "|       Kitchen       |\n"
@@ -46,10 +44,10 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|arrange_kitchen()    |\n"
                     "|place_floor_cabinet()|\n"
                     "|place_wall_cabinet() |\n"
-                    " --------------------- \n")
+                    " _____________________ \n")
 
         encoder = PrettyPrintEncoder()
-        actual = encoder.generate_class(diagram_element)
+        actual = encoder.generate_class(diagram)
 
         self.assertEqual(expected, actual)
 
@@ -59,19 +57,14 @@ class TestPrettyPrintEncoder(unittest.TestCase):
 
 class TestSourceCodeEncoder(unittest.TestCase):
     def test_generate_class(self):
-        diagram_element = {
-            "name":"Kitchen",
-            "type":"class",
-            "fields": [
-                "width",
-                "height"
-            ],
-            "methods": [
-                "arrange_kitchen()",
-                "place_floor_cabinet()",
-                "place_wall_cabinet()"
-            ],
-        }
+        diagram = Diagram("Kitchen", methods=[
+            "arrange_kitchen()",
+            "place_floor_cabinet()",
+            "place_wall_cabinet()"
+        ], fields=[
+            "width",
+            "height"
+        ])
 
         expected = ("class Kitchen:\n"
                     "    def __init__(self, width, height):\n"
@@ -86,111 +79,114 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     "\n"
                     "    def place_wall_cabinet(self):\n"
                     "        pass\n"
+                    "\n"
                     )
 
         encoder = SourceCodeEncoder()
-        actual = encoder.generate_class(diagram_element)
+        actual = encoder.generate_class(diagram)
 
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_inheritance(self):
-        person_diagram_element = {
-            "name":"Person",
-            "type":"class",
-            "fields": [
-                "name",
-                "age"
-            ]
-        }
+        person_diagram = Diagram("Person", fields=[
+            "name",
+            "age"
+        ])
 
-        employee_diagram_element = {
-            "name":"Employee",
-            "type":"class",
-            "fields": [
-                "job_title"
-            ],
-            "extends": "Person"
-        }
+        employee_diagram = Diagram("Employee", fields=[
+            "job_title"
+        ], extends="Person")
 
         expected = ("class Person:\n"
                     "    def __init__(self, name, age):\n"
                     "        self.name = name\n"
                     "        self.age = age\n"
                     "\n"
+                    "\n"
                     "class Employee(Person):\n"
                     "    def __init__(self, job_title):\n"
                     "        self.job_title = job_title\n"
                     "\n"
+                    "\n"
                     )
 
         encoder = SourceCodeEncoder()
-        person = encoder.generate_class(person_diagram_element)
-        employee = encoder.generate_class(employee_diagram_element)
+        person = encoder.generate_class(person_diagram)
+        employee = encoder.generate_class(employee_diagram)
         actual = person + employee
 
         self.assertEqual(expected, actual)
 
     def test_generate_empty_class(self):
-        airplane_element = {
-            "name": "Airplane",
-            "type": "class",
-            "fields": [
-                "wing"
-            ]
-        }
+        airplane_diagram = Diagram("Airplane", fields=[
+            "wing"
+        ])
 
-        wing_element = {
-            "name": "Wing",
-            "type": "class"
-        }
+        wing_diagram = Diagram("Wing")
 
         expected = ("class Airplane:\n"
                     "    def __init__(self, wing):\n"
                     "        self.wing = wing\n"
                     "\n"
+                    "\n"
                     "class Wing:\n"
-                    "    pass\n")
+                    "    pass\n"
+                    "\n"
+                    )
 
         encoder = SourceCodeEncoder()
-        airplane = encoder.generate_class(airplane_element)
-        wing = encoder.generate_class(wing_element)
+        airplane = encoder.generate_class(airplane_diagram)
+        wing = encoder.generate_class(wing_diagram)
 
         actual = airplane + wing
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_dependence(self):
-        """
-        TODO
-        1) Update all classes to return a newline after class
-        :return:
-        """
-        style_element = {
-            "name": "Style",
-            "type": "class",
-            "methods": [
-                {"name": "get_cabinet()", "body": "return XCabinet()"}
-            ]
-        }
+        style_diagram = Diagram("Style", methods=[
+            {"name": "get_cabinet()", "body": "return XCabinet()"}
+        ])
 
-        xcabinet_element = {
-            "name": "XCabinet",
-            "type": "class"
-        }
+        xcabinet_diagram = Diagram("XCabinet")
 
         expected = ("class Style:\n"
                     "    def get_cabinet(self):\n"
                     "        return XCabinet()\n"
+                    "\n"
                     "class XCabinet:\n"
                     "    pass\n"
+                    "\n"
                     )
 
         encoder = SourceCodeEncoder()
-        style = encoder.generate_class(style_element)
-        xcabinet = encoder.generate_class(xcabinet_element)
+        style = encoder.generate_class(style_diagram)
+        xcabinet = encoder.generate_class(xcabinet_diagram)
 
         actual = style + xcabinet
 
-        print("\n"+ actual)
+        self.assertEqual(expected, actual)
+
+    def test_generate_class_with_method_params(self):
+        style_diagram = Diagram("Style", methods=[
+            {"name": "get_cabinet(height)", "body": "return XCabinet()"}
+        ])
+
+        xcabinet_diagram = Diagram("XCabinet")
+
+        expected = ("class Style:\n"
+                    "    def get_cabinet(self, height):\n"
+                    "        return XCabinet()\n"
+                    "\n"
+                    "class XCabinet:\n"
+                    "    pass\n"
+                    "\n"
+                    )
+
+        encoder = SourceCodeEncoder()
+        style = encoder.generate_class(style_diagram)
+        xcabinet = encoder.generate_class(xcabinet_diagram)
+
+        actual = style + xcabinet
+
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
