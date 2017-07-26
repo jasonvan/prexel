@@ -1,12 +1,23 @@
-class PrettyPrintEncoder:
+from prexel.plugin.encoders.encoder import Encoder
+
+
+class PrettyPrintEncoder(Encoder):
     """
     PrettyPrintEncoder is responsible for taking a diagram element
     and creating a pretty-printed version of the element.
+
+    Output based on:
+    https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
+
+     ---------
+    | Encoder |
+    |_________|
+       ^
      ----------------------
-    |  PrettyPrintEncoder  |
-    |----------------------|------>|Diagram
-    |generate_class()      |
-     ______________________
+    |  PrettyPrintEncoder  |        ---------
+    |----------------------|------>| Diagram |
+    |generate_class()      |       |_________|
+    |______________________|
     """
     def generate_class(self, diagram):
         """

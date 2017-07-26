@@ -1,33 +1,32 @@
-"""
-The classes in this file are responsible for processing a dictionary of values
-that describe how the pretty-printed and source code versions should be 
-generated. This dictionary of values comes from the XMLAdapator class
-which would convert from an XMI format to a dictionary.
-
-Output based on:
-https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
-"""
-
 import re
+from prexel.plugin.encoders.encoder import Encoder
 
 
-class SourceCodeEncoder:
+class SourceCodeEncoder(Encoder):
     """
     SourceCodeEncoder is responsible for taking a diagram element
-    and create the appropriate source code.
+    and create the appropriate source code output.
+
+    Output based on:
+    https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
+
+     ---------
+    | Encoder |
+    |_________|
+       ^
      ----------------------
-    |  SourceCodeEncoder   |
-    |----------------------|------>|Diagram
-    |generate_class()      |
-     ______________________
+    |  SourceCodeEncoder   |        ---------
+    |----------------------|------>| Diagram |
+    |generate_class()      |       |_________|
+    |______________________|
     """
+
     method_signature_regex = re.compile(r'([^(){}]*)\((.*)\)')
     indentation = "    "
 
     def generate_class(self, diagram):
         """
         Generate a class from the provided diagram.
-
         Returns: a class string
         """
 
@@ -105,7 +104,6 @@ class SourceCodeEncoder:
     def process_method_signature(signature):
         """
         Processes the method signature for method name and parameters
-
         Returns: string version of method
         """
         matcher = SourceCodeEncoder.method_signature_regex.match(signature)
