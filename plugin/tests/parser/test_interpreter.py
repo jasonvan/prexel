@@ -2,4 +2,5 @@ import unittest
 
 
 class TestInterpreter(unittest.TestCase):
-    pass
+    def test_process_token(self):
+        pass
