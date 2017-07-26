@@ -11,5 +11,5 @@ class Lexer:
         self.pos = 0
 
 
-class Interpreter:
+class main:
     pass
