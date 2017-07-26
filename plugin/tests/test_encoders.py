@@ -143,7 +143,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
 
     def test_generate_class_with_dependence(self):
         style_diagram = Diagram("Style", methods=[
-            {"name": "get_cabinet()", "body": "return XCabinet()"}
+            {"signature": "get_cabinet()", "body": "return XCabinet()"}
         ])
 
         xcabinet_diagram = Diagram("XCabinet")
@@ -167,7 +167,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
 
     def test_generate_class_with_method_params_as_object(self):
         style_diagram = Diagram("Style", methods=[
-            {"name": "get_cabinet(height)", "body": "return XCabinet()"}
+            {"signature": "get_cabinet(height)", "body": "return XCabinet()"}
         ])
 
         xcabinet_diagram = Diagram("XCabinet")

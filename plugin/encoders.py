@@ -1,10 +1,11 @@
 """
 The classes in this file are responsible for processing a dictionary of values
 that describe how the pretty-printed and source code versions should be 
-generated. This dictionary of values would come from the XMLAdapator class
+generated. This dictionary of values comes from the XMLAdapator class
 which would convert from an XMI format to a dictionary.
 
-Output based on this: https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
+Output based on:
+https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
 """
 
 import re
@@ -31,7 +32,7 @@ class PrettyPrintEncoder:
 
         # Need to measure the different elements of the diagram to see
         # which is the longest string
-        items_to_measure = []
+        items_to_measure = list()
 
         # Name
         items_to_measure.append(diagram.name)
@@ -103,6 +104,10 @@ class PrettyPrintEncoder:
         return header
 
 
+class SourceCodeEncoderException(Exception):
+    pass
+
+
 class SourceCodeEncoder:
     """
     SourceCodeEncoder is responsible for taking a diagram element
@@ -113,6 +118,8 @@ class SourceCodeEncoder:
     |generate_class()      |
      ______________________
     """
+    method_signature_regex = re.compile(r'([^(){}]*)\((.*)\)')
+    indentation = "    "
 
     def generate_class(self, diagram):
         """
@@ -127,12 +134,10 @@ class SourceCodeEncoder:
         fields = diagram.fields
         methods = diagram.methods
 
-        # Set default indentation
-        indentation = "    "
-
         # Format the class output
         result = "class {}".format(name)
 
+        # Add super class if it has one
         if extends:
             result += "({})".format(extends)
 
@@ -142,67 +147,79 @@ class SourceCodeEncoder:
         if fields or methods:
             # Create a __init__ method if fields are provided
             if fields:
-                result += indentation + "def __init__(self, {}):\n".format(
-                    ", ".join(fields))
+                result += SourceCodeEncoder.indentation + \
+                          "def __init__(self, {}):\n".format(", ".join(fields))
+
                 for index, field in enumerate(fields):
-                    result += indentation * 2 + "self.{0} = {0}\n".format(field)
+                    result += SourceCodeEncoder.indentation * 2 + \
+                              "self.{0} = {0}\n".format(field)
                     if index == len(fields) - 1:
                         result += "\n"
 
             # Create methods if methods values are provided
             if methods:
-                method_signature = re.compile(r'([^(){}]*)\((.*)\)')
                 for index, method in enumerate(methods):
-                    # If a dictionary is provided for method process the
-                    # extra information.
+                    # Process extra method information if dictionary
+                    # of values is provided.
                     if type(method) is dict:
-                        # TODO need to handle method arguments
-                        # Check for name key in dict
+
+                        # Method signature
                         try:
-                            name = method["name"]
-                        except KeyError:
-                            pass
-                        else:
-                            matcher = method_signature.match(name)
+                            signature = method["signature"]
+                            result += self.process_method_signature(signature)
+                        except (KeyError, SourceCodeEncoderException):
+                            continue  # Proceed to next method if any errors
 
-                            if not matcher:
-                                continue
-
-                            method_name, arguments = matcher.groups()
-                            result += indentation + "def {}(self".format(method_name)
-
-                            if arguments.strip():
-                                result += ", {}".format(arguments)
-
-                            result += "):\n"
-
-                        # Check for body key in dict
+                        # Method body
                         try:
                             body = method["body"]
                         except KeyError:
-                            pass  # Don't do anything if body is missing
-                            # body = None
+                            continue
                         else:
-                            result += indentation * 2 + "{}\n".format(body)
+                            result += SourceCodeEncoder.indentation * 2 + \
+                                "{}\n".format(body)
+                    # Just a string so create an empty method
                     else:
-                        matcher = method_signature.match(method)
-                        method_name, arguments = matcher.groups()
-
-                        result += indentation + "def {}(self".format(method_name)
-                        if arguments.strip():
-                            result += ", {}".format(arguments)
-
-                        result += "):\n"
-                        result += indentation * 2 + "pass\n"
+                        try:
+                            result += self.process_method_signature(method)
+                            result += SourceCodeEncoder.indentation * 2 + \
+                                "pass\n"
+                        except SourceCodeEncoderException:
+                            continue
 
                     if index != len(methods) - 1:
                         result += "\n"
+        # Output pass if no fields or methods provided
         else:
-            result += indentation + "pass\n"
+            result += SourceCodeEncoder.indentation + "pass\n"
 
         # Add a newline after class
         result += "\n"
 
         return result
 
-    # def process_method_arguments(self, method_arguments):
+    @staticmethod
+    def process_method_signature(signature):
+        """
+        Processes the method signature for method name and parameters
+
+        Returns: string version of method
+        """
+        matcher = SourceCodeEncoder.method_signature_regex.match(signature)
+
+        if not matcher:
+            raise SourceCodeEncoderException("Method signature not "
+                                             "properly formatted.")
+
+        method_name, method_arguments = matcher.groups()
+
+        result = ""
+        result += SourceCodeEncoder.indentation + \
+            "def {}(self".format(method_name)
+
+        if method_arguments.strip():
+            result += ", {}".format(method_arguments)
+
+        result += "):\n"
+
+        return result
