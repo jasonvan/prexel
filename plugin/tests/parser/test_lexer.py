@@ -2,14 +2,6 @@ import unittest
 
 
 class TestLexer(unittest.TestCase):
-    """
-    Token list
-    Token(CLASS_MARKER, "|")
-    Token(AGGREGATION, "<>{1}--{*}>")
-    Token(DEPENDENCE, "-->")
-    Token(INHERITENCE, "^")
-    Token(INTERFACE, "=")
-    """
     def test_advance(self):
         pass
 
