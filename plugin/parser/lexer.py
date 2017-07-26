@@ -7,6 +7,9 @@ class Lexer:
     Possible Token list
     Token(CLASS_MARKER, "|")
     Token(AGGREGATION, "<>{1}--{*}>")
+    Token(CHARACTER, "AZaz")
+    Token(NUMBER, "09")
+    Token(MULTIPLE, "*")
     Token(DEPENDENCE, "-->")
     Token(INHERITENCE, "^")
     Token(INTERFACE, "=")
