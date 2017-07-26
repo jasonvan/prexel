@@ -65,7 +65,7 @@ class PrettyPrintEncoder:
 
         # Create formatters that will properly space the body string
         middle_formatter = "|{:<" + str(max_length) + "}|\n"
-        bottom_formatter = " {:_^" + str(max_length) + "} \n"
+        bottom_formatter = "|{:_^" + str(max_length) + "}|\n"
 
         # Generate the body string
         body = ""

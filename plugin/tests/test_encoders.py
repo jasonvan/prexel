@@ -18,7 +18,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         expected = ("|arrange_kitchen()    |\n"
                     "|place_floor_cabinet()|\n"
                     "|place_wall_cabinet() |\n"
-                    " _____________________ \n")
+                    "|_____________________|\n")
 
         diagram = Diagram("Kitchen", methods=[
             "arrange_kitchen()",
@@ -44,7 +44,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|arrange_kitchen()    |\n"
                     "|place_floor_cabinet()|\n"
                     "|place_wall_cabinet() |\n"
-                    " _____________________ \n")
+                    "|_____________________|\n")
 
         encoder = PrettyPrintEncoder()
         actual = encoder.generate_class(diagram)

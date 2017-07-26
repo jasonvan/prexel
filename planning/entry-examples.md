@@ -25,7 +25,7 @@ Pretty-printed UML generated:
     |arrange_kitchen()    |
     |place_floor_cabinet()|
     |place_wall_cabinet() |
-     --------------------- 
+    |_____________________|
         
     
     """
@@ -70,13 +70,13 @@ Pretty-printed UML:
     |----------|
     |name      |
     |age       |
-     ----------
+    |__________|
           ^    
      ____________ 
     |  Employee  |
     |------------|
     |job_title   |
-     ------------  
+    |____________| 
         
     """
 
@@ -111,8 +111,8 @@ Pretty-printed UML:
      _______________ 
     |     Style     |      ____________
     |---------------|---->|  XCabinet  |
-    |get_cabinet()  |      ------------
-     ---------------
+    |get_cabinet()  |     |____________|
+    |_______________|
      
      """
 
@@ -138,9 +138,9 @@ Easy-entry code:
 Pretty-printed UML:
 
     """
-     __________               ________
+     __________              ________
     | Airplane |<>--wing--->|  Wing  |
-     ----------               --------
+    |__________|            |________|
     """
 
 Source code generated:
@@ -168,7 +168,7 @@ Pretty-printed UML:
     """
      __________       __________
     | Employer |-----| Employee |
-     ----------       ----------
+    |__________|     |__________|
      
     """
 
@@ -197,7 +197,7 @@ Pretty-printed UML:
     """
      __________ 1     *  __________
     | Employer |<>----->| Employee |
-     ----------          ----------
+    |__________|        |__________|
      
     """
 
@@ -235,13 +235,13 @@ Pretty-printed UML:
     """
      _________             _________________
     | Kitchen |<>-------->|     XCabinet    |
-     ---------            | << interface >> |
-                           -----------------
+    |_________|           | << interface >> |
+                          |_________________|
      _________________________ ^ ________________________
     |    AntiqueXCabinet      | |    ModernXCabinet      |
     |-------------------------| |------------------------|
     |place_antique_x_cabinet()| |place_modern_x_cabinet()|
-     -------------------------   ------------------------
+    |_________________________| |________________________|
      
     """
 
@@ -273,10 +273,4 @@ Source code generated:
     class ModernXCabinet(XCabinet):
         def place_modern_x_cabinet():
             pass
-
-## TODOs
-
-* How should we denote abstract classes and interfaces
-
-## Ideas
 
