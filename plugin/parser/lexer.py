@@ -1,9 +1,9 @@
+import re
+from prexel.plugin.parser.token import Token
+
+
 class Lexer:
     """
-    Code referenced:
-    https://ruslanspivak.com/lsbasi-part6/
-    http://jayconrod.com/posts/37/a-simple-interpreter-from-scratch-in-python-part-1
-
     Possible Token list
     Token(CLASS_MARKER, "|")
     Token(AGGREGATION, "<>{1}--{*}>")
@@ -14,6 +14,47 @@ class Lexer:
     Token(INHERITENCE, "^")
     Token(INTERFACE, "=")
     """
+
+    class_regex = re.complile(r'[A-Z][a-z0-9]*')
+
     def __init__(self, text):
         self.text = text
-        self.pos = 0
+        self.position = 0
+        self.current = self.text[self.position]
+
+    def step(self):
+        self.position += 1
+        if self.position >= len(self.text):
+            self.current = None
+        else:
+            self.current = self.text[self.position]
+
+    def skip_whitespace(self):
+        while self.current is not None and self.current.isspace():
+            self.step()
+
+    def element(self):
+        string = ""
+        while self.current is not None and not self.current.isspace():
+            string += self.current
+            self.step()
+        return string
+
+    def get_token(self):
+        while self.current is not None:
+            if self.current.isspace():
+                self.skip_whitespace()
+                continue
+            else:
+                element = self.element()
+
+                if self.class_regex.match(element):
+                    return Token("Class", element)
+
+
+
+
+
+
+
+
