@@ -165,7 +165,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_generate_class_with_method_params(self):
+    def test_generate_class_with_method_params_as_object(self):
         style_diagram = Diagram("Style", methods=[
             {"name": "get_cabinet(height)", "body": "return XCabinet()"}
         ])
@@ -188,6 +188,26 @@ class TestSourceCodeEncoder(unittest.TestCase):
         actual = style + xcabinet
 
         self.assertEqual(expected, actual)
+
+    def test_generate_class_with_method_params(self):
+        diagram = Diagram("MyClass", methods=[
+            "crazy_method2Name(param1, param2)"
+        ])
+
+        expected = ("class MyClass:\n"
+                    "    def crazy_method2Name(self, param1, param2):\n"
+                    "        pass\n"
+                    "\n"
+                    )
+
+        encoder = SourceCodeEncoder()
+        actual = encoder.generate_class(diagram)
+
+        self.assertEqual(expected, actual)
+
+
+        # Isolate matching code into its own method and test on method
+        # Test method code for many different types
 
 if __name__ == '__main__':
     unittest.main()

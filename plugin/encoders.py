@@ -130,9 +130,6 @@ class SourceCodeEncoder:
         # Set default indentation
         indentation = "    "
 
-        # Argument regex
-        method_arguments = re.compile("\({}\)")
-
         # Format the class output
         result = "class {}".format(name)
 
@@ -154,6 +151,7 @@ class SourceCodeEncoder:
 
             # Create methods if methods values are provided
             if methods:
+                method_signature = re.compile(r'([^(){}]*)\((.*)\)')
                 for index, method in enumerate(methods):
                     # If a dictionary is provided for method process the
                     # extra information.
@@ -165,24 +163,37 @@ class SourceCodeEncoder:
                         except KeyError:
                             pass
                         else:
-                            argument = str(name)
-                            name = name.replace("()", "")
-                            result += indentation + "def {}(self):\n".format(name)
+                            matcher = method_signature.match(name)
+
+                            if not matcher:
+                                continue
+
+                            method_name, arguments = matcher.groups()
+                            result += indentation + "def {}(self".format(method_name)
+
+                            if arguments.strip():
+                                result += ", {}".format(arguments)
+
+                            result += "):\n"
 
                         # Check for body key in dict
                         try:
                             body = method["body"]
                         except KeyError:
-                            pass  # Don't do anything if body is missin
+                            pass  # Don't do anything if body is missing
                             # body = None
                         else:
                             result += indentation * 2 + "{}\n".format(body)
                     else:
-                        # Process method as is since no dictionary was provided
-                        # TODO need to handle method arguments
-                        method = method.replace("()", "")
-                        result += indentation + "def {}(self):\n".format(method)
-                        result += indentation * 2 + "pass\n".format(method)
+                        matcher = method_signature.match(method)
+                        method_name, arguments = matcher.groups()
+
+                        result += indentation + "def {}(self".format(method_name)
+                        if arguments.strip():
+                            result += ", {}".format(arguments)
+
+                        result += "):\n"
+                        result += indentation * 2 + "pass\n"
 
                     if index != len(methods) - 1:
                         result += "\n"
@@ -193,3 +204,5 @@ class SourceCodeEncoder:
         result += "\n"
 
         return result
+
+    # def process_method_arguments(self, method_arguments):
