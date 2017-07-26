@@ -50,11 +50,3 @@ class Lexer:
 
                 if self.class_regex.match(element):
                     return Token("Class", element)
-
-
-
-
-
-
-
-
