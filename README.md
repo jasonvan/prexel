@@ -28,18 +28,24 @@ For instance the PREXEL below contains two diagram elements.
     
     |Employee  # diagram element 2
     |job_title
+    
+2) **parsers** - This manages the parsing and interpretation of easy-entry PREXEL. 
+The parser creates Diagram objects for the easy-entry PREXEL. These are then processed
+by the classes inside of the XML package into XMI fragments.
 
-2) **encoders** - The classes in this package are responsible for taking a Diagram object
+3) **xml** - This manages the conversion of Diagram objects to and from XMI fragments.
+It also handles the aggregation of all fragments for the project into one XML file as well
+as validation.
+
+4) **encoders** - The classes in this package are responsible for taking a Diagram object
 and encoding it into strings for output in the editor. There are two output types:
 Source Code and Pretty printing.
 
-3) **xml** - This manages the conversion of domain objects to XMI fragments, as
-well as the aggregation of all fragments for the project into one XML file. This 
-also manages the validation of the fragments against the code.
+### Prexel usage example
 
-4) **parsers** - This manages the parsing and interpretation of easy-entry PREXEL. 
-The parser creates Diagram objects for the easy-entry PREXEL. These are then processed
-by the classes inside of the XML package into XMI fragments.
+Plugin gets selected string **=>** Parser parses string in Diagram objects **=>** XMI Adapator converts
+Diagram objects in XMI fragments **=>** Diagram objects are encoded into Pretty-printed and Source code
+output **=>** Plugin takes the Pretty-printed and source code and outputs them
 
 ### Plugin - prexel.py
 
