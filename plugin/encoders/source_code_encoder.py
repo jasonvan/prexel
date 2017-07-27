@@ -1,6 +1,8 @@
 from prexel.plugin.encoders.encoder import Encoder
 from prexel.plugin import REGEX
 
+INDENTATION = "    "  # Default indentation
+
 
 class SourceCodeEncoder(Encoder):
     """
@@ -20,8 +22,6 @@ class SourceCodeEncoder(Encoder):
     |generate_class()      |       |_________|
     |______________________|
     """
-
-    indentation = "    "  # Default indentation
 
     def generate_class(self, diagram):
         """
@@ -48,12 +48,13 @@ class SourceCodeEncoder(Encoder):
         if fields or methods:
             # Create a __init__ method if fields are provided
             if fields:
-                result += SourceCodeEncoder.indentation + \
+                result += INDENTATION + \
                           "def __init__(self, {}):\n".format(", ".join(fields))
 
                 for index, field in enumerate(fields):
-                    result += SourceCodeEncoder.indentation * 2 + \
-                              "self.{0} = {0}\n".format(field)
+                    result += INDENTATION * 2 + \
+                        "self.{0} = {0}\n".format(field)
+
                     if index == len(fields) - 1:
                         result += "\n"
 
@@ -77,14 +78,12 @@ class SourceCodeEncoder(Encoder):
                         except KeyError:
                             continue
                         else:
-                            result += SourceCodeEncoder.indentation * 2 + \
-                                "{}\n".format(body)
+                            result += INDENTATION * 2 + "{}\n".format(body)
                     # Just a string so create an empty method
                     else:
                         try:
                             result += self.process_method_signature(method)
-                            result += SourceCodeEncoder.indentation * 2 + \
-                                "pass\n"
+                            result += INDENTATION * 2 + "pass\n"
                         except SourceCodeEncoderException:
                             continue
 
@@ -92,7 +91,7 @@ class SourceCodeEncoder(Encoder):
                         result += "\n"
         # Output pass if no fields or methods provided
         else:
-            result += SourceCodeEncoder.indentation + "pass\n"
+            result += INDENTATION + "pass\n"
 
         # Add a newline after class
         result += "\n"
@@ -114,7 +113,7 @@ class SourceCodeEncoder(Encoder):
         method_name, method_arguments = matcher.groups()
 
         result = ""
-        result += SourceCodeEncoder.indentation + \
+        result += INDENTATION + \
             "def {}(self".format(method_name)
 
         if method_arguments.strip():
