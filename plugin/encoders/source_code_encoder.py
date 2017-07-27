@@ -1,5 +1,5 @@
-import re
 from prexel.plugin.encoders.encoder import Encoder
+from prexel.plugin import REGEX
 
 
 class SourceCodeEncoder(Encoder):
@@ -21,8 +21,7 @@ class SourceCodeEncoder(Encoder):
     |______________________|
     """
 
-    method_signature_regex = re.compile(r'([^(){}]*)\((.*)\)')
-    indentation = "    "
+    indentation = "    "  # Default indentation
 
     def generate_class(self, diagram):
         """
@@ -106,7 +105,7 @@ class SourceCodeEncoder(Encoder):
         Processes the method signature for method name and parameters
         Returns: string version of method
         """
-        matcher = SourceCodeEncoder.method_signature_regex.match(signature)
+        matcher = REGEX["method_signature"].match(signature)
 
         if not matcher:
             raise SourceCodeEncoderException("Method signature not "

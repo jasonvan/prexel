@@ -1,5 +1,6 @@
 import unittest
 from prexel.plugin.parser.lexer import Lexer
+from prexel.plugin.parser.token import Token
 
 
 class TestLexer(unittest.TestCase):
@@ -46,6 +47,34 @@ class TestLexer(unittest.TestCase):
         lexer.skip_whitespace()
 
         self.assertEqual(lexer.current, "c")
+
+    def test_get_token(self):
+        text = "|Kitchen color square_feet show_kitchen()"
+
+        lexer = Lexer(text)
+        token = lexer.get_token()
+
+        # Check that the token is a class marker
+        self.assertEqual(token.type, Token.CLASS_MARKER)
+
+        token = lexer.get_token()
+
+        # Check that the token is a class name
+        self.assertEqual(token.type, Token.CLASS_NAME)
+
+        token = lexer.get_token()
+
+        # Check that the token is a field
+        self.assertEqual(token.type, Token.FIELD)
+
+        # Check that the token is a field
+        token = lexer.get_token()
+        self.assertEqual(token.type, Token.FIELD)
+
+        # Check that the token is a method
+        token = lexer.get_token()
+        self.assertEqual(token.type, Token.METHOD)
+
 
 if __name__ == '__main__':
     unittest.main()

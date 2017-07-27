@@ -1,5 +1,5 @@
-import re
 from prexel.plugin.parser.token import Token
+from prexel.plugin import REGEX
 
 
 class Lexer:
@@ -7,15 +7,11 @@ class Lexer:
     Possible Token list
     Token(CLASS_MARKER, "|")
     Token(AGGREGATION, "<>{1}--{*}>")
-    Token(CHARACTER, "AZaz")
-    Token(NUMBER, "09")
     Token(MULTIPLE, "*")
     Token(DEPENDENCE, "-->")
     Token(INHERITENCE, "^")
     Token(INTERFACE, "=")
     """
-
-    class_regex = re.complile(r'[A-Z][a-z0-9]*')
 
     def __init__(self, text):
         self.text = text
@@ -45,8 +41,20 @@ class Lexer:
             if self.current.isspace():
                 self.skip_whitespace()
                 continue
+            elif self.current == "|":
+                self.step()
+                return Token(Token.CLASS_MARKER, "|")
             else:
                 element = self.element()
 
-                if self.class_regex.match(element):
-                    return Token("Class", element)
+                # Check element against some regex
+                if REGEX["class_name"].match(element):
+                    self.step()
+                    return Token(Token.CLASS_NAME, element)
+
+                if REGEX["method_signature"].match(element):
+                    self.step()
+                    return Token(Token.METHOD, element)
+                else:
+                    self.step()
+                    return Token(Token.FIELD, element)
