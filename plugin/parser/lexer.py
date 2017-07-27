@@ -43,7 +43,7 @@ class Lexer:
                 continue
             elif self.current == "|":
                 self.step()
-                return Token(Token.CLASS_MARKER, "|")
+                return Token(Token.PREXEL_MARKER, "|")
             else:
                 element = self.element()
 

@@ -2,8 +2,8 @@ class Token:
     """
     TODO
     """
-    CLASS_MARKER, CLASS_NAME, FIELD, METHOD = (
-        "CLASS_MARKER",
+    PREXEL_MARKER, CLASS_NAME, FIELD, METHOD = (
+        "PREXEL_MARKER",
         "CLASS_NAME",
         "FIELD",
         "METHOD"

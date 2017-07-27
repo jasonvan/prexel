@@ -55,7 +55,7 @@ class TestLexer(unittest.TestCase):
         token = lexer.get_token()
 
         # Check that the token is a class marker
-        self.assertEqual(token.type, Token.CLASS_MARKER)
+        self.assertEqual(token.type, Token.PREXEL_MARKER)
 
         token = lexer.get_token()
 
