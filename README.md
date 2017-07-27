@@ -49,10 +49,21 @@ to process, file creation, outputting formatted text, etc.
 
 ## Progress
 
-Currently the bulk of the completed code is inside the encoders and parsers packages.
-There is still work to be done in both these packages and can be noted in the task like
-below. The 
-represent the most complex part.
+Currently the bulk of the completed code is inside the **encoders** and **parsers** packages.
+There is still work to be done in both these packages as can be noted in the task list
+below. In terms of **models**, a basic Diagram object has been created, but will most
+likely be expanded in the future. The classes inside of the **XML** package 
+have not been written yet.The **plugin** code has a skeleton class setup, but is not
+currently hooked up to the parsers or encoders. 
+
+### Next Step
+
+The next step of the project is to finish up the parsers code and then have the
+plugin class utilize this to process easy-entry code into a Diagram object. This 
+Diagram object will be passed directly to the encoders for output the editor. Once the 
+XML code has been written, the parser will pass the Diagram object to an adaptor class
+that will handle convertting it to XMI fragments.
+
 
 ## Tasks
 
@@ -78,6 +89,7 @@ represent the most complex part.
     * Allow user the option to specify if they want pretty-print or source code, both, or neither,
     when running the prexel command
 * XML Package
+    * [DETERMINE MORE TASKS]
     * XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
     * Fragment aggregation code
     * Validation of fragments
