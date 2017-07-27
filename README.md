@@ -41,17 +41,17 @@ as validation.
 and encoding it into strings for output in the editor. There are two output types:
 Source Code and Pretty printing.
 
-### Prexel usage example
-
-Plugin gets selected string **=>** Parser parses string in Diagram objects **=>** XMI Adapator converts
-Diagram objects in XMI fragments **=>** Diagram objects are encoded into Pretty-printed and Source code
-output **=>** Plugin takes the Pretty-printed and source code and outputs them
-
 ### Plugin - prexel.py
 
 The main sublime text specific code is found inside of prexel.py. This file
 manages all of the interaction with the sublime plugin API to determine what text
 to process, file creation, outputting formatted text, etc.
+
+#### Prexel conversion process
+
+[Plugin gets selected string] **=>** [Parser parses string in Diagram objects] **=>** [XMI Adapator converts
+Diagram objects in XMI fragments] **=>** [Diagram objects are encoded into Pretty-printed and Source code
+output] **=>** [Plugin takes the Pretty-printed and source code and outputs them]
 
 ## Progress
 
