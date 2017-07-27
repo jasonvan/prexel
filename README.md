@@ -17,7 +17,7 @@ Running the test can be done from the command line, with the following command:
 
 ### Four top level packages in the project:
 
-1) **models** - This package contains the domain objects for this plugin. The main class
+**models** - This package contains the domain objects for this plugin. The main class
 is the Diagram class. This represents a single diagram element inside of a selection of PREXEL
 text. 
 
@@ -29,15 +29,15 @@ For instance the PREXEL below contains two diagram elements.
     |Employee  # diagram element 2
     |job_title
     
-2) **parsers** - This manages the parsing and interpretation of easy-entry PREXEL. 
+**parsers** - This manages the parsing and interpretation of easy-entry PREXEL. 
 The parser creates Diagram objects for the easy-entry PREXEL. These are then processed
 by the classes inside of the XML package into XMI fragments.
 
-3) **xml** - This manages the conversion of Diagram objects to and from XMI fragments.
+**xml** - This manages the conversion of Diagram objects to and from XMI fragments.
 It also handles the aggregation of all fragments for the project into one XML file as well
 as validation.
 
-4) **encoders** - The classes in this package are responsible for taking a Diagram object
+**encoders** - The classes in this package are responsible for taking a Diagram object
 and encoding it into strings for output in the editor. There are two output types:
 Source Code and Pretty printing.
 
