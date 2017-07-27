@@ -1,6 +1,6 @@
 # Prexel
 
-# Instruction
+# Execution of code
 
 Currently there is a test suite available to test the code. This can be found at:
 
