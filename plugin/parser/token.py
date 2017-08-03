@@ -2,11 +2,12 @@ class Token:
     """
     TODO
     """
-    PREXEL_MARKER, CLASS_NAME, FIELD, METHOD = (
+    PREXEL_MARKER, CLASS_NAME, FIELD, METHOD, AGGREGATION = (
         "PREXEL_MARKER",
         "CLASS_NAME",
         "FIELD",
-        "METHOD"
+        "METHOD",
+        "AGGREGATION"
     )
 
     def __init__(self, type, value):

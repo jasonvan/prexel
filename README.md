@@ -102,3 +102,6 @@ that will handle convertting it to XMI fragments.
     * XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
     * Fragment aggregation code
     * Validation of fragments
+* MISC
+    * make tasks for getting simple class and aggregation working as one-line prexel
+    * Move all tasks in backlog in here and delete backlog.md

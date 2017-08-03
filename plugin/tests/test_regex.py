@@ -52,5 +52,18 @@ class TestRegex(unittest.TestCase):
         self.assertFalse(aggregation_regex.match("<>--&>"))
         self.assertFalse(aggregation_regex.match("<>1a--1b>"))
 
+        # Test groupings
+        matcher = aggregation_regex.match("<>1--name----*>")
+        groups = matcher.groups()
+        self.assertEqual(groups[0], "1")
+        self.assertEqual(groups[1], "name")
+        self.assertEqual(groups[2], "*")
+
+        matcher = aggregation_regex.match("<>1--name---->")
+        groups = matcher.groups()
+        self.assertEqual(groups[0], "1")
+        self.assertEqual(groups[1], "name")
+        self.assertEqual(groups[2], "")
+
 if __name__ == '__main__':
     unittest.main()

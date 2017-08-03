@@ -75,6 +75,32 @@ class TestLexer(unittest.TestCase):
         token = lexer.get_token()
         self.assertEqual(token.type, Token.METHOD)
 
+    def test_get_token_with_aggregation(self):
+        text = "|Airplane <>-wings--> Wing"
+
+        lexer = Lexer(text)
+        token = lexer.get_token()
+
+        # Check that the token is a class marker
+        self.assertEqual(token.type, Token.PREXEL_MARKER)
+
+        token = lexer.get_token()
+
+        # Check that the token is a class name
+        self.assertEqual(token.type, Token.CLASS_NAME)
+
+        token = lexer.get_token()
+
+        # Check that the token is an aggregation
+        self.assertEqual(token.type, Token.AGGREGATION)
+        self.assertEqual(token.value["left_multi"], "")
+        self.assertEqual(token.value["name"], "wings")
+        self.assertEqual(token.value["right_multi"], "")
+
+        token = lexer.get_token()
+
+        # Check that the token is a class name
+        self.assertEqual(token.type, Token.CLASS_NAME)
 
 if __name__ == '__main__':
     unittest.main()

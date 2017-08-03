@@ -52,6 +52,22 @@ class Lexer:
                     self.step()
                     return Token(Token.CLASS_NAME, element)
 
+                aggregation = REGEX["aggregation"].match(element)
+
+                if aggregation:
+                    # Optional groupings returned from regex
+                    # <>(* or digit)---(name)---(* or digit)-->
+                    left_multi, name, right_multi = aggregation.groups()
+
+                    values = {
+                        "left_multi": left_multi,
+                        "name": name,
+                        "right_multi": right_multi
+                    }
+
+                    self.step()
+                    return Token(Token.AGGREGATION, values)
+
                 if REGEX["method_signature"].match(element):
                     self.step()
                     return Token(Token.METHOD, element)
