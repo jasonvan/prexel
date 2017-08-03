@@ -76,6 +76,9 @@ that will handle convertting it to XMI fragments.
 * Parser
     * Lexer
         * Comment test classes
+        * Need to add the usage of regex tester
+            "<>-----"
+            "<------"
         * Handle aggregation
         * Handle Dependence
         * Handle inheritance
