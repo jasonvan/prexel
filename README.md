@@ -71,37 +71,64 @@ XML code has been written, the parser will pass the Diagram object to an adaptor
 that will handle convertting it to XMI fragments.
 
 
-## Tasks
+## Backlog
 
-* Parser
-    * Lexer
-        * Comment test classes
-        * Need to add the usage of regex tester
-            "<>-----"
-            "<------"
-        * Handle aggregation
-        * Handle Dependence
-        * Handle inheritance
-    * Interpreter
-        * [DETERMINE TASKS]
-* Encoders
-    * Pretty Print
-        * Inheritance encoding
-        * Dependence encoding
-        * Aggregation encoding
-    * Source Code 
-        * [DETERMINE REMAINING TASKS]
-* Plugin
-    * [DETERMINE MORE TASKS]
-    * Create new file for source code
-    * Split prexel entry on newlines
-    * Allow user the option to specify if they want pretty-print or source code, both, or neither,
-    when running the prexel command
-* XML Package
-    * [DETERMINE MORE TASKS]
-    * XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
-    * Fragment aggregation code
-    * Validation of fragments
-* MISC
-    * make tasks for getting simple class and aggregation working as one-line prexel
-    * Move all tasks in backlog in here and delete backlog.md
+## Focus
+
+Focus on completing the interpreter and then hook up to sublime plugin. Right
+now the focus should be on producing simple classes and aggregation to source code
+and pretty-printing
+
+### Parser
+
+#### Lexer
+
+* Comment test classes
+* Need to add the usage of regex tester
+    "<>-----"
+    "<------"
+* Handle aggregation
+* Handle Dependence
+* Handle inheritance
+
+#### Interpreter
+* Start interpreter code
+    
+#### Encoders
+* Add docstrings to encoders.py
+* Pretty Print
+    * Inheritance encoding
+    * Dependence encoding
+    * Aggregation encoding
+* Source Code 
+    * [DETERMINE REMAINING TASKS]
+    
+#### Plugin
+* [DETERMINE MORE TASKS]
+* Create new file for source code
+* Split prexel entry on newlines
+* Allow user the option to specify if they want pretty-print or source code, both, or neither,
+when running the prexel command
+* Add Linux and Windows .sublime-keymap files
+
+#### XML Code
+* [DETERMINE MORE TASKS]
+* XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
+* Fragment aggregation code
+* Create ASCII version of UML for entire project
+* Research if anyone is doing aggregation/inheritance first UML models. These would focus on 
+one of these relationships as the main diagram form and other relationships would only be annotated.
+* Validation of fragments
+
+#### MISC
+* make tasks for getting simple class and aggregation working as one-line prexel
+* In current setup there needs to be a space between prexel items, e.g, 
+"|Airplane <>-wing--> Wing" instead of "|Airplane<>-wing-->Wing"
+    
+#### Planning
+
+* https://drive.google.com/file/d/0B9_FGv0nRq5hSGJlbm5WVC1BMG8/view?usp=sharing
+* Research the structure of XMI
+    * https://www.ibm.com/developerworks/library/x-wxxm24/index.html
+    * http://www.omg.org/spec/DD/1.0/
+* Review Sublime text's plugin architecture

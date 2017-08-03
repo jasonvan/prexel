@@ -98,7 +98,7 @@ Easy-entry code:
 
     """
     
-    Style->XCabinet
+    Style -> XCabinet
     
     |Style
     |get_cabinets()
@@ -131,7 +131,7 @@ Easy-entry code:
 
     """
         
-    |Airplane<>-wings->Wing
+    |Airplane <>-wings-> Wing
         
     """
 
@@ -159,7 +159,7 @@ Easy-entry code:
 
     """
         
-    |Employer--Employee
+    |Employer -- Employee
         
     """
 
@@ -188,7 +188,7 @@ Easy-entry code:
 
     """
         
-    |Employer<>1-*>Employee
+    |Employer <>1-*> Employee
         
     """
 
@@ -216,7 +216,7 @@ Easy-entry code:
 
     """
         
-    |Kitchen<>->XCabinet
+    |Kitchen <>-> XCabinet
         
     |=XCabinet=
     ^
