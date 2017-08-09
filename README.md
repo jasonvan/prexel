@@ -75,11 +75,17 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
+Working on one-line syntax
+Added spaces between Aggregation for easier processing
+
 Focus on completing the interpreter and then hook up to sublime plugin. Right
 now the focus should be on producing simple classes and aggregation to source code
 and pretty-printing
 
 ### Parser
+
+* Define a comprehensive grammar
+* Read up on AST
 
 #### Lexer
 
