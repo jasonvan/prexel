@@ -43,9 +43,12 @@ class Interpreter:
                 self.process_token(Token.METHOD)
 
     def aggregation(self, diagram):
-        while self.current_token and self.current_token.type is Token.AGGREGATION:
+        has_aggregation = False
+
+        if self.current_token and self.current_token.type is Token.AGGREGATION:
             token = self.current_token
             self.process_token(Token.AGGREGATION)
+            has_aggregation = True
 
             # TODO - currently this is not used but will be in the future
             try:
@@ -53,12 +56,16 @@ class Interpreter:
             except KeyError:
                 pass  # TODO
 
-            try:
-                name = token.value["name"]
-            except KeyError:
-                pass  # TODO
-            else:
+            if not diagram.fields:
+                diagram.fields = []
+
+            name = token.value["name"]
+
+            if name:
                 diagram.fields.append(name)
+            else:
+                # TODO - need to handle missing aggregated value
+                diagram.fields.append("MISSING-AGGREGATED-NAME")
 
             # TODO - currently this is not used but will be in the future
             try:
@@ -66,23 +73,29 @@ class Interpreter:
             except KeyError:
                 pass  # TODO
 
+        return has_aggregation
+
     def evaluate(self):
+        # TODO - clean up this code, a little hard to follow
         self.start_marker()
         diagrams = []
 
         first_diagram = Diagram()
+        diagrams.append(first_diagram)
 
         self.class_name(first_diagram)
         self.class_body(first_diagram)
-        self.aggregation(first_diagram)
-
-        diagrams.append(first_diagram)
+        has_aggregation = self.aggregation(first_diagram)
 
         if self.current_token and self.current_token.type is Token.CLASS_NAME:
             second_diagram = Diagram()
             self.class_name(second_diagram)
             self.class_body(second_diagram)
             diagrams.append(second_diagram)
+        elif has_aggregation:
+            # If there is aggregation in the string but not another
+            # class afterwards, throw error
+            self.error()
 
         return diagrams
 

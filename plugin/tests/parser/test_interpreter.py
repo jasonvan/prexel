@@ -88,3 +88,14 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(second_diagram.name, "Cupboard")
         self.assertEqual(second_diagram.methods, ["open()"])
 
+    def test_evaluate_error(self):
+        text = "|Kitchen color square_feet show_kitchen() <>-cupboards-->"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+
+        # Test error message
+        with self.assertRaises(InterpreterException) as context:
+            interpreter.evaluate()
+
+        self.assertTrue('Invalid Syntax' in str(context.exception))

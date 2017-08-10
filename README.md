@@ -75,24 +75,17 @@ that will handle convertting it to XMI fragments.
 
 * Working on one-line syntax
 * Demo command line tool
-* Determine who large prexel easy-entry are broken down into 
-different parts
+* Email ( e.g., __init__.py)
 * Added spaces between aggregation for easier processing
     * "|Airplane <>-wing--> Wing" instead of "|Airplane<>-wing-->Wing"
 
 ## Focus
 
-* Complete interpreter
-    * 
-* Think through how the diagram element should be broken down, should the name be changed
-current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation
-* Create command line tool that creates pretty printed code and source code
-output from an easy-entry string
-* Update encoder to take an array of diagrams
+* [NA] items
 
 * Review example-entry.md to determine next steps for the encorder and parser
 and create tasks
-* Write out current grammer for parser
+
 * Review classes, especially the parsers and lexers
     * Method names 
     * Add docstrings 
@@ -101,12 +94,19 @@ and create tasks
 
 ## Backlog
 
+### Model
+
+* Think through how the diagram element should be broken down, should the name be changed
+current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [NA]
+
 ### Interpreter
 
-* Create a default value from aggregation if not specified
+* Comment source and test classes [NA]
+* Create a default value from aggregation if not specified [NA]
 * Use the left multiplicity value for aggregation
 * Use the right multiplicity value for aggregation
 * Optionals
+    * Write out current grammer for parser
     * Define a comprehensive grammar
     * Read up on AST
     * Put tokens into AST if needed
@@ -114,7 +114,8 @@ and create tasks
 
 ### Lexer
 
-* Comment test classes
+* Clean up evaluate method [NA]
+* Comment source and test classes [NA]
 * Need to add the usage of regex tester
     "<>-----"
     "<------"
@@ -124,16 +125,19 @@ and create tasks
 token after first class_marker. This would be handle by the interpreter 
 
 ### Encoders
+* Update encoder to take an array of diagrams [NA]
 * Add docstrings to encoders.py
 * Pretty Print
+    * Aggregation encoding [NA]
     * Inheritance encoding
     * Dependence encoding
-    * Aggregation encoding
 * Source Code 
+    * Add comment to aggregation, noting the Class name aggregated,
+    this is immediately obvious since Python is not typed
     * [DETERMINE REMAINING TASKS]
     
 ### Plugin
-* [DETERMINE MORE TASKS]
+* Determine more tasks
 * Create new file for source code
 * Split prexel entry on double newlines
 * Allow user the option to specify if they want pretty-print or source code, 
@@ -144,8 +148,11 @@ generated classes, XML fragment, and pretty-printed diagrams.
 I believe we still need to synchronize the XML fragment and pretty-printed 
 diagram, but I question whether we need to keep t
 
+### Misc
+* Fix package issues so we can run cli from command line [NA]
+
 ### XML Code
-* [DETERMINE MORE TASKS]
+* Determine more tasks 
 * XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
 * Fragment aggregation code
 * Create ASCII version of UML for entire project
