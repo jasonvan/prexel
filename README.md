@@ -125,7 +125,6 @@ current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [N
 
 * Clean up evaluate method [NA]
 * Comment source and test classes [NA]
-* Don't allow "<>" or "<<" to be parsed as field tokens
 * Need to add the usage of regex tester
     <>-----
     <------
