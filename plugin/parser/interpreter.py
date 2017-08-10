@@ -19,7 +19,7 @@ class Interpreter:
         else:
             self.error()
 
-    def prexel(self):
+    def start_marker(self):
         self.process_token(Token.PREXEL_MARKER)
 
     def class_name(self, diagram):
@@ -47,9 +47,9 @@ class Interpreter:
             token = self.current_token
             self.process_token(Token.AGGREGATION)
 
+            # TODO - currently this is not used but will be in the future
             try:
                 left_multi = token.value["left_multi"]
-                # TODO - need to use this for something
             except KeyError:
                 pass  # TODO
 
@@ -60,18 +60,14 @@ class Interpreter:
             else:
                 diagram.fields.append(name)
 
+            # TODO - currently this is not used but will be in the future
             try:
                 right_multi = token.value["right_multi"]
             except KeyError:
-                # TODO - need to use this for something
                 pass  # TODO
 
-    def expr(self):
-        """
-        TODO
-        :return:
-        """
-        self.prexel()
+    def evaluate(self):
+        self.start_marker()
         diagrams = []
 
         first_diagram = Diagram()

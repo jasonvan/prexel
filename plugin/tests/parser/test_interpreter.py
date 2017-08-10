@@ -31,12 +31,12 @@ class TestInterpreter(unittest.TestCase):
 
         self.assertTrue('Invalid Syntax' in str(context.exception))
 
-    def test_prexel(self):
+    def test_start_marker(self):
         text = "|Airplane <>-wings--> Wing"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        interpreter.prexel()
+        interpreter.start_marker()
 
         self.assertEqual(interpreter.current_token.value, "Airplane")
         self.assertEqual(interpreter.current_token.type, Token.CLASS_NAME)
@@ -46,19 +46,19 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        interpreter.prexel()
+        interpreter.start_marker()
 
         diagram = Diagram()
 
         interpreter.class_name(diagram)
         self.assertEqual(diagram.name, "Airplane")
 
-    def test_expr(self):
+    def test_evaluate(self):
         text = "|Kitchen color square_feet show_kitchen()"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagrams = interpreter.expr()
+        diagrams = interpreter.evaluate()
 
         self.assertEqual(len(diagrams), 1)
 
@@ -68,12 +68,12 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(first_diagram.methods, ["show_kitchen()"])
         self.assertEqual(first_diagram.fields, ["color", "square_feet"])
 
-    def test_expr_advanced(self):
+    def test_evaluate_advanced(self):
         text = "|Kitchen color square_feet show_kitchen() <>-cupboards--> Cupboard open()"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagrams = interpreter.expr()
+        diagrams = interpreter.evaluate()
 
         self.assertEqual(len(diagrams), 2)
 

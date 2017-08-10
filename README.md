@@ -83,12 +83,7 @@ different parts
 ## Focus
 
 * Complete interpreter
-    * Test
-    * Refactor - Review names for Interpreter methods
-    * Test
-    * Refactor out repeating lexer and interpreter creation to a before method
-    in test
-    * Test
+    * 
 * Think through how the diagram element should be broken down, should the name be changed
 current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation
 * Create command line tool that creates pretty printed code and source code
@@ -106,12 +101,16 @@ and create tasks
 
 ## Backlog
 
-### Parser
+### Interpreter
 
-* Define a comprehensive grammar
-* Read up on AST
-* Put tokens into AST if needed
-* Generate diagram objects from AST
+* Create a default value from aggregation if not specified
+* Use the left multiplicity value for aggregation
+* Use the right multiplicity value for aggregation
+* Optionals
+    * Define a comprehensive grammar
+    * Read up on AST
+    * Put tokens into AST if needed
+    * Generate diagram objects from AST
 
 ### Lexer
 
@@ -119,7 +118,6 @@ and create tasks
 * Need to add the usage of regex tester
     "<>-----"
     "<------"
-* Handle aggregation
 * Handle Dependence
 * Handle inheritance
 * Think of a way to handle multiline form. We could ignore any class_marker 
