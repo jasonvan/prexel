@@ -4,6 +4,7 @@ from prexel.plugin import REGEX
 
 class Lexer:
     """
+    Code referenced from https://ruslanspivak.com/lsbasi-part6/
     Possible Token list
     Token(CLASS_MARKER, "|")
     Token(AGGREGATION, "<>{1}--{*}>")

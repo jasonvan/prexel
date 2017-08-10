@@ -1,6 +1,15 @@
 class Diagram:
     """
     Represents a diagram element for use with interpreter and encoder
+     ____________
+    |  Diagram   |
+    |------------|
+    |name        |
+    |diagram_type|
+    |fields      |
+    |methods     |
+    |extends     |
+    |____________|
     """
     def __init__(self, name="", diagram_type="class",
                  fields=None, methods=None, extends=None):

@@ -4,6 +4,7 @@ from prexel.plugin.models.diagram import Diagram
 
 class Interpreter:
     """
+    Code referenced from https://ruslanspivak.com/lsbasi-part6/
     TODO: need to comment this code
     """
     def __init__(self, lexer):

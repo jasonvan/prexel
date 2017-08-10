@@ -77,15 +77,6 @@ Diagram object will be passed directly to the encoders for output the editor. On
 XML code has been written, the parser will pass the Diagram object to an adaptor class
 that will handle convertting it to XMI fragments.
 
-
-## Meeting notes
-
-* Working on one-line syntax
-* Demo command line tool
-* Email ( e.g., __init__.py)
-* Added spaces between aggregation for easier processing
-    * "|Airplane <>-wing--> Wing" instead of "|Airplane<>-wing-->Wing"
-
 ## Focus
 
 * [NA-FIRST]
@@ -96,9 +87,9 @@ that will handle convertting it to XMI fragments.
 and create tasks
 
 * Review classes, especially the parsers and lexers
+    * Add Prexel
     * Method names 
     * Add docstrings 
-    * Add Prexel
     * Add needed comments
 
 ## Backlog
@@ -138,6 +129,7 @@ token after first class_marker. This would be handle by the interpreter
 * Update encoder to take an array of diagrams [NA]
 * Add docstrings to encoders.py
 * Pretty Print
+    * When diagram has no methods don't print out a line
     * Aggregation encoding [NA-FIRST]
     * Inheritance encoding
     * Dependence encoding
