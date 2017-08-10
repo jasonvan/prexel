@@ -22,20 +22,12 @@ class Interpreter:
     def prexel(self):
         self.process_token(Token.PREXEL_MARKER)
 
-    def class_name(self):
+    def class_name(self, diagram):
         token = self.current_token
+        diagram.name = token.value
         self.process_token(Token.CLASS_NAME)
-        return token.value
 
-    def expr(self):
-        """
-        TODO
-        :return:
-        """
-        self.prexel()
-
-        diagram = Diagram(self.class_name())
-
+    def class_body(self, diagram):
         while self.current_token and self.current_token.type in (Token.FIELD, Token.METHOD):
             token = self.current_token
             if token.type == Token.FIELD:
@@ -50,11 +42,53 @@ class Interpreter:
                 diagram.methods.append(token.value)
                 self.process_token(Token.METHOD)
 
-        # TODO Put aggregation here
+    def aggregation(self, diagram):
+        while self.current_token and self.current_token.type is Token.AGGREGATION:
+            token = self.current_token
+            self.process_token(Token.AGGREGATION)
 
-        # TODO put optional class reference here
+            try:
+                left_multi = token.value["left_multi"]
+                # TODO - need to use this for something
+            except KeyError:
+                pass  # TODO
 
-        return diagram
+            try:
+                name = token.value["name"]
+            except KeyError:
+                pass  # TODO
+            else:
+                diagram.fields.append(name)
+
+            try:
+                right_multi = token.value["right_multi"]
+            except KeyError:
+                # TODO - need to use this for something
+                pass  # TODO
+
+    def expr(self):
+        """
+        TODO
+        :return:
+        """
+        self.prexel()
+        diagrams = []
+
+        first_diagram = Diagram()
+
+        self.class_name(first_diagram)
+        self.class_body(first_diagram)
+        self.aggregation(first_diagram)
+
+        diagrams.append(first_diagram)
+
+        if self.current_token and self.current_token.type is Token.CLASS_NAME:
+            second_diagram = Diagram()
+            self.class_name(second_diagram)
+            self.class_body(second_diagram)
+            diagrams.append(second_diagram)
+
+        return diagrams
 
 
 class InterpreterException(Exception):

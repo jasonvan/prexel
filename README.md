@@ -71,23 +71,49 @@ XML code has been written, the parser will pass the Diagram object to an adaptor
 that will handle convertting it to XMI fragments.
 
 
-## Backlog
+## Meeting notes
+
+* Working on one-line syntax
+* Demo command line tool
+* Determine who large prexel easy-entry are broken down into 
+different parts
+* Added spaces between aggregation for easier processing
+    * "|Airplane <>-wing--> Wing" instead of "|Airplane<>-wing-->Wing"
 
 ## Focus
 
-Working on one-line syntax
-Added spaces between Aggregation for easier processing
+* Complete interpreter
+    * Test
+    * Refactor - Review names for Interpreter methods
+    * Test
+    * Refactor out repeating lexer and interpreter creation to a before method
+    in test
+    * Test
+* Think through how the diagram element should be broken down, should the name be changed
+current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation
+* Create command line tool that creates pretty printed code and source code
+output from an easy-entry string
+* Update encoder to take an array of diagrams
 
-Focus on completing the interpreter and then hook up to sublime plugin. Right
-now the focus should be on producing simple classes and aggregation to source code
-and pretty-printing
+* Review example-entry.md to determine next steps for the encorder and parser
+and create tasks
+* Write out current grammer for parser
+* Review classes, especially the parsers and lexers
+    * Method names 
+    * Add docstrings 
+    * Add Prexel
+    * Add needed comments
+
+## Backlog
 
 ### Parser
 
 * Define a comprehensive grammar
 * Read up on AST
+* Put tokens into AST if needed
+* Generate diagram objects from AST
 
-#### Lexer
+### Lexer
 
 * Comment test classes
 * Need to add the usage of regex tester
@@ -96,11 +122,10 @@ and pretty-printing
 * Handle aggregation
 * Handle Dependence
 * Handle inheritance
+* Think of a way to handle multiline form. We could ignore any class_marker 
+token after first class_marker. This would be handle by the interpreter 
 
-#### Interpreter
-* Start interpreter code
-    
-#### Encoders
+### Encoders
 * Add docstrings to encoders.py
 * Pretty Print
     * Inheritance encoding
@@ -109,15 +134,19 @@ and pretty-printing
 * Source Code 
     * [DETERMINE REMAINING TASKS]
     
-#### Plugin
+### Plugin
 * [DETERMINE MORE TASKS]
 * Create new file for source code
-* Split prexel entry on newlines
-* Allow user the option to specify if they want pretty-print or source code, both, or neither,
-when running the prexel command
+* Split prexel entry on double newlines
+* Allow user the option to specify if they want pretty-print or source code, 
+both, or neither, when running the prexel command
 * Add Linux and Windows .sublime-keymap files
+* I’ve also been thinking a lot about the “need” to synchorize between 
+generated classes, XML fragment, and pretty-printed diagrams. 
+I believe we still need to synchronize the XML fragment and pretty-printed 
+diagram, but I question whether we need to keep t
 
-#### XML Code
+### XML Code
 * [DETERMINE MORE TASKS]
 * XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
 * Fragment aggregation code
@@ -125,13 +154,9 @@ when running the prexel command
 * Research if anyone is doing aggregation/inheritance first UML models. These would focus on 
 one of these relationships as the main diagram form and other relationships would only be annotated.
 * Validation of fragments
+* Review presentation of large diagram for all classes in the project 
 
-#### MISC
-* make tasks for getting simple class and aggregation working as one-line prexel
-* In current setup there needs to be a space between prexel items, e.g, 
-"|Airplane <>-wing--> Wing" instead of "|Airplane<>-wing-->Wing"
-    
-#### Planning
+### Planning
 
 * https://drive.google.com/file/d/0B9_FGv0nRq5hSGJlbm5WVC1BMG8/view?usp=sharing
 * Research the structure of XMI
