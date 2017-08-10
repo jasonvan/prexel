@@ -50,12 +50,6 @@ class Interpreter:
             self.process_token(Token.AGGREGATION)
             has_aggregation = True
 
-            # TODO - currently this is not used but will be in the future
-            try:
-                left_multi = token.value["left_multi"]
-            except KeyError:
-                pass  # TODO
-
             if not diagram.fields:
                 diagram.fields = []
 
@@ -68,15 +62,13 @@ class Interpreter:
                 diagram.fields.append("MISSING-AGGREGATED-NAME")
 
             # TODO - currently this is not used but will be in the future
-            try:
-                right_multi = token.value["right_multi"]
-            except KeyError:
-                pass  # TODO
+            left_multi = token.value["left_multi"]
+            right_multi = token.value["right_multi"]
 
         return has_aggregation
 
     def evaluate(self):
-        # TODO - clean up this code, a little hard to follow
+        # TODO - clean up and comment this code, a little hard to follow
         self.start_marker()
         diagrams = []
 

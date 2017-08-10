@@ -81,6 +81,7 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
+* [NA-FIRST]
 * [NA] items
 
 * Review example-entry.md to determine next steps for the encorder and parser
@@ -97,7 +98,7 @@ and create tasks
 ### Model
 
 * Think through how the diagram element should be broken down, should the name be changed
-current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [NA]
+current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [NA-FIRST]
 
 ### Interpreter
 
