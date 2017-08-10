@@ -1,6 +1,12 @@
 # Prexel
 
-# Execution of code
+# Execution
+
+Run this small command-line application to test current code
+
+    prexel/plugin/cli.py
+
+## Testing
 
 Currently there is a test suite available to test the code. This can be found at:
 
@@ -11,6 +17,7 @@ Running the test can be done from the command line, with the following command:
     python3 -m unittest prexel/plugin/tests/encoders/test_pretty_print_encoder.py
     python3 -m unittest prexel/plugin/tests/encoders/test_source_code_encoder.py 
     python3 -m unittest prexel/plugin/tests/parser/test_lexer.py
+    python3 -m unittest prexel/plugin/tests/parser/test_interpreter.py
     python3 -m unittest prexel/plugin/tests/test_regex.py
 
 ## Design
@@ -83,6 +90,7 @@ that will handle convertting it to XMI fragments.
 
 * [NA-FIRST]
 * [NA] items
+* Clean up README
 
 * Review example-entry.md to determine next steps for the encorder and parser
 and create tasks
@@ -117,9 +125,11 @@ current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [N
 
 * Clean up evaluate method [NA]
 * Comment source and test classes [NA]
+* Don't allow "<>" or "<<" to be parsed as field tokens
 * Need to add the usage of regex tester
-    "<>-----"
-    "<------"
+    <>-----
+    <------
+
 * Handle Dependence
 * Handle inheritance
 * Think of a way to handle multiline form. We could ignore any class_marker 
@@ -129,7 +139,7 @@ token after first class_marker. This would be handle by the interpreter
 * Update encoder to take an array of diagrams [NA]
 * Add docstrings to encoders.py
 * Pretty Print
-    * Aggregation encoding [NA]
+    * Aggregation encoding [NA-FIRST]
     * Inheritance encoding
     * Dependence encoding
 * Source Code 

@@ -102,5 +102,31 @@ class TestLexer(unittest.TestCase):
         # Check that the token is a class name
         self.assertEqual(token.type, Token.CLASS_NAME)
 
+    def test_get_token_with_aggregation_error(self):
+        text = "|Airplane length <> Wing"
+
+        lexer = Lexer(text)
+        token = lexer.get_token()
+
+        # Check that the token is a class marker
+        self.assertEqual(token.type, Token.PREXEL_MARKER)
+
+        token = lexer.get_token()
+
+        # Check that the token is a class name
+        self.assertEqual(token.type, Token.CLASS_NAME)
+
+        token = lexer.get_token()
+
+        # Check that the token is a field
+        self.assertEqual(token.type, Token.FIELD)
+
+        token = lexer.get_token()
+
+        # Check that token is the "Wing" values and not "<>"
+        # which should have been skipped
+        self.assertEqual(token.type, Token.CLASS_NAME)
+        self.assertEqual(token.value, "Wing")
+
 if __name__ == '__main__':
     unittest.main()

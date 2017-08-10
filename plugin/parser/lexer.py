@@ -47,6 +47,10 @@ class Lexer:
             else:
                 element = self.element()
 
+                # Skip incorrect aggregation token format
+                if element in ("<<>", "<>>", "<>", "<<>>"):
+                    continue
+
                 # Check element against some regex
                 if REGEX["class_name"].match(element):
                     self.step()
