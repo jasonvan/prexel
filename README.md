@@ -79,11 +79,12 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
-* Think through how the diagram element should be broken down, should the name be changed
-current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [NA-FIRST]
-* Update interpreter to create multiple diagram objects
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests
+* Run tests on test_pretty_print_encoder.py
+* Run tests on test_source_code_encorer.py
+* Update encoder code to take in different types of Diagrams. [BROKEN]
+
 * Allow for multiple loops of code inside of evaluate method
 * Clean up README
 * Update encoders to take an array of digrams, need to determine how to

@@ -3,7 +3,9 @@ import unittest
 from prexel.plugin.parser.lexer import Lexer
 from prexel.plugin.parser.interpreter import Interpreter, InterpreterException
 from prexel.plugin.parser.token import Token
-from prexel.plugin.models.diagram import Diagram
+from prexel.plugin.models.diagram import (ClassDiagram,
+                                          InheritanceDiagram,
+                                          AggregationDiagram)
 
 
 class TestInterpreter(unittest.TestCase):
@@ -48,10 +50,10 @@ class TestInterpreter(unittest.TestCase):
         interpreter = Interpreter(lexer)
         interpreter.start_marker()
 
-        diagram = Diagram()
+        class_diagram = ClassDiagram()
 
-        interpreter.class_name(diagram)
-        self.assertEqual(diagram.name, "Airplane")
+        interpreter.class_name(class_diagram)
+        self.assertEqual(class_diagram.name, "Airplane")
 
     def test_evaluate(self):
         text = "|Kitchen color square_feet show_kitchen()"
@@ -69,29 +71,39 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(first_diagram.fields, ["color", "square_feet"])
 
     def test_evaluate_advanced(self):
-        text = "|Kitchen << Room color square_feet show_kitchen() <>-cupboards--> Cupboard open()"
+        text = "|Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
         diagrams = interpreter.evaluate()
 
-        self.assertEqual(len(diagrams), 3)
+        self.assertEqual(len(diagrams), 5)
 
-        first_diagram = diagrams[0]
+        # Main class diagram
+        main_class_diagram = diagrams[0]
+        self.assertEqual(main_class_diagram.name, "Kitchen")
+        self.assertEqual(main_class_diagram.methods, ["show_kitchen()"])
+        self.assertEqual(main_class_diagram.fields, ["color", "square_feet", "cupboards"])
 
-        self.assertEqual(first_diagram.name, "Kitchen")
-        self.assertEqual(first_diagram.methods, ["show_kitchen()"])
-        self.assertEqual(first_diagram.fields, ["color", "square_feet", "cupboards"])
+        # Inheritance diagram
+        inheritance_diagram = diagrams[1]
+        self.assertIsInstance(inheritance_diagram, InheritanceDiagram)
 
-        second_diagram = diagrams[1]
+        # Inherited class diagram
+        inherited_class_diagram = diagrams[2]
+        self.assertEqual(inherited_class_diagram.name, "Room")
+        self.assertIsInstance(inherited_class_diagram, ClassDiagram)
 
-        self.assertEqual(second_diagram.name, "Room")
-        self.assertEqual(second_diagram.diagram_type, "inheritance")
+        # Aggregation diagram
+        aggregation_diagram = diagrams[3]
+        self.assertIsInstance(aggregation_diagram, AggregationDiagram)
+        self.assertEqual(aggregation_diagram.left_multiplicity, "*")
+        self.assertEqual(aggregation_diagram.right_multiplicity, "1")
 
-        third_diagram = diagrams[2]
-
-        self.assertEqual(third_diagram.name, "Cupboard")
-        self.assertEqual(third_diagram.methods, ["open()"])
+        # Aggregated class diagram
+        aggregated_class_diagram = diagrams[4]
+        self.assertEqual(aggregated_class_diagram.name, "Cupboard")
+        self.assertEqual(aggregated_class_diagram.methods, ["open()"])
 
     def test_evaluate_error(self):
         text = "|Kitchen color square_feet show_kitchen() <>-cupboards-->"

@@ -1,5 +1,8 @@
 from prexel.plugin.parser.lexer import Token
-from prexel.plugin.models.diagram import Diagram
+from prexel.plugin.models.diagram import (ClassDiagram,
+                                          AggregationDiagram,
+                                          InheritanceDiagram)
+
 
 
 class Interpreter:
@@ -10,9 +13,10 @@ class Interpreter:
     def __init__(self, lexer):
         self.lexer = lexer
         self.current_token = self.lexer.get_token()
+        self.diagrams = []
 
-    def error(self):
-        raise InterpreterException('Invalid Syntax')
+    def error(self, message="Invalid Syntax"):
+        raise InterpreterException(message)
 
     def process_token(self, token_type):
         if self.current_token.type == token_type:
@@ -27,6 +31,9 @@ class Interpreter:
         token = self.current_token
         diagram.name = token.value
         self.process_token(Token.CLASS_NAME)
+
+    def next_token_is_class_token(self):
+        return self.current_token and self.current_token.type is Token.CLASS_NAME
 
     def class_body(self, diagram):
         while self.current_token and self.current_token.type in (Token.FIELD, Token.METHOD):
@@ -44,24 +51,32 @@ class Interpreter:
                 self.process_token(Token.METHOD)
 
     def inheritance(self):
-        diagram = None
-
+        # TODO comment and clean up
         if self.current_token and self.current_token.type is Token.INHERITANCE:
-            token = self.current_token
             self.process_token(Token.INHERITANCE)
+            inheritance_diagram = InheritanceDiagram()
 
-            diagram = Diagram()
-            diagram.diagram_type = "inheritance"
+            # Make sure that a class name follows an inheritance token
+            if self.next_token_is_class_token():
+                parent_class_diagram = ClassDiagram()
 
-        return diagram
+                # Determine parent class name
+                self.class_name(parent_class_diagram)
+
+                # Append inheritance diagram and then parent class diagram
+                self.diagrams.append(inheritance_diagram)
+                self.diagrams.append(parent_class_diagram)
+            else:
+                self.error("Missing parent class after \"<<\"")
 
     def aggregation(self, diagram):
-        has_aggregation = False
-
+        # TODO comment and clean up
         if self.current_token and self.current_token.type is Token.AGGREGATION:
             token = self.current_token
             self.process_token(Token.AGGREGATION)
-            has_aggregation = True
+
+            if not self.next_token_is_class_token():
+                self.error()
 
             if not diagram.fields:
                 diagram.fields = []
@@ -74,44 +89,38 @@ class Interpreter:
                 # TODO - need to handle missing aggregated value
                 diagram.fields.append("MISSING-AGGREGATED-NAME")
 
+            aggregation_diagram = AggregationDiagram()
             # TODO - currently this is not used but will be in the future
-            left_multi = token.value["left_multi"]
-            right_multi = token.value["right_multi"]
+            aggregation_diagram.left_multiplicity = token.value["left_multi"]
+            aggregation_diagram.right_multiplicity = token.value["right_multi"]
 
-        return has_aggregation
+            self.diagrams.append(aggregation_diagram)
+
+            # Create aggregation class
+            aggregated_class_diagram = ClassDiagram()
+            self.class_name(aggregated_class_diagram)
+            self.class_body(aggregated_class_diagram)
+            self.diagrams.append(aggregated_class_diagram)
 
     def evaluate(self):
         # TODO - clean up and comment this code, a little hard to follow
-        # TODO add diagrams as a class variable
         self.start_marker()
-        diagrams = []
 
-        first_diagram = Diagram()
-        diagrams.append(first_diagram)
+        # Interpret class
+        class_diagram = ClassDiagram()
+        self.diagrams.append(class_diagram)
+        self.class_name(class_diagram)
 
-        self.class_name(first_diagram)
-        inheritance_diagram = self.inheritance()
-        if inheritance_diagram:
-            # TODO move this check to a method
-            if self.current_token and self.current_token.type is Token.CLASS_NAME:
-                self.class_name(inheritance_diagram)
-                diagrams.append(inheritance_diagram)
-            else:
-                self.error()  # TODO send error string with message
-        self.class_body(first_diagram)
-        has_aggregation = self.aggregation(first_diagram)
+        # Optional - Check for inheritance
+        self.inheritance()
 
-        if self.current_token and self.current_token.type is Token.CLASS_NAME:
-            second_diagram = Diagram()
-            self.class_name(second_diagram)
-            self.class_body(second_diagram)
-            diagrams.append(second_diagram)
-        elif has_aggregation:
-            # If there is aggregation in the string but not another
-            # class afterwards, throw error
-            self.error()  # TODO send error string with message
+        # Interpret class fields and methods
+        self.class_body(class_diagram)
 
-        return diagrams
+        # Optional - Check for aggregation
+        self.aggregation(class_diagram)
+
+        return self.diagrams
 
 
 class InterpreterException(Exception):
