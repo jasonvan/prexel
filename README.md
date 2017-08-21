@@ -79,9 +79,22 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
+* Think through how the diagram element should be broken down, should the name be changed
+current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [NA-FIRST]
+* Update interpreter to create multiple diagram objects
+* Comment interpreter code/ Comment interpreter tests
+* Comment lexer code / Comment lexer tests
+* Allow for multiple loops of code inside of evaluate method
+* Clean up README
+* Update encoders to take an array of digrams, need to determine how to
+properly print values
+* Get multiline reading working
+
+
+
+
 * [NA-FIRST]
 * [NA] items
-* Clean up README
 * Email Eric
     * Check on license
     * Ask about lexer code and how I should attribute it
@@ -89,8 +102,7 @@ that will handle convertting it to XMI fragments.
 * Review example-entry.md to determine next steps for the encorder and parser
 and create tasks
 
-* Get multiline reading working
-* figure out why packing isn't working properly
+* figure out why packaging isn't working properly
 
 * Review classes, especially the parsers and lexers
     * Add Prexel [NA]
@@ -102,8 +114,6 @@ and create tasks
 
 ### Model
 
-* Think through how the diagram element should be broken down, should the name be changed
-current Diagram -> DiagramPart ( abs) DiagramPartClass DiagramPartAggregation [NA-FIRST]
 
 ### Interpreter
 

@@ -69,13 +69,13 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(first_diagram.fields, ["color", "square_feet"])
 
     def test_evaluate_advanced(self):
-        text = "|Kitchen color square_feet show_kitchen() <>-cupboards--> Cupboard open()"
+        text = "|Kitchen << Room color square_feet show_kitchen() <>-cupboards--> Cupboard open()"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
         diagrams = interpreter.evaluate()
 
-        self.assertEqual(len(diagrams), 2)
+        self.assertEqual(len(diagrams), 3)
 
         first_diagram = diagrams[0]
 
@@ -85,8 +85,13 @@ class TestInterpreter(unittest.TestCase):
 
         second_diagram = diagrams[1]
 
-        self.assertEqual(second_diagram.name, "Cupboard")
-        self.assertEqual(second_diagram.methods, ["open()"])
+        self.assertEqual(second_diagram.name, "Room")
+        self.assertEqual(second_diagram.diagram_type, "inheritance")
+
+        third_diagram = diagrams[2]
+
+        self.assertEqual(third_diagram.name, "Cupboard")
+        self.assertEqual(third_diagram.methods, ["open()"])
 
     def test_evaluate_error(self):
         text = "|Kitchen color square_feet show_kitchen() <>-cupboards-->"

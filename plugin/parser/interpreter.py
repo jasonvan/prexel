@@ -43,6 +43,18 @@ class Interpreter:
                 diagram.methods.append(token.value)
                 self.process_token(Token.METHOD)
 
+    def inheritance(self):
+        diagram = None
+
+        if self.current_token and self.current_token.type is Token.INHERITANCE:
+            token = self.current_token
+            self.process_token(Token.INHERITANCE)
+
+            diagram = Diagram()
+            diagram.diagram_type = "inheritance"
+
+        return diagram
+
     def aggregation(self, diagram):
         has_aggregation = False
 
@@ -70,6 +82,7 @@ class Interpreter:
 
     def evaluate(self):
         # TODO - clean up and comment this code, a little hard to follow
+        # TODO add diagrams as a class variable
         self.start_marker()
         diagrams = []
 
@@ -77,6 +90,14 @@ class Interpreter:
         diagrams.append(first_diagram)
 
         self.class_name(first_diagram)
+        inheritance_diagram = self.inheritance()
+        if inheritance_diagram:
+            # TODO move this check to a method
+            if self.current_token and self.current_token.type is Token.CLASS_NAME:
+                self.class_name(inheritance_diagram)
+                diagrams.append(inheritance_diagram)
+            else:
+                self.error()  # TODO send error string with message
         self.class_body(first_diagram)
         has_aggregation = self.aggregation(first_diagram)
 
@@ -88,7 +109,7 @@ class Interpreter:
         elif has_aggregation:
             # If there is aggregation in the string but not another
             # class afterwards, throw error
-            self.error()
+            self.error()  # TODO send error string with message
 
         return diagrams
 
