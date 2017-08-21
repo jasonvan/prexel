@@ -54,7 +54,7 @@ class TestLexer(unittest.TestCase):
         lexer = Lexer(text)
         token = lexer.get_token()
 
-        # Check that the token is a class marker
+        # Check that the token is a prexel marker
         self.assertEqual(token.type, Token.PREXEL_MARKER)
 
         token = lexer.get_token()
@@ -75,13 +75,37 @@ class TestLexer(unittest.TestCase):
         token = lexer.get_token()
         self.assertEqual(token.type, Token.METHOD)
 
+    def test_get_token_with_inheritence(self):
+        text = "|Kitchen << Room"
+
+        lexer = Lexer(text)
+        token = lexer.get_token()
+
+        # Check that the token is a prexel marker
+        self.assertEqual(token.type, Token.PREXEL_MARKER)
+
+        token = lexer.get_token()
+
+        # Check that the token is a class name
+        self.assertEqual(token.type, Token.CLASS_NAME)
+
+        token = lexer.get_token()
+
+        # Check that the token is an inheritance token
+        self.assertEqual(token.type, Token.INHERITANCE)
+
+        token = lexer.get_token()
+
+        # Check that the token is a class name
+        self.assertEqual(token.type, Token.CLASS_NAME)
+
     def test_get_token_with_aggregation(self):
         text = "|Airplane <>-wings--> Wing"
 
         lexer = Lexer(text)
         token = lexer.get_token()
 
-        # Check that the token is a class marker
+        # Check that the token is a prexel marker
         self.assertEqual(token.type, Token.PREXEL_MARKER)
 
         token = lexer.get_token()
@@ -108,7 +132,7 @@ class TestLexer(unittest.TestCase):
         lexer = Lexer(text)
         token = lexer.get_token()
 
-        # Check that the token is a class marker
+        # Check that the token is a prexel marker
         self.assertEqual(token.type, Token.PREXEL_MARKER)
 
         token = lexer.get_token()

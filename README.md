@@ -82,12 +82,18 @@ that will handle convertting it to XMI fragments.
 * [NA-FIRST]
 * [NA] items
 * Clean up README
+* Email Eric
+    * Check on license
+    * Ask about lexer code and how I should attribute it
 
 * Review example-entry.md to determine next steps for the encorder and parser
 and create tasks
 
+* Get multiline reading working
+* figure out why packing isn't working properly
+
 * Review classes, especially the parsers and lexers
-    * Add Prexel
+    * Add Prexel [NA]
     * Method names 
     * Add docstrings 
     * Add needed comments
@@ -131,7 +137,7 @@ token after first class_marker. This would be handle by the interpreter
 * Pretty Print
     * When diagram has no methods don't print out a line
     * Aggregation encoding [NA-FIRST]
-    * Inheritance encoding
+    * Inheritance encoding [NA-FIRST]
     * Dependence encoding
 * Source Code 
     * Add comment to aggregation, noting the Class name aggregated,

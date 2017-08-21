@@ -65,5 +65,11 @@ class TestRegex(unittest.TestCase):
         self.assertEqual(groups[1], "name")
         self.assertEqual(groups[2], "")
 
+    def test_inheritance_regex(self):
+        inheritance_regex = REGEX["inheritance"]
+
+        self.assertTrue(inheritance_regex.match("<<"))
+        self.assertFalse(inheritance_regex.match("< <"))
+
 if __name__ == '__main__':
     unittest.main()

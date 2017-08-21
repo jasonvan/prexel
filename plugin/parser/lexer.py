@@ -6,12 +6,7 @@ class Lexer:
     """
     Code referenced from https://ruslanspivak.com/lsbasi-part6/
     Possible Token list
-    Token(CLASS_MARKER, "|")
-    Token(AGGREGATION, "<>{1}--{*}>")
-    Token(MULTIPLE, "*")
     Token(DEPENDENCE, "-->")
-    Token(INHERITENCE, "^")
-    Token(INTERFACE, "=")
     """
 
     def __init__(self, text):
@@ -53,9 +48,14 @@ class Lexer:
                     continue
 
                 # Check element against some regex
+
                 if REGEX["class_name"].match(element):
                     self.step()
                     return Token(Token.CLASS_NAME, element)
+
+                if REGEX["inheritance"].match(element):
+                    self.step()
+                    return Token(Token.INHERITANCE, element)
 
                 aggregation = REGEX["aggregation"].match(element)
 
