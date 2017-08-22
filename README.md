@@ -79,16 +79,18 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
-* Update code to handle aggregation before list of methods
+* Run tests on test_pretty_print_encoder.py
+* Run tests on test_source_code_encorer.py
+* Update encoder code to take in different types of Diagrams. [BROKEN]
+* Determine how to properly print out diagrams
+
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests
 
-* Run tests on test_pretty_print_encoder.py
-* Run tests on test_source_code_encorer.py
 * need to handle "S" character
-* Update encoder code to take in different types of Diagrams. [BROKEN]
-* Determine how to properly print out diagrams
+
 * need to figure out a way to handle merging multiple diagrams
+
 * Clean up README
 * Make GIFs for using prexel inside of Sublime text
 

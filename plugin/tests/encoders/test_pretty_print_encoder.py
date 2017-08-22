@@ -1,7 +1,7 @@
 import unittest
 
 from prexel.plugin.encoders.pretty_print_encoder import PrettyPrintEncoder
-from prexel.plugin.models.diagram import Diagram
+from prexel.plugin.models.diagram import ClassDiagram
 
 
 class TestPrettyPrintEncoder(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|place_wall_cabinet() |\n"
                     "|_____________________|\n")
 
-        diagram = Diagram("Kitchen", methods=[
+        diagram = ClassDiagram("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -33,7 +33,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_generate_class(self):
-        diagram = Diagram("Kitchen", methods=[
+        diagram = ClassDiagram("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
