@@ -79,24 +79,27 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
+* Update code to handle aggregation before list of methods
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests
+
 * Run tests on test_pretty_print_encoder.py
 * Run tests on test_source_code_encorer.py
+* need to handle "S" character
 * Update encoder code to take in different types of Diagrams. [BROKEN]
+* Determine how to properly print out diagrams
+* need to figure out a way to handle merging multiple diagrams
+* Clean up README
+* Make GIFs for using prexel inside of Sublime text
 
 * Allow for multiple loops of code inside of evaluate method
-* Clean up README
 * Update encoders to take an array of digrams, need to determine how to
 properly print values
-* Get multiline reading working
-
-
-
 
 * [NA-FIRST]
 * [NA] items
 * Email Eric
+    * You can use jasonvan@bu.edu
     * Check on license
     * Ask about lexer code and how I should attribute it
 
@@ -141,6 +144,7 @@ and create tasks
 * Handle inheritance
 * Think of a way to handle multiline form. We could ignore any class_marker 
 token after first class_marker. This would be handle by the interpreter 
+* Make multiplicity values constants
 
 ### Encoders
 * Update encoder to take an array of diagrams [NA]

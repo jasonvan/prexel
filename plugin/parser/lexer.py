@@ -5,14 +5,14 @@ from prexel.plugin import REGEX
 class Lexer:
     """
     Code referenced from https://ruslanspivak.com/lsbasi-part6/
-    Possible Token list
-    Token(DEPENDENCE, "-->")
+    TODO add PREXEL
     """
 
     def __init__(self, text):
         self.text = text
         self.position = 0
         self.current = self.text[self.position]
+        self.marker_found = False
 
     def step(self):
         self.position += 1
@@ -39,7 +39,11 @@ class Lexer:
                 continue
             elif self.current == "|":
                 self.step()
-                return Token(Token.PREXEL_MARKER, "|")
+                if not self.marker_found:
+                    self.marker_found = True
+                    return Token(Token.PREXEL_MARKER, "|")
+                else:
+                    continue
             else:
                 element = self.element()
 

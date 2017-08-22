@@ -38,7 +38,7 @@ class TestLexer(unittest.TestCase):
         self.assertEqual(result, "color")
 
     def test_skip_whitespace(self):
-        text = "|Kitchen    color"
+        text = "|Kitchen    color \n\n size"
 
         lexer = Lexer(text)
 
@@ -47,6 +47,11 @@ class TestLexer(unittest.TestCase):
         lexer.skip_whitespace()
 
         self.assertEqual(lexer.current, "c")
+
+        lexer.element()  # get "color"
+        lexer.skip_whitespace()  # skip \n
+
+        self.assertEqual(lexer.current, "s")
 
     def test_get_token(self):
         text = "|Kitchen color square_feet show_kitchen()"
@@ -151,6 +156,19 @@ class TestLexer(unittest.TestCase):
         # which should have been skipped
         self.assertEqual(token.type, Token.CLASS_NAME)
         self.assertEqual(token.value, "Wing")
+
+    def test_get_token_skip_extra_prexel_markets(self):
+        text = "|Kitchen << Room\n|arrange_kitchen()\n|place_floor_cabinet()"
+
+        lexer = Lexer(text)
+        lexer.get_token()  # PREXEL MARKER
+        lexer.get_token()  # "Kitchen"
+        lexer.get_token()  # "<<"
+        lexer.get_token()  # "Room"
+
+        # Skip extra "|" tokens
+        self.assertEqual(lexer.get_token().type, Token.METHOD)
+        self.assertEqual(lexer.get_token().type, Token.METHOD)
 
 if __name__ == '__main__':
     unittest.main()

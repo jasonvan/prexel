@@ -69,7 +69,7 @@ class Interpreter:
             else:
                 self.error("Missing parent class after \"<<\"")
 
-    def aggregation(self, diagram):
+    def aggregation(self, diagram, include_class_body=True):
         # TODO comment and clean up
         if self.current_token and self.current_token.type is Token.AGGREGATION:
             token = self.current_token
@@ -96,17 +96,21 @@ class Interpreter:
 
             self.diagrams.append(aggregation_diagram)
 
-            # Create aggregation class
+            # Create aggregated class
             aggregated_class_diagram = ClassDiagram()
             self.class_name(aggregated_class_diagram)
-            self.class_body(aggregated_class_diagram)
+
+            # Optionally include class body
+            if include_class_body:
+                self.class_body(aggregated_class_diagram)
+
             self.diagrams.append(aggregated_class_diagram)
 
     def evaluate(self):
-        # TODO - clean up and comment this code, a little hard to follow
+        # Check for the first PREXEL marker
         self.start_marker()
 
-        # Interpret class
+        # Create main class
         class_diagram = ClassDiagram()
         self.diagrams.append(class_diagram)
         self.class_name(class_diagram)
@@ -114,7 +118,12 @@ class Interpreter:
         # Optional - Check for inheritance
         self.inheritance()
 
-        # Interpret class fields and methods
+        # Optional - Check for aggregation but don't
+        # consider the following fields and methods as part of the
+        # aggregated class.In this position they belong to the main class
+        self.aggregation(class_diagram, include_class_body=False)
+
+        # Interpret class fields and methods for main class
         self.class_body(class_diagram)
 
         # Optional - Check for aggregation

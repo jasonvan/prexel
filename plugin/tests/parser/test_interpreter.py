@@ -71,7 +71,8 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(first_diagram.fields, ["color", "square_feet"])
 
     def test_evaluate_advanced(self):
-        text = "|Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
+        text = "|Kitchen << Room color square_feet show_kitchen() " \
+               "<>*-cupboards--1> Cupboard open()"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
@@ -83,7 +84,8 @@ class TestInterpreter(unittest.TestCase):
         main_class_diagram = diagrams[0]
         self.assertEqual(main_class_diagram.name, "Kitchen")
         self.assertEqual(main_class_diagram.methods, ["show_kitchen()"])
-        self.assertEqual(main_class_diagram.fields, ["color", "square_feet", "cupboards"])
+        self.assertEqual(main_class_diagram.fields, ["color", "square_feet",
+                                                     "cupboards"])
 
         # Inheritance diagram
         inheritance_diagram = diagrams[1]
@@ -104,6 +106,28 @@ class TestInterpreter(unittest.TestCase):
         aggregated_class_diagram = diagrams[4]
         self.assertEqual(aggregated_class_diagram.name, "Cupboard")
         self.assertEqual(aggregated_class_diagram.methods, ["open()"])
+
+    def test_evaluate_aggregation_first(self):
+        text = "|TaskList <>-tasks----*> Task \n |get_the_tasks()"
+
+        lexer = Lexer(text)
+        interpreter = Interpreter(lexer)
+        diagrams = interpreter.evaluate()
+
+        # Main class diagram
+        main_class_diagram = diagrams[0]
+        self.assertEqual(main_class_diagram.name, "TaskList")
+        self.assertEqual(main_class_diagram.methods, ["get_the_tasks()"])
+
+        # Aggregation diagram
+        aggregation_diagram = diagrams[1]
+        self.assertIsInstance(aggregation_diagram, AggregationDiagram)
+        self.assertEqual(aggregation_diagram.left_multiplicity, "")
+        self.assertEqual(aggregation_diagram.right_multiplicity, "*")
+
+        # Aggregated class diagram
+        aggregated_class_diagrams = diagrams[2]
+        self.assertEqual(aggregated_class_diagrams.name, "Task")
 
     def test_evaluate_error(self):
         text = "|Kitchen color square_feet show_kitchen() <>-cupboards-->"
