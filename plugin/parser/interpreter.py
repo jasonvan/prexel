@@ -2,9 +2,10 @@
 Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
 """
 from prexel.plugin.parser.lexer import Token
-from prexel.plugin.models.diagram import (ClassDiagram,
-                                          AggregationDiagram,
-                                          InheritanceDiagram)
+from prexel.plugin.models.diagram import (Diagram,
+                                          ClassDiagramPart,
+                                          AggregationDiagramPart,
+                                          InheritanceDiagramPart)
 
 
 class Interpreter:
@@ -48,26 +49,28 @@ class Interpreter:
                 diagram.methods.append(token.value)
                 self.process_token(Token.METHOD)
 
-    def inheritance(self):
+    def inheritance(self, diagram):
         # TODO comment and clean up
         if self.current_token and self.current_token.type is Token.INHERITANCE:
             self.process_token(Token.INHERITANCE)
-            inheritance_diagram = InheritanceDiagram()
+            inheritance = InheritanceDiagramPart()
 
-            # Make sure that a class name follows an inheritance token
+            # Make sure that a class name token follows an inheritance token
             if self.next_token_is_class_token():
-                parent_class_diagram = ClassDiagram()
+                parent = ClassDiagramPart()
 
                 # Determine parent class name
-                self.class_name(parent_class_diagram)
+                self.class_name(parent)
 
                 # Append inheritance diagram and then parent class diagram
-                self.diagrams.append(inheritance_diagram)
-                self.diagrams.append(parent_class_diagram)
+                diagram.inheritance = inheritance
+                diagram.parent = parent
+                # self.diagrams.append(inheritance_diagram)
+                # self.diagrams.append(parent_class_diagram)
             else:
                 self.error("Missing parent class after \"<<\"")
 
-    def aggregation(self, diagram, include_class_body=True):
+    def aggregation(self, diagram, include_following_tokens=True):
         # TODO comment and clean up
         if self.current_token and self.current_token.type is Token.AGGREGATION:
             token = self.current_token
@@ -76,57 +79,58 @@ class Interpreter:
             if not self.next_token_is_class_token():
                 self.error()
 
-            if not diagram.fields:
-                diagram.fields = []
+            if not diagram.main.fields:
+                diagram.main.fields = []
 
             name = token.value["name"]
 
             if name:
-                diagram.fields.append(name)
+                diagram.main.fields.append(name)
             else:
                 # TODO - need to handle missing aggregated value
                 diagram.fields.append("MISSING-AGGREGATED-NAME")
 
-            aggregation_diagram = AggregationDiagram()
-            aggregation_diagram.left_multiplicity = token.value["left_multi"]
-            aggregation_diagram.right_multiplicity = token.value["right_multi"]
+            aggregation = AggregationDiagramPart()
+            aggregation.left_multiplicity = token.value["left_multi"]
+            aggregation.right_multiplicity = token.value["right_multi"]
 
-            self.diagrams.append(aggregation_diagram)
+            diagram.aggregation = aggregation
 
             # Create aggregated class
-            aggregated_class_diagram = ClassDiagram()
-            self.class_name(aggregated_class_diagram)
+            aggregated = ClassDiagramPart()
+            self.class_name(aggregated)
 
             # Optionally include class body
-            if include_class_body:
-                self.class_body(aggregated_class_diagram)
+            if include_following_tokens:
+                self.class_body(aggregated)
 
-            self.diagrams.append(aggregated_class_diagram)
+            diagram.aggregated = aggregated
 
     def evaluate(self):
+        diagram = Diagram(main=ClassDiagramPart())
+
         # Check for the first PREXEL marker
         self.start_marker()
 
-        # Create main class
-        class_diagram = ClassDiagram()
-        self.diagrams.append(class_diagram)
-        self.class_name(class_diagram)
+        # Process main class name
+        self.class_name(diagram.main)
 
         # Optional - Check for inheritance
-        self.inheritance()
+        self.inheritance(diagram)
 
         # Optional - Check for aggregation but don't
-        # consider the following fields and methods as part of the
-        # aggregated class.In this position they belong to the main class
-        self.aggregation(class_diagram, include_class_body=False)
+        # consider the fields and methods following the aggregation
+        # token as part of the aggregated class.In this position
+        # they belong to the main class
+        self.aggregation(diagram, include_following_tokens=False)
 
-        # Interpret class fields and methods for main class
-        self.class_body(class_diagram)
+        # Process fields and methods for main class
+        self.class_body(diagram.main)
 
         # Optional - Check for aggregation
-        self.aggregation(class_diagram)
+        self.aggregation(diagram)
 
-        return self.diagrams
+        return diagram
 
 
 class InterpreterException(Exception):

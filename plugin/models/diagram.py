@@ -1,7 +1,18 @@
 from abc import ABCMeta
 
 
-class Diagram(metaclass=ABCMeta):
+class Diagram:
+    def __init__(self, main=None,
+                 parent=None, inheritance=None,
+                 aggregated=None, aggregation=None):
+        self.main = main
+        self.parent = parent
+        self.inheritance = inheritance
+        self.aggregated = aggregated
+        self.aggregation = aggregation
+
+
+class DiagramPart(metaclass=ABCMeta):
     """
     Represents a abstract diagram element for use with interpreter and encoder
      ____________
@@ -16,7 +27,7 @@ class Diagram(metaclass=ABCMeta):
         self.type = type
 
 
-class ClassDiagram(Diagram):
+class ClassDiagramPart(DiagramPart):
     def __init__(self, name="", fields=None, methods=None, extends=None):
         super().__init__(name, "class")
         self.fields = fields
@@ -24,13 +35,13 @@ class ClassDiagram(Diagram):
         self.extends = extends
 
 
-class AggregationDiagram(Diagram):
+class AggregationDiagramPart(DiagramPart):
     def __init__(self, name="", left_multiplicity=None, right_multiplicity=None):
         super().__init__(name, "aggregation")
         self.left_multiplicity = left_multiplicity
         self.right_multiplicity = right_multiplicity
 
 
-class InheritanceDiagram(Diagram):
+class InheritanceDiagramPart(DiagramPart):
     def __init__(self, name=""):
         super().__init__(name, "inheritance")

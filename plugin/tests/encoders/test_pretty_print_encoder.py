@@ -1,14 +1,14 @@
 import unittest
 
 from prexel.plugin.encoders.pretty_print_encoder import PrettyPrintEncoder
-from prexel.plugin.models.diagram import (ClassDiagram,
-                                          InheritanceDiagram,
-                                          AggregationDiagram)
+from prexel.plugin.models.diagram import (ClassDiagramPart,
+                                          InheritanceDiagramPart,
+                                          AggregationDiagramPart)
 
 
 class TestPrettyPrintEncoder(unittest.TestCase):
     def test_generate_class_header(self):
-        diagram = ClassDiagram("Kitchen", methods=[
+        diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -30,7 +30,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|place_wall_cabinet() |\n"
                     "|_____________________|\n")
 
-        diagram = ClassDiagram("Kitchen", methods=[
+        diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -43,7 +43,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_generate_class(self):
-        diagram = ClassDiagram("Kitchen", methods=[
+        diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -63,7 +63,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_empty_class(self):
-        diagram = ClassDiagram("Kitchen")
+        diagram = ClassDiagramPart("Kitchen")
 
         expected = (" _______ \n"
                     "|Kitchen|\n"
@@ -75,8 +75,8 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_aggregation(self):
-        task_list_aggregation = AggregationDiagram("the_tasks",
-                                                   right_multiplicity="*")
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       right_multiplicity="*")
 
         expected = "<>-the_tasks---*>"
 
@@ -86,8 +86,8 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_inheritance(self):
-        room_diagram = ClassDiagram("Room")
-        kitchen_diagram = ClassDiagram("Kitchen", methods=[
+        room_diagram = ClassDiagramPart("Room")
+        kitchen_diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -115,14 +115,14 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_concat_inheritance(self):
-        room_diagram = ClassDiagram("Room", fields=[
+        room_diagram = ClassDiagramPart("Room", fields=[
             "width",
             "height"
         ], methods=[
             "set_color()"
         ])
 
-        kitchen_diagram = ClassDiagram("Kitchen", methods=[
+        kitchen_diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -154,15 +154,15 @@ class TestPrettyPrintEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_concat_aggregation(self):
-        task_list_diagram = ClassDiagram("TaskList", methods=[
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
             "get_the_tasks()",
             "prioritize()"
         ])
 
-        task_list_aggregation = AggregationDiagram("the_tasks",
-                                                   right_multiplicity="*")
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       right_multiplicity="*")
 
-        task_diagram = ClassDiagram("Task")
+        task_diagram = ClassDiagramPart("Task")
 
         expected = (" _______________                   ____ \n"
                     "|   TaskList    |<>-the_tasks---*>|Task|\n"
@@ -181,16 +181,16 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                                             aggregated=task)
 
     def test_concat_aggregation_alt(self):
-        task_list_diagram = ClassDiagram("TaskList", methods=[
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
             "get_the_tasks()",
             "prioritize()"
         ])
 
-        task_list_aggregation = AggregationDiagram("the_tasks",
-                                                   left_multiplicity="10",
-                                                   right_multiplicity="*")
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       left_multiplicity="10",
+                                                       right_multiplicity="*")
 
-        task_diagram = ClassDiagram("Task", fields=[
+        task_diagram = ClassDiagramPart("Task", fields=[
             "field1",
             "field2",
             "field3"

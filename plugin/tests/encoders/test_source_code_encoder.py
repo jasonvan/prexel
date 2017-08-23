@@ -1,12 +1,12 @@
 import unittest
 
 from prexel.plugin.encoders.source_code_encoder import SourceCodeEncoder
-from prexel.plugin.models.diagram import ClassDiagram
+from prexel.plugin.models.diagram import ClassDiagramPart
 
 
 class TestSourceCodeEncoder(unittest.TestCase):
     def test_generate_class(self):
-        diagram = ClassDiagram("Kitchen", methods=[
+        diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -37,12 +37,12 @@ class TestSourceCodeEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_inheritance(self):
-        person_diagram = ClassDiagram("Person", fields=[
+        person_diagram = ClassDiagramPart("Person", fields=[
             "name",
             "age"
         ])
 
-        employee_diagram = ClassDiagram("Employee", fields=[
+        employee_diagram = ClassDiagramPart("Employee", fields=[
             "job_title"
         ], extends="Person")
 
@@ -69,11 +69,11 @@ class TestSourceCodeEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_empty_class(self):
-        airplane_diagram = ClassDiagram("Airplane", fields=[
+        airplane_diagram = ClassDiagramPart("Airplane", fields=[
             "wing"
         ])
 
-        wing_diagram = ClassDiagram("Wing")
+        wing_diagram = ClassDiagramPart("Wing")
 
         expected = ("class Airplane:\n"
                     "    def __init__(self, wing):\n"
@@ -93,11 +93,11 @@ class TestSourceCodeEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_dependence(self):
-        style_diagram = ClassDiagram("Style", methods=[
+        style_diagram = ClassDiagramPart("Style", methods=[
             {"signature": "get_cabinet()", "body": "return XCabinet()"}
         ])
 
-        xcabinet_diagram = ClassDiagram("XCabinet")
+        xcabinet_diagram = ClassDiagramPart("XCabinet")
 
         expected = ("class Style:\n"
                     "    def get_cabinet(self):\n"
@@ -117,11 +117,11 @@ class TestSourceCodeEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_method_params_as_object(self):
-        style_diagram = ClassDiagram("Style", methods=[
+        style_diagram = ClassDiagramPart("Style", methods=[
             {"signature": "get_cabinet(height)", "body": "return XCabinet()"}
         ])
 
-        xcabinet_diagram = ClassDiagram("XCabinet")
+        xcabinet_diagram = ClassDiagramPart("XCabinet")
 
         expected = ("class Style:\n"
                     "    def get_cabinet(self, height):\n"
@@ -141,7 +141,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_method_params(self):
-        diagram = ClassDiagram("MyClass", methods=[
+        diagram = ClassDiagramPart("MyClass", methods=[
             "crazy_method2Name(param1, param2)"
         ])
 
