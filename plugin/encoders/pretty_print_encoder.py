@@ -131,10 +131,53 @@ class PrettyPrintEncoder(Encoder):
 
         return result
 
-    def concat_results(self, diagrams):
-        results = ""
-        for diagram in diagrams:
-            results += diagram
+    def concat_inheritance(self, parent, children):
+        results = parent
+        for child_class in children:
+            results += child_class
 
         return results
 
+    def concat_aggregation(self, aggregator, aggregation, aggregated):
+        result = []
+        aggregator_parts = list(filter(None, aggregator.split("\n")))
+        aggregated_parts = list(filter(None, aggregated.split("\n")))
+
+        length_aggregator = len(max(aggregator_parts))
+        length_aggregated = len(max(aggregated_parts))
+        length_aggregation = len(aggregation)
+
+        height_aggregator = len(aggregator_parts)
+        height_aggregated = len(aggregated_parts)
+
+        combined = zip(aggregator_parts, aggregated_parts)
+        combined_list = list(combined)
+        start_index = len(combined_list)
+
+        for index, item in enumerate(combined_list):
+            line = item[0]
+            if index == 1:
+                line += aggregation
+            else:
+                line += " " * length_aggregation
+
+            line += item[1]
+
+            result.append(line)
+
+        if height_aggregator > height_aggregated:
+            for item in aggregator_parts[start_index:]:
+                line = item
+                line += " " * length_aggregation
+                line += " " * length_aggregated
+                result.append(line)
+        elif height_aggregated > height_aggregator:
+            for item in aggregated_parts[start_index:]:
+                line = " " * length_aggregator
+                line += " " * length_aggregation
+                line += item
+                result.append(line)
+        else:
+            pass  # If they are the same length they are already combined
+
+        return "\n".join(result) + "\n"

@@ -79,13 +79,12 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
-* Run tests on test_source_code_encorer.py
-* Update encoder code to take in different types of Diagrams. [BROKEN]
-* Determine how to properly print out diagrams
 * Update interpreter to save extends value into ClassDiagram
-
+* Update source code encoding to take in multiple diagrams
+* Get cli working again
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests
+* Comment encoder code / Comment encoder tests
 
 * need to handle "S" character
 
@@ -101,9 +100,9 @@ properly print values
 * [NA-FIRST]
 * [NA] items
 * Email Eric
-    * You can use jasonvan@bu.edu
-    * Check on license
-    * Ask about lexer code and how I should attribute it
+    * Can't handle multiple inheritance right now
+    * Can't handle multiple aggregation right now
+    * Can't handle self aggregation right now
 
 * Review example-entry.md to determine next steps for the encorder and parser
 and create tasks

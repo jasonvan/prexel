@@ -109,11 +109,12 @@ class TestPrettyPrintEncoder(unittest.TestCase):
 
         kitchen_class = encoder.generate_class(kitchen_diagram)
         room_class = encoder.generate_class(room_diagram)
-        actual = encoder.concat_results([room_class, kitchen_class])
+        actual = encoder.concat_inheritance(parent=room_class,
+                                            children=[kitchen_class])
 
         self.assertEqual(expected, actual)
 
-    def test_generate_class_with_inheritance_advanced(self):
+    def test_concat_inheritance(self):
         room_diagram = ClassDiagram("Room", fields=[
             "width",
             "height"
@@ -147,11 +148,12 @@ class TestPrettyPrintEncoder(unittest.TestCase):
 
         kitchen_class = encoder.generate_class(kitchen_diagram)
         room_class = encoder.generate_class(room_diagram)
-        actual = encoder.concat_results([room_class, kitchen_class])
+        actual = encoder.concat_inheritance(parent=room_class,
+                                            children=[kitchen_class])
 
         self.assertEqual(expected, actual)
 
-    def test_generate_class_with_aggregation(self):
+    def test_concat_aggregation(self):
         task_list_diagram = ClassDiagram("TaskList", methods=[
             "get_the_tasks()",
             "prioritize()"
@@ -162,21 +164,63 @@ class TestPrettyPrintEncoder(unittest.TestCase):
 
         task_diagram = ClassDiagram("Task")
 
-        # 1. split diagrams on new line
-        # 2. get the length of the aggregation
-        # 3. determine the max height, max_length
-        # 4. combine the matching values at each of the indexes
-        # 5. join on \n
-        # 6. append \n
+        expected = (" _______________                   ____ \n"
+                    "|   TaskList    |<>-the_tasks---*>|Task|\n"
+                    "|---------------|                 |____|\n"
+                    "|get_the_tasks()|                       \n"
+                    "|prioritize()   |                       \n"
+                    "|_______________|                       \n")
 
-        expected = (" ______________                   ____ \n"
-                    "|   TaskList   |<>-the_tasks---*>|Task|\n"
-                    "|--------------|                 |____|\n"
-                    "|get_the_task()|\n"
-                    "|prioritize()  |\n"
-                    "|______________|\n")
+        encoder = PrettyPrintEncoder()
+        task_list = encoder.generate_class(task_list_diagram)
+        aggregation = encoder.generate_aggregation(task_list_aggregation)
+        task = encoder.generate_class(task_diagram)
 
+        actual = encoder.concat_aggregation(aggregator=task_list,
+                                            aggregation=aggregation,
+                                            aggregated=task)
 
+    def test_concat_aggregation_alt(self):
+        task_list_diagram = ClassDiagram("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ])
+
+        task_list_aggregation = AggregationDiagram("the_tasks",
+                                                   left_multiplicity="10",
+                                                   right_multiplicity="*")
+
+        task_diagram = ClassDiagram("Task", fields=[
+            "field1",
+            "field2",
+            "field3"
+        ], methods=[
+            "method1()",
+            "method2()",
+            "method3()"
+        ])
+
+        expected = (" _______________                     _________ \n"
+                    "|   TaskList    |<>10-the_tasks---*>|  Task   |\n"
+                    "|---------------|                   |---------|\n"
+                    "|get_the_tasks()|                   |field1   |\n"
+                    "|prioritize()   |                   |field2   |\n"
+                    "|_______________|                   |field3   |\n"
+                    "                                    |method1()|\n"
+                    "                                    |method2()|\n"
+                    "                                    |method3()|\n"
+                    "                                    |_________|\n")
+
+        encoder = PrettyPrintEncoder()
+        task_list = encoder.generate_class(task_list_diagram)
+        aggregation = encoder.generate_aggregation(task_list_aggregation)
+        task = encoder.generate_class(task_diagram)
+
+        actual = encoder.concat_aggregation(aggregator=task_list,
+                                            aggregation=aggregation,
+                                            aggregated=task)
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':
