@@ -3,7 +3,7 @@ from abc import ABCMeta
 
 class Diagram(metaclass=ABCMeta):
     """
-    Represents a diagram element for use with interpreter and encoder
+    Represents a abstract diagram element for use with interpreter and encoder
      ____________
     |  Diagram   |
     |------------|
@@ -14,13 +14,6 @@ class Diagram(metaclass=ABCMeta):
     def __init__(self, name, type):
         self.name = name
         self.type = type
-    # def __init__(self, name="", diagram_type="class",
-    #              fields=None, methods=None, extends=None):
-    #     self.name = name
-    #     self.diagram_type = diagram_type
-    #     self.fields = fields
-    #     self.methods = methods
-    #     self.extends = extends
 
 
 class ClassDiagram(Diagram):

@@ -1,13 +1,11 @@
+"""
+Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
+"""
 from prexel.plugin.parser.token import Token
 from prexel.plugin import REGEX
 
 
 class Lexer:
-    """
-    Code referenced from https://ruslanspivak.com/lsbasi-part6/
-    TODO add PREXEL
-    """
-
     def __init__(self, text):
         self.text = text
         self.position = 0

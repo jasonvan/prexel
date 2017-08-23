@@ -46,6 +46,8 @@ class TestSourceCodeEncoder(unittest.TestCase):
             "job_title"
         ], extends="Person")
 
+        # TODO Employee should contain call to super().__init__() with value
+
         expected = ("class Person:\n"
                     "    def __init__(self, name, age):\n"
                     "        self.name = name\n"

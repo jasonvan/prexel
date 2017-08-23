@@ -1,7 +1,9 @@
+"""
+Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
+"""
+
+
 class Token:
-    """
-    TODO
-    """
     PREXEL_MARKER, CLASS_NAME, FIELD, METHOD, AGGREGATION, INHERITANCE = (
         "PREXEL_MARKER",
         "CLASS_NAME",

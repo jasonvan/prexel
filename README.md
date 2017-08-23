@@ -79,10 +79,10 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
-* Run tests on test_pretty_print_encoder.py
 * Run tests on test_source_code_encorer.py
 * Update encoder code to take in different types of Diagrams. [BROKEN]
 * Determine how to properly print out diagrams
+* Update interpreter to save extends value into ClassDiagram
 
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests

@@ -50,7 +50,7 @@ class PrettyPrintEncoder(Encoder):
 
         # Create the class header and the body
         result = ""
-        result += self.generate_class_header(max_length, diagram.name)
+        result += self.generate_class_header(max_length, diagram)
         result += self.generate_class_body(max_length, diagram)
 
         return result
@@ -58,7 +58,6 @@ class PrettyPrintEncoder(Encoder):
     def generate_class_body(self, max_length, diagram):
         """
         Generate the class body string for the provided diagram.
-
         Returns: class body string
         """
 
@@ -81,23 +80,47 @@ class PrettyPrintEncoder(Encoder):
 
         return body
 
-    def generate_class_header(self, max_length, name):
+    def generate_class_header(self, max_length, diagram):
         """
         Generate the class header from the provided diagram name.
-
         Returns: class header string
         """
 
-        # Create formatters
-        top_formatter = " {:_^" + str(max_length) + "} \n"
-        middle_formatter = "|{:^" + str(max_length) + "}|\n"
-        bottom_formatter = "|{:-^" + str(max_length) + "}|\n"
+        max_length_as_string = str(max_length)
 
-        # Generate header string
+        # Create formatters
+        extends_formatter = "∆{:^" + max_length_as_string + "} \n"
+        top_formatter = " {:_^" + max_length_as_string + "} \n"
+        middle_formatter = "|{:^" + max_length_as_string + "}|\n"
+        bottom_formatter = "|{:-^" + max_length_as_string + "}|\n"
+
+        # Create strings
+        top = top_formatter.format("")
+        middle = middle_formatter.format(diagram.name)
+        bottom = bottom_formatter.format("")
+
+        # Assemble header
         header = ""
-        header += top_formatter.format("")
-        header += middle_formatter.format(name)
-        header += bottom_formatter.format("")
+
+        # Add extends and arrow and update the top value with a "|"
+        # on the far left side
+        if diagram.extends:
+            extends = extends_formatter.format("")
+            header += extends
+
+            top = "|" + top[1:]
+
+        header += top
+        header += middle
+        if diagram.fields or diagram.methods:
+            header += bottom
 
         return header
+
+    def concat_results(self, diagrams):
+        results = ""
+        for diagram in diagrams:
+            results += diagram
+
+        return results
 

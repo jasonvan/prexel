@@ -1,6 +1,7 @@
 from prexel.plugin.encoders.encoder import Encoder
 from prexel.plugin import REGEX
 
+# TODO - make this configurable
 INDENTATION = "    "  # Default indentation
 
 

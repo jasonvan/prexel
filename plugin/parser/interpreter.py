@@ -1,15 +1,13 @@
+"""
+Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
+"""
 from prexel.plugin.parser.lexer import Token
 from prexel.plugin.models.diagram import (ClassDiagram,
                                           AggregationDiagram,
                                           InheritanceDiagram)
 
 
-
 class Interpreter:
-    """
-    Code referenced from https://ruslanspivak.com/lsbasi-part6/
-    TODO: need to comment this code
-    """
     def __init__(self, lexer):
         self.lexer = lexer
         self.current_token = self.lexer.get_token()
