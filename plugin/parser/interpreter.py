@@ -88,7 +88,6 @@ class Interpreter:
                 diagram.fields.append("MISSING-AGGREGATED-NAME")
 
             aggregation_diagram = AggregationDiagram()
-            # TODO - currently this is not used but will be in the future
             aggregation_diagram.left_multiplicity = token.value["left_multi"]
             aggregation_diagram.right_multiplicity = token.value["right_multi"]
 

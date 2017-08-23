@@ -117,6 +117,20 @@ class PrettyPrintEncoder(Encoder):
 
         return header
 
+    def generate_aggregation(self, diagram):
+        result = "<>"
+        if diagram.left_multiplicity:
+            result += diagram.left_multiplicity
+
+        result += "-{}---".format(diagram.name)
+
+        if diagram.right_multiplicity:
+            result += diagram.right_multiplicity
+
+        result += ">"
+
+        return result
+
     def concat_results(self, diagrams):
         results = ""
         for diagram in diagrams:
