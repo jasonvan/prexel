@@ -21,11 +21,11 @@ def main():
         else:
             for diagram in diagrams:
                 encoder = PrettyPrintEncoder()
-                print(encoder.generate_class(diagram))
+                print(encoder.create_class(diagram))
 
             for diagram in diagrams:
                 encoder = SourceCodeEncoder()
-                print(encoder.generate_class(diagram))
+                print(encoder.create_class(diagram))
 
 if __name__ == '__main__':
     main()

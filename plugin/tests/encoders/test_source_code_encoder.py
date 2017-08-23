@@ -32,7 +32,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     )
 
         encoder = SourceCodeEncoder()
-        actual = encoder.generate_class(diagram)
+        actual = encoder.create_class(diagram)
 
         self.assertEqual(expected, actual)
 
@@ -62,8 +62,8 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     )
 
         encoder = SourceCodeEncoder()
-        person = encoder.generate_class(person_diagram)
-        employee = encoder.generate_class(employee_diagram)
+        person = encoder.create_class(person_diagram)
+        employee = encoder.create_class(employee_diagram)
         actual = person + employee
 
         self.assertEqual(expected, actual)
@@ -86,8 +86,8 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     )
 
         encoder = SourceCodeEncoder()
-        airplane = encoder.generate_class(airplane_diagram)
-        wing = encoder.generate_class(wing_diagram)
+        airplane = encoder.create_class(airplane_diagram)
+        wing = encoder.create_class(wing_diagram)
 
         actual = airplane + wing
         self.assertEqual(expected, actual)
@@ -109,8 +109,8 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     )
 
         encoder = SourceCodeEncoder()
-        style = encoder.generate_class(style_diagram)
-        xcabinet = encoder.generate_class(xcabinet_diagram)
+        style = encoder.create_class(style_diagram)
+        xcabinet = encoder.create_class(xcabinet_diagram)
 
         actual = style + xcabinet
 
@@ -133,8 +133,8 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     )
 
         encoder = SourceCodeEncoder()
-        style = encoder.generate_class(style_diagram)
-        xcabinet = encoder.generate_class(xcabinet_diagram)
+        style = encoder.create_class(style_diagram)
+        xcabinet = encoder.create_class(xcabinet_diagram)
 
         actual = style + xcabinet
 
@@ -152,7 +152,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     )
 
         encoder = SourceCodeEncoder()
-        actual = encoder.generate_class(diagram)
+        actual = encoder.create_class(diagram)
 
         self.assertEqual(expected, actual)
 

@@ -1,102 +1,33 @@
 import unittest
 
 from prexel.plugin.encoders.pretty_print_encoder import PrettyPrintEncoder
-from prexel.plugin.models.diagram import (ClassDiagramPart,
+from prexel.plugin.models.diagram import (Diagram,
+                                          ClassDiagramPart,
                                           InheritanceDiagramPart,
                                           AggregationDiagramPart)
 
 
-class TestPrettyPrintEncoder(unittest.TestCase):
-    def test_generate_class_header(self):
-        diagram = ClassDiagramPart("Kitchen", methods=[
+class TestPrettyPrintEncoderMain(unittest.TestCase):
+    """
+    Tests related to main generate method
+    """
+    def test_generate_with_inheritance(self):
+        room = ClassDiagramPart("Room")
+        inheritance = InheritanceDiagramPart()
+        kitchen = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
         ])
 
-        expected = (" _____________________ \n"
-                    "|       Kitchen       |\n"
-                    "|---------------------|\n")
-
-        max_length = 21
-        encoder = PrettyPrintEncoder()
-        actual = encoder.generate_class_header(max_length, diagram)
-
-        self.assertEqual(actual, expected)
-
-    def test_generate_class_body(self):
-        expected = ("|arrange_kitchen()    |\n"
-                    "|place_floor_cabinet()|\n"
-                    "|place_wall_cabinet() |\n"
-                    "|_____________________|\n")
-
-        diagram = ClassDiagramPart("Kitchen", methods=[
-            "arrange_kitchen()",
-            "place_floor_cabinet()",
-            "place_wall_cabinet()"
-        ])
-
-        max_length = 21
-        encoder = PrettyPrintEncoder()
-        actual = encoder.generate_class_body(max_length, diagram)
-
-        self.assertEqual(actual, expected)
-
-    def test_generate_class(self):
-        diagram = ClassDiagramPart("Kitchen", methods=[
-            "arrange_kitchen()",
-            "place_floor_cabinet()",
-            "place_wall_cabinet()"
-        ])
-
-        expected = (" _____________________ \n"
-                    "|       Kitchen       |\n"
-                    "|---------------------|\n"
-                    "|arrange_kitchen()    |\n"
-                    "|place_floor_cabinet()|\n"
-                    "|place_wall_cabinet() |\n"
-                    "|_____________________|\n")
-
-        encoder = PrettyPrintEncoder()
-        actual = encoder.generate_class(diagram)
-
-        self.assertEqual(expected, actual)
-
-    def test_generate_empty_class(self):
-        diagram = ClassDiagramPart("Kitchen")
-
-        expected = (" _______ \n"
-                    "|Kitchen|\n"
-                    "|_______|\n")
-
-        encoder = PrettyPrintEncoder()
-        actual = encoder.generate_class(diagram)
-
-        self.assertEqual(expected, actual)
-
-    def test_generate_aggregation(self):
-        task_list_aggregation = AggregationDiagramPart("the_tasks",
-                                                       right_multiplicity="*")
-
-        expected = "<>-the_tasks---*>"
-
-        encoder = PrettyPrintEncoder()
-        actual = encoder.generate_aggregation(task_list_aggregation)
-
-        self.assertEqual(expected, actual)
-
-    def test_generate_class_with_inheritance(self):
-        room_diagram = ClassDiagramPart("Room")
-        kitchen_diagram = ClassDiagramPart("Kitchen", methods=[
-            "arrange_kitchen()",
-            "place_floor_cabinet()",
-            "place_wall_cabinet()"
-        ], extends="Room")
+        diagram = Diagram(kitchen,
+                          parent=room,
+                          inheritance=inheritance)
 
         expected = (" ____ \n"
                     "|Room|\n"
                     "|____|\n"
-                    "∆                      \n"
+                    "∆\n"
                     "|_____________________ \n"
                     "|       Kitchen       |\n"
                     "|---------------------|\n"
@@ -106,27 +37,28 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|_____________________|\n")
 
         encoder = PrettyPrintEncoder()
-
-        kitchen_class = encoder.generate_class(kitchen_diagram)
-        room_class = encoder.generate_class(room_diagram)
-        actual = encoder.concat_inheritance(parent=room_class,
-                                            children=[kitchen_class])
-
+        actual = encoder.generate(diagram)
         self.assertEqual(expected, actual)
 
-    def test_concat_inheritance(self):
-        room_diagram = ClassDiagramPart("Room", fields=[
+    def test_generate_with_inheritance_alt(self):
+        room = ClassDiagramPart("Room", fields=[
             "width",
             "height"
         ], methods=[
             "set_color()"
         ])
 
-        kitchen_diagram = ClassDiagramPart("Kitchen", methods=[
+        inheritance = InheritanceDiagramPart()
+
+        kitchen = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
-        ], extends="Room")
+        ])
+
+        diagram = Diagram(kitchen,
+                          parent=room,
+                          inheritance=inheritance)
 
         expected = (" ___________ \n"
                     "|   Room    |\n"
@@ -135,7 +67,7 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|height     |\n"
                     "|set_color()|\n"
                     "|___________|\n"
-                    "∆                      \n"
+                    "∆\n"
                     "|_____________________ \n"
                     "|       Kitchen       |\n"
                     "|---------------------|\n"
@@ -145,11 +77,130 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|_____________________|\n")
 
         encoder = PrettyPrintEncoder()
+        actual = encoder.generate(diagram)
+        self.assertEqual(expected, actual)
 
-        kitchen_class = encoder.generate_class(kitchen_diagram)
-        room_class = encoder.generate_class(room_diagram)
-        actual = encoder.concat_inheritance(parent=room_class,
-                                            children=[kitchen_class])
+    def test_generate_with_aggregation(self):
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ])
+
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       right_multiplicity="*")
+
+        task_diagram = ClassDiagramPart("Task")
+
+        diagram = Diagram(task_list_diagram,
+                          aggregation=task_list_aggregation,
+                          aggregated=task_diagram)
+
+        expected = (" _______________                   ____ \n"
+                    "|   TaskList    |<>-the_tasks---*>|Task|\n"
+                    "|---------------|                 |____|\n"
+                    "|get_the_tasks()|                       \n"
+                    "|prioritize()   |                       \n"
+                    "|_______________|                       \n")
+
+        encoder = PrettyPrintEncoder()
+        actual = encoder.generate(diagram)
+        self.assertEqual(expected, actual)
+
+    def test_generate_full(self):
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ])
+
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       right_multiplicity="*")
+
+        task_diagram = ClassDiagramPart("Task", fields=[
+            "name",
+            "description"
+        ])
+
+        parent = ClassDiagramPart("Manager", fields=[
+            "field1",
+            "field2"
+        ], methods=[
+            "method1()",
+            "method2()"
+        ])
+
+        inheritance = InheritanceDiagramPart()
+
+        diagram = Diagram(task_list_diagram,
+                          parent=parent,
+                          inheritance=inheritance,
+                          aggregation=task_list_aggregation,
+                          aggregated=task_diagram)
+
+        expected = (" _________ \n"
+                    "| Manager |\n"
+                    "|---------|\n"
+                    "|field1   |\n"
+                    "|field2   |\n"
+                    "|method1()|\n"
+                    "|method2()|\n"
+                    "|_________|\n"
+                    "∆\n"
+                    "|_______________                   ___________ \n"
+                    "|   TaskList    |<>-the_tasks---*>|   Task    |\n"
+                    "|---------------|                 |-----------|\n"
+                    "|get_the_tasks()|                 |name       |\n"
+                    "|prioritize()   |                 |description|\n"
+                    "|_______________|                 |___________|\n")
+
+        encoder = PrettyPrintEncoder()
+        actual = encoder.generate(diagram)
+        self.assertEqual(expected, actual)
+
+
+class TestPrettyPrintEncoderHelpers(unittest.TestCase):
+    """
+    Helper tests
+    """
+    def test_create_class(self):
+        diagram = ClassDiagramPart("Kitchen", methods=[
+            "arrange_kitchen()",
+            "place_floor_cabinet()",
+            "place_wall_cabinet()"
+        ])
+
+        expected = (" _____________________ \n"
+                    "|       Kitchen       |\n"
+                    "|---------------------|\n"
+                    "|arrange_kitchen()    |\n"
+                    "|place_floor_cabinet()|\n"
+                    "|place_wall_cabinet() |\n"
+                    "|_____________________|\n")
+
+        encoder = PrettyPrintEncoder()
+        actual = encoder.create_class(diagram)
+
+        self.assertEqual(expected, actual)
+
+    def test_create_class_empty(self):
+        diagram = ClassDiagramPart("Kitchen")
+
+        expected = (" _______ \n"
+                    "|Kitchen|\n"
+                    "|_______|\n")
+
+        encoder = PrettyPrintEncoder()
+        actual = encoder.create_class(diagram)
+
+        self.assertEqual(expected, actual)
+
+    def test_create_aggregation_arrow(self):
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       right_multiplicity="*")
+
+        expected = "<>-the_tasks---*>"
+
+        encoder = PrettyPrintEncoder()
+        actual = encoder.create_aggregation_arrow(task_list_aggregation)
 
         self.assertEqual(expected, actual)
 
@@ -172,13 +223,15 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "|_______________|                       \n")
 
         encoder = PrettyPrintEncoder()
-        task_list = encoder.generate_class(task_list_diagram)
-        aggregation = encoder.generate_aggregation(task_list_aggregation)
-        task = encoder.generate_class(task_diagram)
+        task_list = encoder.create_class(task_list_diagram)
+        aggregation = encoder.create_aggregation_arrow(task_list_aggregation)
+        task = encoder.create_class(task_diagram)
 
         actual = encoder.concat_aggregation(aggregator=task_list,
                                             aggregation=aggregation,
                                             aggregated=task)
+
+        self.assertEqual(expected, actual)
 
     def test_concat_aggregation_alt(self):
         task_list_diagram = ClassDiagramPart("TaskList", methods=[
@@ -212,9 +265,9 @@ class TestPrettyPrintEncoder(unittest.TestCase):
                     "                                    |_________|\n")
 
         encoder = PrettyPrintEncoder()
-        task_list = encoder.generate_class(task_list_diagram)
-        aggregation = encoder.generate_aggregation(task_list_aggregation)
-        task = encoder.generate_class(task_diagram)
+        task_list = encoder.create_class(task_list_diagram)
+        aggregation = encoder.create_aggregation_arrow(task_list_aggregation)
+        task = encoder.create_class(task_diagram)
 
         actual = encoder.concat_aggregation(aggregator=task_list,
                                             aggregation=aggregation,

@@ -2,7 +2,7 @@ from abc import ABCMeta
 
 
 class Diagram:
-    def __init__(self, main=None,
+    def __init__(self, main,
                  parent=None, inheritance=None,
                  aggregated=None, aggregation=None):
         self.main = main
@@ -10,6 +10,12 @@ class Diagram:
         self.inheritance = inheritance
         self.aggregated = aggregated
         self.aggregation = aggregation
+
+    def merge(self, *diagrams):
+        """
+        TODO need to set this up so a diagram object can be merged together
+        """
+        pass
 
 
 class DiagramPart(metaclass=ABCMeta):

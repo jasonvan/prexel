@@ -24,7 +24,7 @@ class SourceCodeEncoder(Encoder):
     |______________________|
     """
 
-    def generate_class(self, diagram):
+    def create_class(self, diagram):
         """
         Generate a class from the provided diagram.
         Returns: a class string

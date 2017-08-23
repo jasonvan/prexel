@@ -79,7 +79,6 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
-* Update interpreter to save extends value into ClassDiagram
 * Update source code encoding to take in multiple diagrams
 * Get cli working again
 * Comment interpreter code/ Comment interpreter tests
