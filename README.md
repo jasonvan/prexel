@@ -2,7 +2,7 @@
 
 ## Installation
 
-The plugin should be installed inside of the Sublime Text packages folder. Once inside Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
+The plugin should be placed inside of the Sublime Text packages folder. Once inside Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
 
 **Windows**
 
@@ -22,7 +22,7 @@ Place the cursor in a line with a PREXEL string (**SEE next section for examples
 
 **Source Code Generation**
 
-When expanding PREXEL, you have the option of generating source code for the diagram. You will see a dialog box at the bottom of the editor when expanding to pretty-printed version, which also you specifiy if you want source code generated or not.
+When expanding PREXEL, you have the option of generating source code for the diagram. A dialog box will appear at the bottom of the editor when expanding to specify whether or not source code should be generated.
 
 ## Entry examples
 
@@ -43,6 +43,7 @@ Easy-entry multi-line:
     |place_wall_cabinet()
 
 Pretty-printed UML generated:
+
      _____________________ 
     |       Kitchen       |
     |---------------------|
@@ -112,6 +113,7 @@ Easy-entry multi-line:
     |weight
 
 Pretty-printed UML:
+
      ________              ____ 
     |Airplane|<>-wings--->|Wing|
     |--------|            |____|
@@ -189,6 +191,7 @@ Easy-entry multi-line (in multi-line, Cupboard can't have fields)
     |show_kitchen()
 
 Pretty-printed UML:
+
      ____ 
     |Room|
     |____|
