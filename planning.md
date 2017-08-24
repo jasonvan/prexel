@@ -1,13 +1,11 @@
-## Backlog
+## Meeting Notes
 
-### Meeting Notes
-
-#### Demo
+### Demo
 
 * README
 * Error |kitchen <<
 
-#### Syntax
+### Syntax
 
 This doesn't allow for aggregation
 
@@ -25,15 +23,15 @@ This way parent classes could have fields and methods
 
     |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
 
-#### Usage in docstrings
+### Usage in docstrings
 
 I didn't include the constraint PREXEL to have to be inside of docstrings
 this way it can be used in other files, for example I used it when updating the 
 examples inside of the README, which is a markdown file. 
 
-Plus it is way faster to type .
+Plus it is way faster to type.
 
-#### Improvements
+### Improvements
 
 * Can't handle multiple inheritance right now
 * Can't handle multiple aggregation right now
@@ -155,8 +153,7 @@ Plus it is way faster to type .
 
 
 
-
-
+## Backlog
 
 ### Next Actions
 
