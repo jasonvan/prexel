@@ -12,7 +12,7 @@ import re
 |get_the_tasks()
 |prioritize()
 
-|Kitchen << Blah
+|Kitchen << Room
 
 """
 

@@ -2,7 +2,7 @@
 
 ## Installation
 
-The plugin should be placed inside of the Sublime Text packages folder. Once inside Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
+The plugin should be placed inside of the Sublime Text packages folder. Once inside, Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
 
 **Windows**
 
@@ -26,8 +26,8 @@ When expanding PREXEL, you have the option of generating source code for the dia
 
 ## Entry examples
 
-Below are some examples of easy entry for Prexel. Using easy entry, the developer
-can quickly create UML fragments inside of source file comments. It will also generate source code based on the UML diagrams generated.
+Below are some examples of entry for PREXEL. PREXEL can be entered as either
+single-line or multi-line strings. For multi-line strings, select the entire block of text to expand
 
 ### Example 1 - Basic Class
 

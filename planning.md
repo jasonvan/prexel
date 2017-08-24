@@ -2,70 +2,181 @@
 
 ### Meeting Notes
 
-* Kitchen arrange_kitchen() place_floor_cabinet() place_wall_cabinet() << Room - doesn't allow for aggregation
+#### Demo
+
+* README
+* Error |kitchen <<
+
+#### Syntax
+
+This doesn't allow for aggregation
+
+    |Kitchen arrange_kitchen() place_floor_cabinet() place_wall_cabinet() << Room
 
 This does
 
-* Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
+    |Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
 
 Or perhaps this would be best. That way we specify values on the Room
 
-* Room >> Kitchen color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
+    |Room >> Kitchen color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
 
-for example
+This way parent classes could have fields and methods
 
-* Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
+    |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
 
+#### Usage in docstrings
 
-Also I didn't include the constraint for it to have to be inside of docstrings
+I didn't include the constraint PREXEL to have to be inside of docstrings
 this way it can be used in other files, for example I used it when updating the 
-entry examples which is inside of a markdown file. Plus it is way faster to type
-this way
+examples inside of the README, which is a markdown file. 
 
-    * Can't handle multiple inheritance right now
-    * Can't handle multiple aggregation right now
-    * Can't handle self aggregation right now
-    * show error
+Plus it is way faster to type .
 
+#### Improvements
 
-### Next Action
-
-* Clean up README
-* Review email and paper and determine what to discuss in meeting
-* Search for all TODOs in project
-* Comment interpreter code/ Comment interpreter tests
-* Comment lexer code / Comment lexer tests
-* Comment encoder code / Comment encoder tests
-
-* need to handle "S" character, static
-* need to determine how we want the aggregated value added to the aggregator
-right now single-line and multi-line do it in a different order
-
+* Can't handle multiple inheritance right now
+* Can't handle multiple aggregation right now
+* Can't handle self aggregation right now
+* Can't handle static "S"
 * need to figure out a way to handle merging multiple diagrams
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Next Actions
+
+* Search for all TODOs in project
+* Comment/Clean up interpreter code/tests
+* Comment/Clean up lexer code/tests
+* Comment/Clean up encoder code/tests
+
+* need to handle "S" character, and create class variable in source code
+* need to determine how we want the aggregated value added to the aggregator
+right now single-line and multi-line do it in a different order
 * Allow for multiple loops of code inside of evaluate method
-
-* Discussion Points
-
-* Review example-entry.md to determine next steps for the encorder and parser
-and create tasks
-
-* figure out why packaging isn't working properly
-
-* Review classes, especially the parsers and lexers
-    * Method names 
-    * Add docstrings 
-    * Add needed comments
     
-
-
 ### Interpreter
 
 * Comment source and test classes [NA]
 * Create a default value from aggregation if not specified [NA]
 * Use the left multiplicity value for aggregation
 * Use the right multiplicity value for aggregation
-* Optionals
+* Optional
     * Write out current grammer for parser
     * Define a comprehensive grammar
     * Read up on AST
@@ -81,40 +192,24 @@ and create tasks
     <------
 
 * Handle Dependence
-* Handle inheritance
-* Think of a way to handle multiline form. We could ignore any class_marker 
-token after first class_marker. This would be handle by the interpreter 
-* Make multiplicity values constants
 
 ### Encoders
-* Update encoder to take an array of diagrams [NA]
-* Add docstrings to encoders.py
-* Pretty Print
-    * When diagram has no methods don't print out a line
-    * Aggregation encoding [NA-FIRST]
-    * Inheritance encoding [NA-FIRST]
-    * Dependence encoding
-* Source Code 
-    * Add comment to aggregation, noting the Class name aggregated,
-    this is immediately obvious since Python is not typed
-    * [DETERMINE REMAINING TASKS]
+
+* Source code - add comment to aggregation, noting the Class name aggregated,
+this is immediately obvious since Python is not typed
     
 ### Plugin
-* Determine more tasks
-* Create new file for source code
-* Split prexel entry on double newlines
+
 * Allow user the option to specify if they want pretty-print or source code, 
 both, or neither, when running the prexel command
-* Add Linux and Windows .sublime-keymap files
+
 * I’ve also been thinking a lot about the “need” to synchorize between 
 generated classes, XML fragment, and pretty-printed diagrams. 
 I believe we still need to synchronize the XML fragment and pretty-printed 
 diagram, but I question whether we need to keep t
 
-### Misc
-* Fix package issues so we can run cli from command line [NA]
-
 ### XML Code
+
 * Determine more tasks 
 * XMIAdaptor - handles the conversion of a Diagram object in and out of XMI
 * Fragment aggregation code
