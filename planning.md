@@ -34,6 +34,7 @@ Plus it is way faster to type.
 ### Prep for submission
 
 * Use dropbox for source?
+* remove git repo for submitted zip as it has reference to github
 
 ### Improvements
 
