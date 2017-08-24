@@ -1,7 +1,7 @@
 import unittest
 
-from prexel.plugin.encoders.source_code_encoder import SourceCodeEncoder
-from prexel.plugin.models.diagram import ClassDiagramPart
+from prexel.encoders.source_code_encoder import SourceCodeEncoder
+from prexel.models.diagram import ClassDiagramPart
 
 
 class TestSourceCodeEncoder(unittest.TestCase):

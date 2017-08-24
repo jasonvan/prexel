@@ -1,11 +1,11 @@
 import unittest
 
-from prexel.plugin.parser.lexer import Lexer
-from prexel.plugin.parser.interpreter import Interpreter, InterpreterException
-from prexel.plugin.parser.token import Token
-from prexel.plugin.models.diagram import (ClassDiagramPart,
-                                          InheritanceDiagramPart,
-                                          AggregationDiagramPart)
+from prexel.parser.lexer import Lexer
+from prexel.parser.interpreter import Interpreter, InterpreterException
+from prexel.parser.token import Token
+from prexel.models.diagram import (ClassDiagramPart, 
+                                InheritanceDiagramPart,
+                            AggregationDiagramPart)
 
 
 class TestInterpreter(unittest.TestCase):

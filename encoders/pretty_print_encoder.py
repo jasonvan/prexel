@@ -1,4 +1,4 @@
-from prexel.plugin.encoders.encoder import Encoder
+from prexel.encoders.encoder import Encoder
 
 
 class PrettyPrintEncoder(Encoder):
@@ -9,15 +9,17 @@ class PrettyPrintEncoder(Encoder):
     Output based on:
     https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
 
-     ---------
-    | Encoder |
-    |_________|
-       ^
-     ----------------------
-    |  PrettyPrintEncoder  |        ---------
-    |----------------------|------>| Diagram |
-    |generate()            |       |_________|
-    |______________________|
+     _______ 
+    |Encoder|
+    |_______|
+    ∆
+    |__________________ 
+    |PrettyPrintEncoder|
+    |------------------|
+    |generate()        |
+    |create_class()    |
+    |__________________|
+
     """
     def generate(self, diagram):
         """

@@ -1,5 +1,5 @@
 import unittest
-from prexel.plugin import REGEX
+from prexel.regex import REGEX
 
 
 class TestRegex(unittest.TestCase):

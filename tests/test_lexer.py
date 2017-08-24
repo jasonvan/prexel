@@ -1,6 +1,6 @@
 import unittest
-from prexel.plugin.parser.lexer import Lexer
-from prexel.plugin.parser.token import Token
+from prexel.parser.lexer import Lexer
+from prexel.parser.token import Token
 
 
 class TestLexer(unittest.TestCase):

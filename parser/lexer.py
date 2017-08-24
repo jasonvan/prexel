@@ -1,11 +1,22 @@
 """
 Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
 """
-from parser.token import Token
-from plugin import REGEX
+from prexel.parser.token import Token
+from prexel.regex import REGEX
 
 
 class Lexer:
+    """
+     ____________ 
+    |   Lexer    |
+    |------------|
+    |text        |
+    |position    |
+    |current     |
+    |marker_found|
+    |____________|
+
+    """
     def __init__(self, text):
         self.text = text
         self.position = 0

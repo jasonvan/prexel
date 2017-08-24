@@ -1,7 +1,7 @@
-from prexel.plugin.parser.lexer import Lexer
-from prexel.plugin.parser.interpreter import Interpreter, InterpreterException
-from prexel.plugin.encoders.pretty_print_encoder import PrettyPrintEncoder
-from prexel.plugin.encoders.source_code_encoder import SourceCodeEncoder
+from .parser.lexer import Lexer
+from .parser.interpreter import Interpreter, InterpreterException
+from .encoders.pretty_print_encoder import PrettyPrintEncoder
+from .encoders.source_code_encoder import SourceCodeEncoder
 
 
 def main():

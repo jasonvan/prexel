@@ -1,28 +1,31 @@
 import sublime
 import sublime_plugin
 
-from .parser.lexer import Lexer
-from .parser.interpreter import Interpreter, InterpreterException
-from .encoders.pretty_print_encoder import PrettyPrintEncoder
-from .encoders.source_code_encoder import SourceCodeEncoder
+from prexel.parser.lexer import Lexer
+from prexel.parser.interpreter import Interpreter, InterpreterException
+from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
+from prexel.encoders.source_code_encoder import SourceCodeEncoder
 
 """
-|Kitchen << Room
+
 """
 
 class GenerateUmlCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        for region in self.view.sel():
-            if not region.empty():
-                region_text = self.view.substr(region)
+        # Get the currently selected line or lines
+        line = self.view.line(self.view.sel()[0])
+        text = self.view.substr(line)
 
-                lexer = Lexer(region_text)
-                interpreter = Interpreter(lexer)
+        # Create tokens from the text
+        lexer = Lexer(text)
 
-                diagram = interpreter.evaluate()
-                encoder = PrettyPrintEncoder()
+        # Interpret the tokens and create a diagram object
+        interpreter = Interpreter(lexer)
+        diagram = interpreter.evaluate()
 
-                result = encoder.generate(diagram)
+        # Encode diagram for output to the view
+        encoder = PrettyPrintEncoder()
+        result = encoder.generate(diagram)
 
-                print(result)
-                # TODO Do string processing here
+        # Replace selection
+        self.view.replace(edit, line, result)

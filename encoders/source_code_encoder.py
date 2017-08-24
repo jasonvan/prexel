@@ -1,5 +1,5 @@
-from prexel.plugin.encoders.encoder import Encoder
-from prexel.plugin import REGEX
+from prexel.encoders.encoder import Encoder
+from prexel.regex import REGEX
 
 # TODO - make this configurable
 INDENTATION = "    "  # Default indentation
@@ -13,15 +13,16 @@ class SourceCodeEncoder(Encoder):
     Output based on:
     https://github.com/jasonvan/prexel/blob/master/planning/entry-examples.md
 
-     ---------
-    | Encoder |
-    |_________|
-       ^
-     ----------------------
-    |  SourceCodeEncoder   |        ---------
-    |----------------------|------>| Diagram |
-    |generate_class()      |       |_________|
-    |______________________|
+     _______ 
+    |Encoder|
+    |_______|
+    ∆
+    |_________________ 
+    |SourceCodeEncoder|
+    |-----------------|
+    |create_class()   |
+    |_________________|
+
     """
 
     def create_class(self, diagram):
