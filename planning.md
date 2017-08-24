@@ -17,6 +17,17 @@ for example
 * Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
 
 
+Also I didn't include the constraint for it to have to be inside of docstrings
+this way it can be used in other files, for example I used it when updating the 
+entry examples which is inside of a markdown file. Plus it is way faster to type
+this way
+
+    * Can't handle multiple inheritance right now
+    * Can't handle multiple aggregation right now
+    * Can't handle self aggregation right now
+    * show error
+
+
 ### Next Action
 
 * Clean up README
@@ -26,19 +37,15 @@ for example
 * Comment lexer code / Comment lexer tests
 * Comment encoder code / Comment encoder tests
 
-* need to handle "S" character
+* need to handle "S" character, static
+* need to determine how we want the aggregated value added to the aggregator
+right now single-line and multi-line do it in a different order
+
 * need to figure out a way to handle merging multiple diagrams
 
-* Make GIFs for using prexel inside of Sublime text
-
 * Allow for multiple loops of code inside of evaluate method
-* Update encoders to take an array of digrams, need to determine how to
-properly print values
 
 * Discussion Points
-    * Can't handle multiple inheritance right now
-    * Can't handle multiple aggregation right now
-    * Can't handle self aggregation right now
 
 * Review example-entry.md to determine next steps for the encorder and parser
 and create tasks
