@@ -2,6 +2,18 @@ import re
 
 """
 |Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()
+
+|Kitchen
+|color
+|square_feet
+|show_kitchen()
+
+|Tasklist <>-the_tasks--*> Task
+|get_the_tasks()
+|prioritize()
+
+|Kitchen << Blah
+
 """
 
 REGEX = {
