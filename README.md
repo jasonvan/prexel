@@ -5,8 +5,8 @@
 First, a copy of Sublime Text 3 should be installed. It can be downloaded at:
 
     https://www.sublimetext.com/
-
-After downloading and installing Sublime Text, the plugin should be placed inside of the Sublime Text packages folder. Once inside, Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
+    
+After downloading and installing Sublime Text, the “prexel” folder found alongside this file should be placed directly inside of the Sublime Text “Packages” folder. This is the plugin folder. Once inside, Sublime Text will automatically load the plugin. The “Packages” folder can be found in the following locations.
 
 **Windows**
 
