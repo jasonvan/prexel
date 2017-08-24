@@ -1,8 +1,8 @@
 """
 Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
 """
-from prexel.plugin.parser.token import Token
-from prexel.plugin import REGEX
+from parser.token import Token
+from plugin import REGEX
 
 
 class Lexer:

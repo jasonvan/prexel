@@ -79,17 +79,21 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
+* Get sublime plugin working with pretty-printed
+
 * Update source code encoding to take in multiple diagrams
-* Get cli working again
+
+* Clean up README
+
+* Get sublime plugin working with source-encoding
+
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests
 * Comment encoder code / Comment encoder tests
 
 * need to handle "S" character
-
 * need to figure out a way to handle merging multiple diagrams
 
-* Clean up README
 * Make GIFs for using prexel inside of Sublime text
 
 * Allow for multiple loops of code inside of evaluate method
