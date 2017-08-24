@@ -156,7 +156,7 @@ Pretty-printed UML from single-line entry:
     |employees|                            
     |_________|                            
 
-Pretty-printed UML from multi-line entry:
+Pretty-printed UML from multi-line entry (NOTE: no fields on Employee):
 
      _________                    ________ 
     |Employer |<>1-employees---*>|Employee|
@@ -208,7 +208,7 @@ Pretty-printed UML from single-line entry:
     |show_kitchen()|                            
     |______________|                            
 
-Pretty-printed UML from multo-line entry:
+Pretty-printed UML from multo-line entry (NOTE: no fields on Cupboard):
 
      ____ 
     |Room|
