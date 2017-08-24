@@ -1,18 +1,18 @@
 # Prexel
 
-## Installations
+## Installation
 
 The plugin can be installed inside of the Sublime Text packages folder.
 
-*Windows*
+**Windows**
 
 	%APPDATA%\Sublime Text 3\Packages
 
-*MAC/OSX*
+**MAC/OSX**
 
 	~/Library/Application Support/Sublime Text 3/Packages
 
-*LINUX*
+**LINUX**
 
 	~/.config/sublime-text-3/Packages
 
