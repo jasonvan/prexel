@@ -1,4 +1,4 @@
-# Prexel
+# Prexel - Sublime Text plugin
 
 ## Installation
 
