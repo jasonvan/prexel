@@ -11,39 +11,6 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
     """
     Tests related to main generate method
     """
-    def test_generate_class(self):
-        diagram = ClassDiagramPart("Kitchen", methods=[
-            "arrange_kitchen()",
-            "place_floor_cabinet()",
-            "place_wall_cabinet()"
-        ], fields=[
-            "width",
-            "height"
-        ])
-
-        expected = ("class Kitchen:\n"
-                    "    def __init__(self, width, height):\n"
-                    "        self.width = width\n"
-                    "        self.height = height\n"
-                    "\n"
-                    "    def arrange_kitchen(self):\n"
-                    "        pass\n"
-                    "\n"
-                    "    def place_floor_cabinet(self):\n"
-                    "        pass\n"
-                    "\n"
-                    "    def place_wall_cabinet(self):\n"
-                    "        pass\n"
-                    )
-
-        encoder = SourceCodeEncoder()
-        actual = encoder.create_class(diagram)
-
-        print(expected)
-        print(actual)
-
-        self.assertEqual(expected, actual)
-
     def test_generate_empty_class(self):
         wing = ClassDiagramPart("Wing")
 
@@ -55,10 +22,8 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         encoder = SourceCodeEncoder()
         actual = encoder.generate(diagram)
 
-        print(expected)
-        print(actual[0])
-
-        self.assertEqual(expected, actual[0])
+        self.assertEqual("wing", actual[0][0])
+        self.assertEqual(expected, actual[0][1])
 
     def test_generate_with_inheritance(self):
         person = ClassDiagramPart("Person", fields=[
@@ -90,14 +55,16 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         encoder = SourceCodeEncoder()
         actual = encoder.generate(diagram)  # Returns and array of classes
 
-        self.assertEqual(person_class, actual[0])
-        self.assertEqual(employee_class, actual[1])
+        self.assertEqual("person", actual[0][0])
+        self.assertEqual(person_class, actual[0][1])
+        self.assertEqual("employee", actual[1][0])
+        self.assertEqual(employee_class, actual[1][1])
 
     def test_generate_with_aggregation(self):
         task_list_diagram = ClassDiagramPart("TaskList", methods=[
             "get_the_tasks()",
             "prioritize()"
-        ])
+        ], fields=["the_tasks"])
 
         task_list_aggregation = AggregationDiagramPart("the_tasks",
                                                        right_multiplicity="*")
@@ -124,8 +91,10 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         encoder = SourceCodeEncoder()
         actual = encoder.generate(diagram)
 
-        self.assertEqual(task_list_class, actual[1])
-        self.assertEqual(task_class, actual[0])
+        self.assertEqual("tasklist", actual[1][0])
+        self.assertEqual(task_list_class, actual[1][1])
+        self.assertEqual("task", actual[0][0])
+        self.assertEqual(task_class, actual[0][1])
 
     def test_generate_full(self):
         task_list_diagram = ClassDiagramPart("TaskList", methods=[
@@ -164,15 +133,45 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         actual = encoder.generate(diagram)
 
         # NOT TESTING ANYTHING, JUST CHECKING OUTPUT
-        print(actual[0])
-        print(actual[1])
-        print(actual[2])
+        print(actual[0][1])
+        print(actual[1][1])
+        print(actual[2][2])
 
 
 class TestSourceCodeEncoderMainHelpers(unittest.TestCase):
     """
     Helper tests
     """
+    def test_create_class(self):
+        diagram = ClassDiagramPart("Kitchen", methods=[
+            "arrange_kitchen()",
+            "place_floor_cabinet()",
+            "place_wall_cabinet()"
+        ], fields=[
+            "width",
+            "height"
+        ])
+
+        expected = ("class Kitchen:\n"
+                    "    def __init__(self, width, height):\n"
+                    "        self.width = width\n"
+                    "        self.height = height\n"
+                    "\n"
+                    "    def arrange_kitchen(self):\n"
+                    "        pass\n"
+                    "\n"
+                    "    def place_floor_cabinet(self):\n"
+                    "        pass\n"
+                    "\n"
+                    "    def place_wall_cabinet(self):\n"
+                    "        pass\n"
+                    )
+
+        encoder = SourceCodeEncoder()
+        actual = encoder.create_class(diagram)
+
+        self.assertEqual(expected, actual)
+
     def test_generate_class_with_method_params_as_object(self):
         style_diagram = ClassDiagramPart("Style", methods=[
             {"signature": "get_cabinet(height)", "body": "return XCabinet()"}

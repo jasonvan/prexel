@@ -94,13 +94,15 @@ class Interpreter:
 
             name = token.value["name"]
 
+            aggregation = AggregationDiagramPart()
+
             if name:
                 diagram.main.fields.append(name)
+                aggregation.name = name
             else:
                 # TODO - need to handle missing aggregated value
-                diagram.fields.append("MISSING-AGGREGATED-NAME")
+                diagram.main.fields.append("MISSING-AGGREGATED-NAME")
 
-            aggregation = AggregationDiagramPart()
             aggregation.left_multiplicity = token.value["left_multi"]
             aggregation.right_multiplicity = token.value["right_multi"]
 

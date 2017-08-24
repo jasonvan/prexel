@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 
 from prexel.parser.lexer import Lexer
-from prexel.parser.interpreter import Interpreter, InterpreterException
+from prexel.parser.interpreter import Interpreter
 from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
 
@@ -20,6 +20,7 @@ MAC/OSX — ~/Library/Application Support/Sublime Text 3/Packages
 
 """
 
+
 class GenerateUmlCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         # Get the currently selected line or lines
@@ -36,36 +37,45 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         interpreter = Interpreter(lexer)
         diagram = interpreter.evaluate()
 
-        # Encode diagram for output to the view
-        encoder = PrettyPrintEncoder()
-        result = encoder.generate(diagram)
+        # Pretty-print encode diagram for output to the view
+        pretty_print = PrettyPrintEncoder()
+        result = pretty_print.generate(diagram)
+
+        # Source-code encode diagram for files
+        source_code = SourceCodeEncoder()
+        classes = source_code.generate(diagram)
 
         # Replace selection
         self.view.replace(edit, line, result)
 
-        contents = "new-content"
-
         # Send command to window
         self.view.window().run_command("create_new_file", 
-                                      {"file_contents" : contents})
+                                      {"classes" : classes})
 
 
 class CreateNewFileCommand(sublime_plugin.WindowCommand):
-    def run(self, file_contents):
-        self.file_contents = file_contents
-        self.window.show_input_panel("Create class file?", "", 
+    def run(self, classes):
+        self.classes = classes
+        self.window.show_input_panel("Create class files? (YES or NO):", "", 
                                     self.on_done, 
                                     None, 
                                     None)
 
     def on_done(self, text):
-        view = self.window.new_file()
-        view.run_command("add_text_to_new_file", {"text": self.file_contents})
+        if text.lower().strip() in ("yes", "y"):
+            for class_item in self.classes:
+                print(class_item)
+                file_name, file_contents = class_item
+                view = self.window.new_file()
+                view.run_command("add_text_to_new_file", 
+                    {"file_name": file_name, "file_contents": file_contents})
 
 
 class AddTextToNewFileCommand(sublime_plugin.TextCommand):
-    def run(self, edit, text):
-        self.view.insert(edit, 0, text)
+    def run(self, edit, file_name, file_contents):
+        self.view.insert(edit, 0, file_contents)
+        self.view.set_name(file_name + ".py")
+        self.view.run_command('save')
 
 
 

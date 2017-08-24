@@ -20,11 +20,11 @@ class SourceCodeEncoder(Encoder):
     |_________________ 
     |SourceCodeEncoder|
     |-----------------|
+    |generate()       |
     |create_class()   |
     |_________________|
 
     """
-
     def generate(self, diagram):
         """
         TODO change this to return an array of tuples,
@@ -32,25 +32,23 @@ class SourceCodeEncoder(Encoder):
         TODO comment this code
         """
         classes = []
-
         parent_name = None
 
         if diagram.parent:
             parent = SourceCodeEncoder.create_class(diagram.parent)
             parent_name = diagram.parent.name
-            classes.append(parent)
+            parent_tup = (parent_name.lower(), parent)
+            classes.append(parent_tup)
 
-        if diagram.aggregation and diagram.aggregated:
-            if not diagram.main.fields:
-                diagram.main.fields = []
-
-            diagram.main.fields.append(diagram.aggregation.name)
+        if diagram.aggregated and diagram.aggregation:
             aggregated = SourceCodeEncoder.create_class(diagram.aggregated)
-            classes.append(aggregated)
+            aggregated_tup = (diagram.aggregated.name.lower(),aggregated)
+            classes.append(aggregated_tup)
 
         main = SourceCodeEncoder.create_class(diagram.main, parent_name)
+        main_tup = (diagram.main.name.lower(), main)
 
-        classes.append(main)
+        classes.append(main_tup)
 
         return classes
 
