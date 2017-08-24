@@ -146,7 +146,7 @@ Easy-entry multi-line (in multi-line, Employee can't have fields)
     |age
 
 
-Pretty-printed UML:
+Pretty-printed UML from single-line entry:
 
      _________                    ________ 
     |Employer |<>1-employees---*>|Employee|
@@ -156,12 +156,14 @@ Pretty-printed UML:
     |employees|                            
     |_________|                            
 
+Pretty-printed UML from multi-line entry:
+
      _________                    ________ 
     |Employer |<>1-employees---*>|Employee|
     |---------|                  |________|
-    |employees|                            
-    |name     |                            
+    |name     |
     |age      |                            
+    |employees|                            
     |_________|                            
 
 Source code generated (each class in its own file):
@@ -190,7 +192,8 @@ Easy-entry multi-line (in multi-line, Cupboard can't have fields)
     |square_feet
     |show_kitchen()
 
-Pretty-printed UML:
+
+Pretty-printed UML from single-line entry:
 
      ____ 
     |Room|
@@ -201,6 +204,21 @@ Pretty-printed UML:
     |--------------|                  |--------|
     |color         |                  |open()  |
     |square_feet   |                  |________|
+    |cupboards     |                            
+    |show_kitchen()|                            
+    |______________|                            
+
+Pretty-printed UML from multo-line entry:
+
+     ____ 
+    |Room|
+    |____|
+    ∆
+    |______________                    ________ 
+    |   Kitchen    |<>*-cupboards---1>|Cupboard|
+    |--------------|                  |________|
+    |color         |                            
+    |square_feet   |                            
     |cupboards     |                            
     |show_kitchen()|                            
     |______________|                            
