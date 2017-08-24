@@ -31,6 +31,10 @@ examples inside of the README, which is a markdown file.
 
 Plus it is way faster to type.
 
+### Prep for submission
+
+* Use dropbox for source?
+
 ### Improvements
 
 * Can't handle multiple inheritance right now
