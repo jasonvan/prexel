@@ -2,7 +2,11 @@
 
 ## Installation
 
-The plugin should be placed inside of the Sublime Text packages folder. Once inside, Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
+First, a copy of Sublime Text 3 should be installed. It can be downloaded at:
+
+    https://www.sublimetext.com/
+
+After downloading and installing Sublime Text, the plugin should be placed inside of the Sublime Text packages folder. Once inside, Sublime text will automatically load the plugin, **SO YOU'RE DONE**.
 
 **Windows**
 
@@ -254,5 +258,12 @@ Running the test can be done from the command line, with the following command:
     python3 -m unittest prexel/plugin/tests/test_lexer.py
     python3 -m unittest prexel/plugin/tests/test_interpreter.py
     python3 -m unittest prexel/plugin/tests/test_regex.py
+
+## Improvements and Unimplemented features
+
+* Limited to a single subclass inheriting from a single parent class.
+* A class can only aggregate one other class.
+* A class cannot aggregate itself.
+* No way to convert multiple PREXEL strings at one time. These would need to be merged together.
 
 
