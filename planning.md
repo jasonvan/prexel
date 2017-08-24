@@ -43,120 +43,6 @@ Plus it is way faster to type.
 * Can't handle static "S"
 * need to figure out a way to handle merging multiple diagrams
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Backlog
 
 ### Next Actions
@@ -166,8 +52,11 @@ Plus it is way faster to type.
 * Comment/Clean up lexer code/tests
 * Comment/Clean up encoder code/tests
 
-* need to handle "S" character, and create class variable in source code
-* need to determine how we want the aggregated value added to the aggregator
+* Update interpreter to agreed upon structure
+    * need to handle "S" character, and create class variable in source code
+    * need to determine how we want the aggregated value added to the aggregator
+
+* need to add more describitive messages to interpreter
 right now single-line and multi-line do it in a different order
 * Allow for multiple loops of code inside of evaluate method
     
