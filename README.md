@@ -1,18 +1,22 @@
 # Prexel
 
+## Installations
 
+The plugin can be installed inside of the Sublime Text packages folder.
 
-WINDOWS — %APPDATA%\Sublime Text 3\Packages
-LINUX — ~/.config/sublime-text-3/Packages
-MAC/OSX — ~/Library/Application Support/Sublime Text 3/Packages
+*Windows*
 
-# Execution
+	%APPDATA%\Sublime Text 3\Packages
 
-Run this small command-line application to test current code
+*MAC/OSX*
 
-    prexel/plugin/cli.py
+	~/Library/Application Support/Sublime Text 3/Packages
 
-## Testing
+*LINUX*
+
+	~/.config/sublime-text-3/Packages
+
+## Tests
 
 Currently there is a test suite available to test the code. This can be found at:
 
