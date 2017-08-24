@@ -16,6 +16,10 @@ The plugin can be installed inside of the Sublime Text packages folder.
 
 	~/.config/sublime-text-3/Packages
 
+## Usage
+
+[TODO]
+
 ## Tests
 
 Currently there is a test suite available to test the code. This can be found at:
