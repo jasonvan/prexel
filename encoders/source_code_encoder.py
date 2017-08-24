@@ -25,7 +25,37 @@ class SourceCodeEncoder(Encoder):
 
     """
 
-    def create_class(self, diagram):
+    def generate(self, diagram):
+        """
+        TODO change this to return an array of tuples,
+        with class_name, and contents
+        TODO comment this code
+        """
+        classes = []
+
+        parent_name = None
+
+        if diagram.parent:
+            parent = SourceCodeEncoder.create_class(diagram.parent)
+            parent_name = diagram.parent.name
+            classes.append(parent)
+
+        if diagram.aggregation and diagram.aggregated:
+            if not diagram.main.fields:
+                diagram.main.fields = []
+
+            diagram.main.fields.append(diagram.aggregation.name)
+            aggregated = SourceCodeEncoder.create_class(diagram.aggregated)
+            classes.append(aggregated)
+
+        main = SourceCodeEncoder.create_class(diagram.main, parent_name)
+
+        classes.append(main)
+
+        return classes
+
+    @staticmethod
+    def create_class(diagram, extends=None):
         """
         Generate a class from the provided diagram.
         Returns: a class string
@@ -33,7 +63,6 @@ class SourceCodeEncoder(Encoder):
 
         # Cache diagram values to local variables
         name = diagram.name
-        extends = diagram.extends
         fields = diagram.fields
         methods = diagram.methods
 
@@ -57,7 +86,7 @@ class SourceCodeEncoder(Encoder):
                     result += INDENTATION * 2 + \
                         "self.{0} = {0}\n".format(field)
 
-                    if index == len(fields) - 1:
+                    if index == len(fields) - 1 and methods:
                         result += "\n"
 
             # Create methods if methods values are provided
@@ -70,7 +99,7 @@ class SourceCodeEncoder(Encoder):
                         # Method signature
                         try:
                             signature = method["signature"]
-                            result += self.process_method_signature(signature)
+                            result += SourceCodeEncoder.process_method_signature(signature)
                         except (KeyError, SourceCodeEncoderException):
                             continue  # Proceed to next method if any errors
 
@@ -84,7 +113,7 @@ class SourceCodeEncoder(Encoder):
                     # Just a string so create an empty method
                     else:
                         try:
-                            result += self.process_method_signature(method)
+                            result += SourceCodeEncoder.process_method_signature(method)
                             result += INDENTATION * 2 + "pass\n"
                         except SourceCodeEncoderException:
                             continue
@@ -95,8 +124,8 @@ class SourceCodeEncoder(Encoder):
         else:
             result += INDENTATION + "pass\n"
 
-        # Add a newline after class
-        result += "\n"
+        # TODO - might need to add this back in to add a newline after class
+        # result += "\n"
 
         return result
 

@@ -2,9 +2,9 @@ import unittest
 
 from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
 from prexel.models.diagram import (Diagram,
-                            ClassDiagramPart,
-                            InheritanceDiagramPart,
-                            AggregationDiagramPart)
+                                   ClassDiagramPart,
+                                   InheritanceDiagramPart,
+                                   AggregationDiagramPart)
 
 
 class TestPrettyPrintEncoderMain(unittest.TestCase):

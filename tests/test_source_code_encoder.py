@@ -1,10 +1,16 @@
 import unittest
 
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
-from prexel.models.diagram import ClassDiagramPart
+from prexel.models.diagram import (Diagram,
+                                   ClassDiagramPart,
+                                   InheritanceDiagramPart,
+                                   AggregationDiagramPart)
 
 
-class TestSourceCodeEncoder(unittest.TestCase):
+class TestSourceCodeEncoderMain(unittest.TestCase):
+    """
+    Tests related to main generate method
+    """
     def test_generate_class(self):
         diagram = ClassDiagramPart("Kitchen", methods=[
             "arrange_kitchen()",
@@ -28,94 +34,145 @@ class TestSourceCodeEncoder(unittest.TestCase):
                     "\n"
                     "    def place_wall_cabinet(self):\n"
                     "        pass\n"
-                    "\n"
                     )
 
         encoder = SourceCodeEncoder()
         actual = encoder.create_class(diagram)
 
-        self.assertEqual(expected, actual)
-
-    def test_generate_class_with_inheritance(self):
-        person_diagram = ClassDiagramPart("Person", fields=[
-            "name",
-            "age"
-        ])
-
-        employee_diagram = ClassDiagramPart("Employee", fields=[
-            "job_title"
-        ], extends="Person")
-
-        # TODO Employee should contain call to super().__init__() with value
-
-        expected = ("class Person:\n"
-                    "    def __init__(self, name, age):\n"
-                    "        self.name = name\n"
-                    "        self.age = age\n"
-                    "\n"
-                    "\n"
-                    "class Employee(Person):\n"
-                    "    def __init__(self, job_title):\n"
-                    "        self.job_title = job_title\n"
-                    "\n"
-                    "\n"
-                    )
-
-        encoder = SourceCodeEncoder()
-        person = encoder.create_class(person_diagram)
-        employee = encoder.create_class(employee_diagram)
-        actual = person + employee
+        print(expected)
+        print(actual)
 
         self.assertEqual(expected, actual)
 
     def test_generate_empty_class(self):
-        airplane_diagram = ClassDiagramPart("Airplane", fields=[
-            "wing"
-        ])
+        wing = ClassDiagramPart("Wing")
 
-        wing_diagram = ClassDiagramPart("Wing")
+        diagram = Diagram(wing)
 
-        expected = ("class Airplane:\n"
-                    "    def __init__(self, wing):\n"
-                    "        self.wing = wing\n"
-                    "\n"
-                    "\n"
-                    "class Wing:\n"
-                    "    pass\n"
-                    "\n"
-                    )
+        expected = ("class Wing:\n"
+                    "    pass\n")
 
         encoder = SourceCodeEncoder()
-        airplane = encoder.create_class(airplane_diagram)
-        wing = encoder.create_class(wing_diagram)
+        actual = encoder.generate(diagram)
 
-        actual = airplane + wing
-        self.assertEqual(expected, actual)
+        print(expected)
+        print(actual[0])
 
-    def test_generate_class_with_dependence(self):
-        style_diagram = ClassDiagramPart("Style", methods=[
-            {"signature": "get_cabinet()", "body": "return XCabinet()"}
+        self.assertEqual(expected, actual[0])
+
+    def test_generate_with_inheritance(self):
+        person = ClassDiagramPart("Person", fields=[
+            "name",
+            "age"
         ])
 
-        xcabinet_diagram = ClassDiagramPart("XCabinet")
+        inheritance = InheritanceDiagramPart()
 
-        expected = ("class Style:\n"
-                    "    def get_cabinet(self):\n"
-                    "        return XCabinet()\n"
-                    "\n"
-                    "class XCabinet:\n"
-                    "    pass\n"
-                    "\n"
-                    )
+        employee = ClassDiagramPart("Employee", fields=[
+            "job_title"
+        ])
+
+        diagram = Diagram(employee,
+                          parent=person,
+                          inheritance=inheritance)
+
+        # TODO Employee should contain call to super().__init__() with value
+
+        person_class = ("class Person:\n"
+                        "    def __init__(self, name, age):\n"
+                        "        self.name = name\n"
+                        "        self.age = age\n")
+
+        employee_class = ("class Employee(Person):\n"
+                          "    def __init__(self, job_title):\n"
+                          "        self.job_title = job_title\n")
 
         encoder = SourceCodeEncoder()
-        style = encoder.create_class(style_diagram)
-        xcabinet = encoder.create_class(xcabinet_diagram)
+        actual = encoder.generate(diagram)  # Returns and array of classes
 
-        actual = style + xcabinet
+        self.assertEqual(person_class, actual[0])
+        self.assertEqual(employee_class, actual[1])
 
-        self.assertEqual(expected, actual)
+    def test_generate_with_aggregation(self):
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ])
 
+        task_list_aggregation = AggregationDiagramPart("the_tasks",
+                                                       right_multiplicity="*")
+
+        task_diagram = ClassDiagramPart("Task")
+
+        diagram = Diagram(task_list_diagram,
+                          aggregation=task_list_aggregation,
+                          aggregated=task_diagram)
+
+        task_list_class = ("class TaskList:\n"
+                           "    def __init__(self, the_tasks):\n"
+                           "        self.the_tasks = the_tasks\n"
+                           "\n"
+                           "    def get_the_tasks(self):\n"
+                           "        pass\n"
+                           "\n"
+                           "    def prioritize(self):\n"
+                           "        pass\n")
+
+        task_class = ("class Task:\n"
+                      "    pass\n")
+
+        encoder = SourceCodeEncoder()
+        actual = encoder.generate(diagram)
+
+        self.assertEqual(task_list_class, actual[1])
+        self.assertEqual(task_class, actual[0])
+
+    def test_generate_full(self):
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ])
+
+        task_list_aggregation = AggregationDiagramPart("name",
+                                                       right_multiplicity="*")
+
+        task_diagram = ClassDiagramPart("Task", fields=[
+            "name",
+            "description"
+        ], methods=[
+            "complete()",
+            "delete()"
+        ])
+
+        parent = ClassDiagramPart("Manager", fields=[
+            "field1",
+            "field2"
+        ], methods=[
+            "method1()",
+            "method2()"
+        ])
+
+        inheritance = InheritanceDiagramPart()
+
+        diagram = Diagram(task_list_diagram,
+                          parent=parent,
+                          inheritance=inheritance,
+                          aggregation=task_list_aggregation,
+                          aggregated=task_diagram)
+
+        encoder = SourceCodeEncoder()
+        actual = encoder.generate(diagram)
+
+        # NOT TESTING ANYTHING, JUST CHECKING OUTPUT
+        print(actual[0])
+        print(actual[1])
+        print(actual[2])
+
+
+class TestSourceCodeEncoderMainHelpers(unittest.TestCase):
+    """
+    Helper tests
+    """
     def test_generate_class_with_method_params_as_object(self):
         style_diagram = ClassDiagramPart("Style", methods=[
             {"signature": "get_cabinet(height)", "body": "return XCabinet()"}
@@ -126,10 +183,8 @@ class TestSourceCodeEncoder(unittest.TestCase):
         expected = ("class Style:\n"
                     "    def get_cabinet(self, height):\n"
                     "        return XCabinet()\n"
-                    "\n"
                     "class XCabinet:\n"
                     "    pass\n"
-                    "\n"
                     )
 
         encoder = SourceCodeEncoder()
@@ -147,9 +202,7 @@ class TestSourceCodeEncoder(unittest.TestCase):
 
         expected = ("class MyClass:\n"
                     "    def crazy_method2Name(self, param1, param2):\n"
-                    "        pass\n"
-                    "\n"
-                    )
+                    "        pass\n")
 
         encoder = SourceCodeEncoder()
         actual = encoder.create_class(diagram)

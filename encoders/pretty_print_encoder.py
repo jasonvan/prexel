@@ -28,28 +28,29 @@ class PrettyPrintEncoder(Encoder):
 
         Precondition: Well-formed diagram element
         Returns: pretty-printed diagram
+        TODO commend this method
         """
         result = ""
         main_class = ""
 
         if diagram.inheritance:
-            main_class += self.create_class(diagram.main, True)
+            main_class += PrettyPrintEncoder.create_class(diagram.main, True)
         else:
-            main_class += self.create_class(diagram.main)
+            main_class += PrettyPrintEncoder.create_class(diagram.main)
 
         if diagram.aggregation:
-            aggregation_arrow = self.create_aggregation_arrow(diagram.aggregation)
-            aggregated_class = self.create_class(diagram.aggregated)
-            result += self.concat_aggregation(main_class,
+            aggregation_arrow = PrettyPrintEncoder.create_aggregation_arrow(diagram.aggregation)
+            aggregated_class = PrettyPrintEncoder.create_class(diagram.aggregated)
+            result += PrettyPrintEncoder.concat_aggregation(main_class,
                                               aggregation_arrow,
                                               aggregated_class)
         else:
             result += main_class
 
         if diagram.parent:
-            parent = self.create_class(diagram.parent)
+            parent = PrettyPrintEncoder.create_class(diagram.parent)
             if diagram.inheritance:
-                parent += self.create_inheritance_arrow()
+                parent += PrettyPrintEncoder.create_inheritance_arrow()
 
             result = parent + result
 

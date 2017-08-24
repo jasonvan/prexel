@@ -3,9 +3,9 @@ import unittest
 from prexel.parser.lexer import Lexer
 from prexel.parser.interpreter import Interpreter, InterpreterException
 from prexel.parser.token import Token
-from prexel.models.diagram import (ClassDiagramPart, 
-                                InheritanceDiagramPart,
-                            AggregationDiagramPart)
+from prexel.models.diagram import (ClassDiagramPart,
+                                   InheritanceDiagramPart,
+                                   AggregationDiagramPart)
 
 
 class TestInterpreter(unittest.TestCase):

@@ -21,12 +21,6 @@ class Diagram:
 class DiagramPart(metaclass=ABCMeta):
     """
     Represents a abstract diagram element for use with interpreter and encoder
-     ____________
-    |  Diagram   |
-    |------------|
-    |name        |
-    |type        |
-    |____________|
     """
     def __init__(self, name, type):
         self.name = name
@@ -34,6 +28,17 @@ class DiagramPart(metaclass=ABCMeta):
 
 
 class ClassDiagramPart(DiagramPart):
+    """
+     ___________ 
+    |DiagramPart|
+    |___________|
+    ∆
+    |________________ 
+    |ClassDiagramPart|
+    |________________|
+
+    """
+
     def __init__(self, name="", fields=None, methods=None, extends=None):
         super().__init__(name, "class")
         self.fields = fields
@@ -42,6 +47,16 @@ class ClassDiagramPart(DiagramPart):
 
 
 class AggregationDiagramPart(DiagramPart):
+    """
+     ___________ 
+    |DiagramPart|
+    |___________|
+    ∆
+    |______________________ 
+    |AggregationDiagramPart|
+    |______________________|
+
+    """
     def __init__(self, name="", left_multiplicity=None, right_multiplicity=None):
         super().__init__(name, "aggregation")
         self.left_multiplicity = left_multiplicity
@@ -49,5 +64,15 @@ class AggregationDiagramPart(DiagramPart):
 
 
 class InheritanceDiagramPart(DiagramPart):
+    """
+     ___________ 
+    |DiagramPart|
+    |___________|
+    ∆
+    |______________________ 
+    |InheritanceDiagramPart|
+    |______________________|
+
+    """
     def __init__(self, name=""):
         super().__init__(name, "inheritance")

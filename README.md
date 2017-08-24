@@ -79,13 +79,12 @@ that will handle convertting it to XMI fragments.
 
 ## Focus
 
-* Get sublime plugin working with pretty-printed
-
 * Update source code encoding to take in multiple diagrams
-
-* Clean up README
-
 * Get sublime plugin working with source-encoding
+* Clean up README
+* move all tasks from README.md to backlog
+* Look into why aggregation name isn't input into arrow when pretty-printed
+* Review email and paper and determine what to discuss in meeting
 
 * Comment interpreter code/ Comment interpreter tests
 * Comment lexer code / Comment lexer tests
@@ -100,9 +99,7 @@ that will handle convertting it to XMI fragments.
 * Update encoders to take an array of digrams, need to determine how to
 properly print values
 
-* [NA-FIRST]
-* [NA] items
-* Email Eric
+* Discussion Points
     * Can't handle multiple inheritance right now
     * Can't handle multiple aggregation right now
     * Can't handle self aggregation right now
