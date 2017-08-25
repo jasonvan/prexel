@@ -41,22 +41,23 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         self.view.window().run_command("create_new_file", 
                                       {"classes" : classes})
 
+
 class CreateErrorPage(sublime_plugin.WindowCommand):
     def run(self, error):
         view = self.window.new_file()
         view.run_command("output_error_text", {"error": error})
 
+
 class OutputErrorText(sublime_plugin.TextCommand):
     def run(self, edit, error):
         self.view.insert(edit, 0, error)
 
+
 class CreateNewFileCommand(sublime_plugin.WindowCommand):
     def run(self, classes):
         self.classes = classes
-        self.window.show_input_panel("Create class files? (YES or NO):", "", 
-                                    self.on_done, 
-                                    None, 
-                                    None)
+        self.window.show_input_panel("Create class files? (YES or NO):", "",
+                                     self.on_done, None, None)
 
     def on_done(self, text):
         if text.lower().strip() in ("yes", "y"):

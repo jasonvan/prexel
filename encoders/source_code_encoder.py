@@ -122,9 +122,6 @@ class SourceCodeEncoder(Encoder):
         else:
             result += INDENTATION + "pass\n"
 
-        # TODO - might need to add this back in to add a newline after class
-        # result += "\n"
-
         return result
 
     @staticmethod

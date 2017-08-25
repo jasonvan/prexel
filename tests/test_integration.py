@@ -1,7 +1,7 @@
 import unittest
 
 from prexel.parser.lexer import Lexer
-from prexel.parser.interpreter import Interpreter
+from prexel.parser.interpreter import Interpreter, InterpreterException
 from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
 
@@ -13,9 +13,11 @@ class TestIntegration(unittest.TestCase):
         lexer = Lexer(text)
 
         # Interpret the tokens and create a diagram object
-        # TODO need to handle InterpreterException thrown here
-        interpreter = Interpreter(lexer)
-        diagram = interpreter.evaluate()
+        try:
+            interpreter = Interpreter(lexer)
+            diagram = interpreter.evaluate()
+        except InterpreterException as e:
+            print(e)
 
         # Pretty-print encode diagram for output to the view
         pretty_print = PrettyPrintEncoder()
