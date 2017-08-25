@@ -1,72 +1,26 @@
-## Meeting Notes
-
-### Demo
-
-* README
-* Error |kitchen <<
-
-### Syntax
-
-This doesn't allow for aggregation
-
-    |Kitchen arrange_kitchen() place_floor_cabinet() place_wall_cabinet() << Room
-
-This does
-
-    |Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
-
-Or perhaps this would be best. That way we specify values on the Room
-
-    |Room >> Kitchen color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()"
-
-This way parent classes could have fields and methods
-
-    |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
-
-### Usage in docstrings
-
-I didn't include the constraint PREXEL to have to be inside of docstrings
-this way it can be used in other files, for example I used it when updating the 
-examples inside of the README, which is a markdown file. 
-
-Plus it is way faster to type.
-
-### Prep for submission
-
-* Use dropbox for source?
-* remove git repo for submitted zip as it has reference to github
-
-### Improvements
-
-* Can't handle multiple inheritance right now
-* Can't handle multiple aggregation right now
-* Can't handle self aggregation right now
-* Can't handle static "S"
-* need to figure out a way to handle merging multiple diagrams
-
 ## Backlog
 
-### Next Actions
+## Next Actions
 
-* Search for all TODOs in project
-* Comment/Clean up interpreter code/tests
-* Comment/Clean up lexer code/tests
-* Comment/Clean up encoder code/tests
+### Code Quality
 
-* Update interpreter to agreed upon structure
-    * need to handle "S" character, and create class variable in source code
-    * need to determine how we want the aggregated value added to the aggregator
+* Search for all TODOs in project [NA]
+* Comment/Clean up interpreter code/tests [NA]
+* Comment/Clean up lexer code/tests [NA]
+* Comment/Clean up encoder code/tests [NA]
 
-* need to add more describitive messages to interpreter
-right now single-line and multi-line do it in a different order
-* Allow for multiple loops of code inside of evaluate method
-    
 ### Interpreter
 
-* Comment source and test classes [NA]
+* Make this change to interpreter [NA]
+    * |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
 * Create a default value from aggregation if not specified [NA]
+* Right now now single-line and multi-line add aggregated values in different orders [NA]
 * Use the left multiplicity value for aggregation
 * Use the right multiplicity value for aggregation
+* need to handle "S" character, and create class variable in source code
+* need to determine how we want the aggregated value added to the aggregator
+* need to add more descriptive messages for syntax errors in interpreter
+* Allow for multiple loops of code inside of evaluate method
 * Optional
     * Write out current grammer for parser
     * Define a comprehensive grammar
