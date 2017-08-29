@@ -6,7 +6,9 @@ First, a copy of Sublime Text 3 should be installed. It can be downloaded at:
 
     https://www.sublimetext.com/
     
-After downloading and installing Sublime Text, the “prexel” folder found alongside this file should be placed directly inside of the Sublime Text “Packages” folder. This is the plugin folder. Once inside, Sublime Text will automatically load the plugin. The “Packages” folder can be found in the following locations.
+After downloading and installing Sublime Text, navigate to the "Packages" folder for Sublime Text. This
+is where Sublime Text installs all third-party plugins. The "Packages" directory location for various 
+operating systems can be found below. 
 
 **Windows**
 
@@ -19,6 +21,17 @@ After downloading and installing Sublime Text, the “prexel” folder found alo
 **LINUX**
 
 	~/.config/sublime-text-3/Packages
+
+Once inside of the packages directory, run the following command to check out the plugin to the current 
+directory. 
+
+	git clone https://github.com/jasonvan/prexel.git
+
+Optionally, you can also download the project directly here.
+
+	https://github.com/jasonvan/prexel/archive/master.zip
+
+Once the project has been checked out/downloaded and placed directly inside of the Sublime Text “Packages” folder, Sublime Text will automatically load the plugin. 
 
 ## Usage
 
