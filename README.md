@@ -6,8 +6,7 @@ First, a copy of Sublime Text 3 should be installed. It can be downloaded at:
 
     https://www.sublimetext.com/
     
-After downloading and installing Sublime Text, navigate to the "Packages" folder for Sublime Text. This
-is where Sublime Text installs all third-party plugins. The "Packages" directory location for various 
+After downloading and installing Sublime Text, in your file system (e.g., Windows Explorer), navigate to the "Packages" folder for Sublime Text. This is where Sublime Text installs all third-party plugins. The "Packages" directory location for various 
 operating systems can be found below. 
 
 **Windows**
