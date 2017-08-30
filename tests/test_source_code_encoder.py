@@ -135,7 +135,6 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         # NOT TESTING ANYTHING, JUST CHECKING OUTPUT
         print(actual[0][1])
         print(actual[1][1])
-        print(actual[2][2])
 
 
 class TestSourceCodeEncoderMainHelpers(unittest.TestCase):

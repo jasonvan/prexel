@@ -1,8 +1,13 @@
 from prexel.encoders.encoder import Encoder
 from prexel.regex import REGEX
 
-# TODO - make this configurable
-INDENTATION = "    "  # Default indentation
+# Load sublime if inside of sublime text
+try:
+    import sublime
+except ImportError:
+    sublime_imported = False
+else:
+    sublime_imported = True
 
 
 class SourceCodeEncoder(Encoder):
@@ -59,6 +64,9 @@ class SourceCodeEncoder(Encoder):
         Returns: a class string
         """
 
+        # Get indentation value
+        indentation = SourceCodeEncoder.get_user_defined_identation()
+
         # Cache diagram values to local variables
         name = diagram.name
         fields = diagram.fields
@@ -77,11 +85,11 @@ class SourceCodeEncoder(Encoder):
         if fields or methods:
             # Create a __init__ method if fields are provided
             if fields:
-                result += INDENTATION + \
+                result += indentation + \
                           "def __init__(self, {}):\n".format(", ".join(fields))
 
                 for index, field in enumerate(fields):
-                    result += INDENTATION * 2 + \
+                    result += indentation * 2 + \
                         "self.{0} = {0}\n".format(field)
 
                     if index == len(fields) - 1 and methods:
@@ -107,12 +115,12 @@ class SourceCodeEncoder(Encoder):
                         except KeyError:
                             continue
                         else:
-                            result += INDENTATION * 2 + "{}\n".format(body)
+                            result += indentation * 2 + "{}\n".format(body)
                     # Just a string so create an empty method
                     else:
                         try:
                             result += SourceCodeEncoder.process_method_signature(method)
-                            result += INDENTATION * 2 + "pass\n"
+                            result += indentation * 2 + "pass\n"
                         except SourceCodeEncoderException:
                             continue
 
@@ -120,7 +128,7 @@ class SourceCodeEncoder(Encoder):
                         result += "\n"
         # Output pass if no fields or methods provided
         else:
-            result += INDENTATION + "pass\n"
+            result += indentation + "pass\n"
 
         return result
 
@@ -130,6 +138,9 @@ class SourceCodeEncoder(Encoder):
         Processes the method signature for method name and parameters
         Returns: string version of method
         """
+        # Get indentation value
+        indentation = SourceCodeEncoder.get_user_defined_identation()
+
         matcher = REGEX["method_signature"].match(signature)
 
         if not matcher:
@@ -139,7 +150,7 @@ class SourceCodeEncoder(Encoder):
         method_name, method_arguments = matcher.groups()
 
         result = ""
-        result += INDENTATION + \
+        result += indentation + \
             "def {}(self".format(method_name)
 
         if method_arguments.strip():
@@ -149,6 +160,24 @@ class SourceCodeEncoder(Encoder):
 
         return result
 
+    @staticmethod
+    def get_user_defined_identation():
+        """
+        Retrieves the user-defined indentation value if it was set inside
+        of Prexel.sublime-settings
+        """
+
+        indentation = "    "  # Default value
+
+        # Only add if we are inside of Sublime Text
+        if sublime_imported:
+            settings = sublime.load_settings('Prexel.sublime-settings')
+            indentation_value = settings.get('indentation')
+
+            if indentation_value:
+                indentation = user_value
+
+        return indentation
 
 class SourceCodeEncoderException(Exception):
     pass

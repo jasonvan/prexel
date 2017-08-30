@@ -13,8 +13,6 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         line = self.view.line(self.view.sel()[0])
         text = self.view.substr(line)
 
-        print(edit)
-
         # Create tokens from the text
         lexer = Lexer(text)
 
@@ -62,7 +60,6 @@ class CreateNewFileCommand(sublime_plugin.WindowCommand):
     def on_done(self, text):
         if text.lower().strip() in ("yes", "y"):
             for class_item in self.classes:
-                print(class_item)
                 file_name, file_contents = class_item
                 view = self.window.new_file()
                 view.run_command("add_text_to_new_file", 
