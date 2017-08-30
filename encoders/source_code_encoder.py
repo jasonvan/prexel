@@ -175,7 +175,7 @@ class SourceCodeEncoder(Encoder):
             indentation_value = settings.get('indentation')
 
             if indentation_value:
-                indentation = user_value
+                indentation = indentation_value
 
         return indentation
 
