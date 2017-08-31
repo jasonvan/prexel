@@ -4,10 +4,9 @@
 
 ### Code Quality
 
-* Search for all TODOs in project [NA]
 * Comment/Clean up interpreter code/tests [NA]
-* Comment/Clean up lexer code/tests [NA]
 * Comment/Clean up encoder code/tests [NA]
+* Search for all TODOs in project [NA]
 
 ### Interpreter
 
@@ -30,13 +29,12 @@
 
 ### Lexer
 
-* Clean up evaluate method [NA]
-* Comment source and test classes [NA]
-* Need to add the usage of regex tester
+* Update inheritance to use ">>" instead of "<<"
+* Need to throw an exception if an ignored character is used, this needs to be handled by the plugin
+* Add the following self aggregation, need to determine a shorthand for this
     <>-----
     <------
-
-* Handle Dependence
+* Add dependence
 
 ### Encoders
 

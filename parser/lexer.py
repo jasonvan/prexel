@@ -1,21 +1,10 @@
-"""
-Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
-"""
 from prexel.parser.token import Token
-from prexel.regex import REGEX
+from prexel import regex
 
 
 class Lexer:
     """
-     ____________ 
-    |   Lexer    |
-    |------------|
-    |text        |
-    |position    |
-    |current     |
-    |marker_found|
-    |____________|
-
+    The Lexer class manages splitting an easy-entry string into individual Token objects
     """
     def __init__(self, text):
         self.text = text
@@ -24,58 +13,75 @@ class Lexer:
         self.marker_found = False
 
     def step(self):
+        """
+        Advance one character in the easy-entry string.
+        """
         self.position += 1
+
         if self.position >= len(self.text):
             self.current = None
         else:
             self.current = self.text[self.position]
 
     def skip_whitespace(self):
+        """
+        Step past 1 or more whitespace characters.
+        """
         while self.current is not None and self.current.isspace():
             self.step()
 
-    def element(self):
-        string = ""
+    def generate_token_string(self):
+        """
+        Generate an individual token.
+        """
+        token_chars = []
+
         while self.current is not None and not self.current.isspace():
-            string += self.current
+            token_chars.append(self.current)
             self.step()
-        return string
+
+        return ''.join(token_chars)
 
     def get_token(self):
+        """
+        Create a Token object for next token.
+        :return: Token
+        """
         while self.current is not None:
+            # Skip any white space
             if self.current.isspace():
                 self.skip_whitespace()
                 continue
+            # Check if current character is the PREXEL marker
             elif self.current == "|":
                 self.step()
+
+                # Check and see if the PREXEL marker has already been found.
+                # Only the first PREXEL marker will be tokenized. The rest will be ignored.
                 if not self.marker_found:
                     self.marker_found = True
                     return Token(Token.PREXEL_MARKER, "|")
                 else:
-                    continue
+                    continue  # Go to next character
             else:
-                element = self.element()
+                # Generate the current token
+                token = self.generate_token_string()
 
-                # Skip incorrect aggregation token format
-                if element in ("<<>", "<>>", "<>", "<<>>"):
-                    continue
-
-                # Check element against some regex
-
-                if REGEX["class_name"].match(element):
+                # Check token against a variety of regex to determine what
+                # type of Token it is.
+                if regex.is_class_name(token):
                     self.step()
-                    return Token(Token.CLASS_NAME, element)
-
-                if REGEX["inheritance"].match(element):
+                    return Token(Token.CLASS_NAME, token)
+                elif regex.is_inheritance(token):
                     self.step()
-                    return Token(Token.INHERITANCE, element)
+                    return Token(Token.INHERITANCE, token)
+                elif regex.is_aggregation(token):
+                    self.step()
 
-                aggregation = REGEX["aggregation"].match(element)
-
-                if aggregation:
                     # Optional groupings returned from regex
                     # <>(* or digit)---(name)---(* or digit)-->
-                    left_multi, name, right_multi = aggregation.groups()
+                    aggregation_groups = regex.is_aggregation(token).groups()
+                    left_multi, name, right_multi = aggregation_groups
 
                     values = {
                         "left_multi": left_multi,
@@ -83,12 +89,12 @@ class Lexer:
                         "right_multi": right_multi
                     }
 
-                    self.step()
                     return Token(Token.AGGREGATION, values)
-
-                if REGEX["method_signature"].match(element):
+                elif regex.is_method_signature(token):
                     self.step()
-                    return Token(Token.METHOD, element)
+                    return Token(Token.METHOD, token)
+                elif regex.is_ignored_character(token):
+                    continue  # Skip ignored characters
                 else:
                     self.step()
-                    return Token(Token.FIELD, element)
+                    return Token(Token.FIELD, token)
