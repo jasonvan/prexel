@@ -25,7 +25,7 @@ operating systems can be found below.
 
 	~/.config/sublime-text-3/Packages
 
-** NOTE: Make sure you aren't inside of the the default "Packages" directory for Sublime Text 3**, which is for 
+**NOTE: Make sure you aren't inside of the the default "Packages" directory for Sublime Text 3**, which is for 
 default Sublime Text plugins. The default "Packages" directory can be found at the locations below.
 
 **Windows**
