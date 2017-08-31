@@ -2,12 +2,16 @@
 
 ## Installation
 
+### Download Sublime Text 3
+
 First, a copy of Sublime Text 3 should be installed. It can be downloaded at:
 
     https://www.sublimetext.com/
-    
-After downloading and installing Sublime Text, in your file system (e.g., Windows Explorer), navigate to the "Packages" folder for Sublime Text. This is where Sublime Text installs all third-party plugins. The "Packages" directory location for various 
-operating systems can be found below. 
+
+### Find the Sublime Text 3rd-party packages folder
+
+After downloading and installing Sublime Text, in your file system (e.g., Windows Explorer or Finder), navigate to the "Packages" folder for Sublime Text. This is where Sublime Text installs all third-party plugins. The "Packages" directory location for various 
+operating systems can be found below.
 
 **Windows**
 
@@ -20,6 +24,23 @@ operating systems can be found below.
 **LINUX**
 
 	~/.config/sublime-text-3/Packages
+
+** NOTE: Make sure you aren't inside of the the default "Packages" directory for Sublime Text 3**, which is for 
+default Sublime Text plugins. The default "Packages" directory can be found at the locations below.
+
+**Windows**
+
+	[TODO]
+
+**MAC/OSX**
+
+	/Applications/Sublime Text.app/Contents/MacOS/Packages
+
+**LINUX**
+
+	/opt/sublime_text/Packages
+
+### Clone or download the PREXEL plugin files
 
 Once inside of the packages directory, run the following command to check out the plugin to the current 
 directory. 
