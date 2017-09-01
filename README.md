@@ -107,7 +107,7 @@ Source code generated:
 
 ### Example 2 - Multiple Classes with Inheritance
 
-Easy-entry single-line:
+Easy-entry single-line (in this syntax Employee is the parent):
     
     |Person << Employee name age
 
