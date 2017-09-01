@@ -31,7 +31,7 @@ These locations are for default Sublime Text plugins and settings.
 **Windows**
 
 	c:\Program Files\Sublime Text 3\Packages or
-	c:\Program Files(x86)\Sublime Text 3\Packages"
+	c:\Program Files(x86)\Sublime Text 3\Packages
 
 **MAC/OSX**
 
