@@ -30,7 +30,8 @@ These locations are for default Sublime Text plugins and settings.
 
 **Windows**
 
-	[TODO]
+	c:\Program Files\Sublime Text 3\Packages or
+	c:\Program Files(x86)\Sublime Text 3\Packages"
 
 **MAC/OSX**
 
@@ -60,6 +61,8 @@ Place the cursor in a line with a PREXEL string (**SEE next section for examples
 **Source Code Generation**
 
 When expanding PREXEL, you have the option of generating source code for the diagram. A dialog box will appear at the bottom of the editor when expanding to specify whether or not source code should be generated.
+
+![ScreenShot](dialog-box.png)
 
 ## Entry examples
 
