@@ -2,6 +2,10 @@
 
 ## Next Actions
 
+* Organize backlog to make it more linear
+* Update zip file
+* Use Sublime for all development
+
 ### Code Quality
 
 * Comment/Clean up interpreter code/tests [NA]
@@ -10,8 +14,9 @@
 
 ### Interpreter
 
+* |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open() [NA-FIRST]
+
 * Make this change to interpreter [NA]
-    * |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open()
 * Create a default value from aggregation if not specified [NA]
 * Right now now single-line and multi-line add aggregated values in different orders [NA]
 * Use the left multiplicity value for aggregation
@@ -35,6 +40,7 @@
     <>-----
     <------
 * Add dependence
+    * need dialog box to decide what type of dependence
 
 ### Encoders
 
