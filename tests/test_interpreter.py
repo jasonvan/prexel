@@ -73,6 +73,24 @@ class TestInterpreter(unittest.TestCase):
         interpreter.class_name(class_diagram)
         self.assertEqual(class_diagram.name, "Airplane")
 
+    def test_class_body(self):
+        """
+        Test the class_body() method, which processes FIELD and METHOD tokens
+        """
+        text = "|Airplane size color take_off()"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        interpreter.start_marker()
+
+        class_diagram = ClassDiagramPart()
+
+        interpreter.class_name(class_diagram)
+        interpreter.class_body(class_diagram)
+
+        self.assertEqual(class_diagram.fields, ["size", "color"])
+        self.assertEqual(class_diagram.methods, ["take_off()"])
+
     def test_evaluate(self):
         text = "|Kitchen color square_feet show_kitchen()"
         lexer = Lexer(text)
