@@ -9,31 +9,46 @@ from prexel.models.diagram import (ClassDiagramPart,
 
 
 class TestInterpreter(unittest.TestCase):
+    """
+    Test cases to exercise the Interpreter class.
+    """
     def test_init(self):
+        """
+        Test the __init__() method.
+        """
         text = "|Airplane <>-wings--> Wing"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
 
-        self.assertEqual(interpreter.current_token.type, Token.PREXEL_MARKER)
+        self.assertEqual(interpreter.current_token.type, Token.START_MARKER)
         self.assertEqual(interpreter.current_token.value, "|")
 
     def test_process_token(self):
+        """
+        Test the process_token() method which processes one token at
+        a time. Also includes a test to confirm an error message is given
+        if an improper token is given.
+        """
         text = "|Airplane <>-wings--> Wing"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        interpreter.process_token(Token.PREXEL_MARKER)
+        interpreter.process_token(Token.START_MARKER)
 
+        # Assert the current token is a CLASS_NAME
         self.assertEqual(interpreter.current_token.type, Token.CLASS_NAME)
 
-        # Test error message
+        # Test error message is raised when the incorrect token processed
         with self.assertRaises(InterpreterException) as context:
             interpreter.process_token(Token.FIELD)
-
-        self.assertTrue('Invalid Syntax' in str(context.exception))
+            self.assertTrue('Invalid Syntax' in str(context.exception))
 
     def test_start_marker(self):
+        """
+        Test the start_marker() method, which processes a START_MARKER
+        token.
+        """
         text = "|Airplane <>-wings--> Wing"
         lexer = Lexer(text)
 
@@ -44,6 +59,9 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(interpreter.current_token.type, Token.CLASS_NAME)
 
     def test_class_name(self):
+        """
+        Test the class_name() method, which processes a CLASS_NAME token.
+        """
         text = "|Airplane <>-wings--> Wing"
         lexer = Lexer(text)
 

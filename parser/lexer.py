@@ -60,7 +60,7 @@ class Lexer:
                 # Only the first PREXEL marker will be tokenized. The rest will be ignored.
                 if not self.marker_found:
                     self.marker_found = True
-                    return Token(Token.PREXEL_MARKER, "|")
+                    return Token(Token.START_MARKER, "|")
                 else:
                     continue  # Go to next character
             else:

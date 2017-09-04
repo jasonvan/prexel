@@ -248,7 +248,7 @@ Pretty-printed UML from single-line entry:
     |show_kitchen()|                            
     |______________|                            
 
-Pretty-printed UML from multo-line entry (NOTE: no fields on Cupboard):
+Pretty-printed UML from multi-line entry (NOTE: no fields on Cupboard):
 
      ____ 
     |Room|

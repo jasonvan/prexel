@@ -13,8 +13,8 @@ class Token:
     |_____|
 
     """
-    PREXEL_MARKER, CLASS_NAME, FIELD, METHOD, AGGREGATION, INHERITANCE = (
-        "PREXEL_MARKER",
+    START_MARKER, CLASS_NAME, FIELD, METHOD, AGGREGATION, INHERITANCE = (
+        "START_MARKER",
         "CLASS_NAME",
         "FIELD",
         "METHOD",

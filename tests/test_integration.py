@@ -23,6 +23,8 @@ class TestIntegration(unittest.TestCase):
         pretty_print = PrettyPrintEncoder()
         result = pretty_print.generate(diagram)
 
+        print(result)
+
         # Source-code encode diagram for files
         source_code = SourceCodeEncoder()
         classes = source_code.generate(diagram)

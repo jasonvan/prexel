@@ -5,11 +5,11 @@ from prexel.parser.token import Token
 
 class TestLexer(unittest.TestCase):
     """
-    Test cases to exercise the Lexer class
+    Test cases to exercise the Lexer class.
     """
     def test_step(self):
         """
-        Test the step() method, which steps forward in the string one character
+        Test the step() method, which steps forward in the string one character.
         """
         text = "|Kitchen get_cabinet()"
         lexer = Lexer(text)
@@ -21,7 +21,7 @@ class TestLexer(unittest.TestCase):
 
     def test_step_end_of_text(self):
         """
-        Test the step() method going all the way to the end of the string
+        Test the step() method going all the way to the end of the string.
         """
         text = "|Kitchen"
         lexer = Lexer(text)
@@ -83,7 +83,7 @@ class TestLexer(unittest.TestCase):
         lexer = Lexer(text)
 
         # Check that the token is a PREXEL marker
-        self.assertEqual(lexer.get_token().type, Token.PREXEL_MARKER)
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
 
         # Check that the token is a class name
         self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
@@ -105,7 +105,7 @@ class TestLexer(unittest.TestCase):
         lexer = Lexer(text)
 
         # Check that the token is a PREXEL marker
-        self.assertEqual(lexer.get_token().type, Token.PREXEL_MARKER)
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
 
         # Check that the token is a class name
         self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
@@ -124,7 +124,7 @@ class TestLexer(unittest.TestCase):
         lexer = Lexer(text)
 
         # Check that the token is a PREXEL marker
-        self.assertEqual(lexer.get_token().type, Token.PREXEL_MARKER)
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
 
         # Check that the token is a class name
         self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
@@ -147,7 +147,7 @@ class TestLexer(unittest.TestCase):
         lexer = Lexer(text)
 
         # Check that the token is a prexel marker
-        self.assertEqual(lexer.get_token().type, Token.PREXEL_MARKER)
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
 
         # Check that the token is a class name
         self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)

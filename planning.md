@@ -1,24 +1,22 @@
-## Backlog
 
 ## Next Actions
 
-* Organize backlog to make it more linear
-* Update zip file
-* Use Sublime for all development
+* Comment/Clean up interpreter code/tests [Code Quality]
+* Comment/Clean up encoder code/tests [Code Quality]
+* Search for all TODOs in project [Code Quality]
+* Update inheritance to use ">>" instead of "<<" [Lexer]
+* Change Interpreter to handle inheritance differently [Interpreter]
+    * Example: |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open() [NA-FIRST]
+* Create a default value from aggregation if not specified [Interpreter]
+* Right now now single-line and multi-line add aggregated values in different orders [Interpreter]
+* Need to throw an exception if an ignored character is used, this needs to be handled by the plugin [Lexer]
+
+## Backlog
 
 ### Code Quality
 
-* Comment/Clean up interpreter code/tests [NA]
-* Comment/Clean up encoder code/tests [NA]
-* Search for all TODOs in project [NA]
-
 ### Interpreter
 
-* |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open() [NA-FIRST]
-
-* Make this change to interpreter [NA]
-* Create a default value from aggregation if not specified [NA]
-* Right now now single-line and multi-line add aggregated values in different orders [NA]
 * Use the left multiplicity value for aggregation
 * Use the right multiplicity value for aggregation
 * need to handle "S" character, and create class variable in source code
@@ -34,8 +32,6 @@
 
 ### Lexer
 
-* Update inheritance to use ">>" instead of "<<"
-* Need to throw an exception if an ignored character is used, this needs to be handled by the plugin
 * Add the following self aggregation, need to determine a shorthand for this
     <>-----
     <------

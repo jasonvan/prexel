@@ -2,7 +2,7 @@ from abc import ABCMeta
 
 
 class Diagram:
-    def __init__(self, main,
+    def __init__(self, main=None,
                  parent=None, inheritance=None,
                  aggregated=None, aggregation=None):
         self.main = main

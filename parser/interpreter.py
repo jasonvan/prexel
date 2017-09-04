@@ -3,9 +3,9 @@ Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
 """
 from prexel.parser.lexer import Token
 from prexel.models.diagram import (Diagram,
-                            ClassDiagramPart,
-                            AggregationDiagramPart,
-                            InheritanceDiagramPart)
+                                   ClassDiagramPart,
+                                   AggregationDiagramPart,
+                                   InheritanceDiagramPart)
 
 
 class Interpreter:
@@ -14,34 +14,79 @@ class Interpreter:
     | Interpreter |<>---->|Lexer|
     |-------------|       |_____|
     |current_token|              
-    |diagrams     |              
-    |lexer        |              
-    |_____________|              
+    |lexer        |
+    |_____________|
+
+    The Interpreter class processes the token stream received from the Lexer class.
+    A diagram object is returned which contains the token values parsed.
+
+     ___________ 
+    |  Diagram  |
+    |-----------|
+    |main       |
+    |parent     |
+    |inheritance|
+    |aggregated |
+    |aggregation|
+    |___________|
 
     """
     def __init__(self, lexer):
         self.lexer = lexer
         self.current_token = self.lexer.get_token()
-        self.diagrams = []
 
     def error(self, message="Invalid Syntax"):
+        """
+        Raises a InterpreterException for processing later.
+        """
         raise InterpreterException(message)
 
     def process_token(self, token_type):
+        """
+        Process a single token from the lexer. An error is thrown
+        if the current token type doesn't match the token type passed to
+        this method.
+        """
         if self.current_token.type == token_type:
             self.current_token = self.lexer.get_token()
         else:
             self.error()
 
     def start_marker(self):
-        self.process_token(Token.PREXEL_MARKER)
+        """
+        Process a START_MARKER token. This token is denoted by "|" and defines
+        the beginning of a easy-entry string
+        """
+        self.process_token(Token.START_MARKER)
 
-    def class_name(self, diagram):
-        token = self.current_token
-        diagram.name = token.value
+    def class_name(self, class_diagram_part):
+        """
+        Process a CLASS_NAME token and set the name value on a 
+        ClassDiagramPart object.
+
+         ___________ 
+        |DiagramPart|
+        |-----------|
+        |name       |
+        |type       |
+        |___________|
+        ∆
+        |________________ 
+        |ClassDiagramPart|
+        |----------------|
+        |fields          |
+        |methods         |
+        |extends         |
+        |________________|
+
+        """
+        class_diagram_part.name = self.current_token.value
         self.process_token(Token.CLASS_NAME)
 
     def next_token_is_class_token(self):
+        """
+        Helper method to check whether the next token is a CLASS_NAME token.
+        """
         return self.current_token and self.current_token.type is Token.CLASS_NAME
 
     def class_body(self, diagram):
@@ -75,8 +120,6 @@ class Interpreter:
                 # Append inheritance diagram and then parent class diagram
                 diagram.inheritance = inheritance
                 diagram.parent = parent
-                # self.diagrams.append(inheritance_diagram)
-                # self.diagrams.append(parent_class_diagram)
             else:
                 self.error("Missing parent class after \"<<\"")
 
