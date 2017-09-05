@@ -1,7 +1,6 @@
 
 ## Next Actions
 
-* Comment/Clean up interpreter code/tests [Code Quality]
 * Update inheritance to use ">>" instead of "<<" [Lexer]
 * Change Interpreter to handle inheritance differently [Interpreter]
     * Example: |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open() [NA-FIRST]
@@ -17,6 +16,8 @@
 
 ### Interpreter
 
+* Review aggregation method. It might be more clear to break this up into 
+separate methods
 * Use the left multiplicity value for aggregation
 * Use the right multiplicity value for aggregation
 * need to handle "S" character, and create class variable in source code
