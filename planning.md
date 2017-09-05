@@ -4,7 +4,7 @@
 * Update inheritance to use ">>" instead of "<<" [Lexer]
 * Change Interpreter to handle inheritance differently [Interpreter]
     * Example: |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open() [NA-FIRST]
-* Create a default value from aggregation if not specified [Interpreter]
+    
 * Comment/Clean up encoder code/tests [Code Quality]
 * Search for all TODOs in project [Code Quality]
 * Right now now single-line and multi-line add aggregated values in different orders [Interpreter]

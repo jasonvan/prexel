@@ -49,6 +49,7 @@ class Interpreter:
     def __init__(self, lexer):
         self.lexer = lexer
         self.current_token = self.lexer.get_token()
+        self.diagram = Diagram(main=ClassDiagramPart())
 
     def error(self, message="Invalid Syntax"):
         """
@@ -137,7 +138,7 @@ class Interpreter:
         """
         return self.current_token and self.current_token.type is Token.CLASS_NAME
 
-    def inheritance(self, diagram):
+    def inheritance(self):
         """
         Process an INHERITANCE TOKEN. Sets the parent and inheritance fields
         on the Diagram object.
@@ -164,12 +165,12 @@ class Interpreter:
                 self.class_name(parent)
 
                 # Append inheritance diagram and then parent class diagram
-                diagram.inheritance = inheritance
-                diagram.parent = parent
+                self.diagram.inheritance = inheritance
+                self.diagram.parent = parent
             else:
                 self.error("Missing parent class after \"<<\"")
 
-    def aggregation(self, diagram, include_following_tokens=True):
+    def aggregation(self, include_following_tokens=True):
         """
         Process any aggregated classes. The class process both the AGGREGATION token and
         a CLASS_NAME token for the aggregated class.
@@ -192,25 +193,25 @@ class Interpreter:
             if include_following_tokens:
                 self.class_body(aggregated)
 
-            diagram.aggregated = aggregated
+            self.diagram.aggregated = aggregated
 
             # Process AggregationDiagramPart
             aggregation = AggregationDiagramPart()
 
             # Create a list for the fields on the main ClassDiagramPart object
-            if not diagram.main.fields:
-                diagram.main.fields = []
+            if not self.diagram.main.fields:
+                self.diagram.main.fields = []
 
             # Check that the AGGREGATION token has a name, if not
             # default to the aggregated class's name
             name = token.value["name"]
             if name:
-                diagram.main.fields.append(name)
+                self.diagram.main.fields.append(name)
                 aggregation.name = name
             else:
                 # Generate an aggregation name from the aggregated class
                 generated_name = aggregated.name.lower()
-                diagram.main.fields.append(generated_name)
+                self.diagram.main.fields.append(generated_name)
                 aggregation.name = generated_name
 
             # Add multiplicity values
@@ -218,33 +219,36 @@ class Interpreter:
             aggregation.right_multiplicity = token.value["right_multi"]
 
             # Save aggregation value to Diagram object
-            diagram.aggregation = aggregation
+            self.diagram.aggregation = aggregation
 
     def evaluate(self):
-        diagram = Diagram(main=ClassDiagramPart())
+        # diagram = Diagram(main=ClassDiagramPart())
+
+        # Create main class diagram part
+        self.diagram.main = ClassDiagramPart()
 
         # Check for the first PREXEL marker
         self.start_marker()
 
         # Process main class name
-        self.class_name(diagram.main)
+        self.class_name(self.diagram.main)
 
         # Optional - Check for inheritance
-        self.inheritance(diagram)
+        self.inheritance()
 
         # Optional - Check for aggregation but don't
         # consider the fields and methods following the aggregation
         # token as part of the aggregated class.In this position
         # they belong to the main class
-        self.aggregation(diagram, include_following_tokens=False)
+        self.aggregation(include_following_tokens=False)
 
         # Process fields and methods for main class
-        self.class_body(diagram.main)
+        self.class_body(self.diagram.main)
 
         # Optional - Check for aggregation
-        self.aggregation(diagram)
+        self.aggregation()
 
-        return diagram
+        return self.diagram
 
 
 class InterpreterException(Exception):

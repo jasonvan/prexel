@@ -101,11 +101,11 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = Diagram(main=ClassDiagramPart())
+        diagram = interpreter.diagram
 
         interpreter.start_marker()
         interpreter.class_name(diagram.main)
-        interpreter.inheritance(diagram)
+        interpreter.inheritance()
 
         self.assertEqual(diagram.parent.name, "Room")
 
@@ -117,14 +117,14 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = Diagram(main=ClassDiagramPart())
+        diagram = interpreter.diagram
 
         interpreter.start_marker()
         interpreter.class_name(diagram.main)
 
         # Should raise a InterpreterException
         with self.assertRaises(InterpreterException) as context:
-            interpreter.inheritance(diagram)
+            interpreter.inheritance()
 
         self.assertTrue("Missing parent class after \"<<\"" in str(context.exception))
 
@@ -136,11 +136,11 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = Diagram(main=ClassDiagramPart())
+        diagram = interpreter.diagram
 
         interpreter.start_marker()
         interpreter.class_name(diagram.main)
-        interpreter.aggregation(diagram)
+        interpreter.aggregation()
 
         self.assertEqual(diagram.aggregation.name, "cupboard")
         self.assertEqual(diagram.main.fields, ["cupboard"])
@@ -154,11 +154,11 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = Diagram(main=ClassDiagramPart())
+        diagram = interpreter.diagram
 
         interpreter.start_marker()
         interpreter.class_name(diagram.main)
-        interpreter.aggregation(diagram)
+        interpreter.aggregation()
 
         self.assertEqual(diagram.aggregation.name, "cupboard")
         self.assertEqual(diagram.main.fields, ["cupboard"])
@@ -175,11 +175,11 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = Diagram(main=ClassDiagramPart())
+        diagram = interpreter.diagram
 
         interpreter.start_marker()
         interpreter.class_name(diagram.main)
-        interpreter.aggregation(diagram, include_following_tokens=False)
+        interpreter.aggregation(include_following_tokens=False)
         interpreter.class_body(diagram.main)
 
         self.assertEqual(diagram.aggregation.name, "cupboard")
