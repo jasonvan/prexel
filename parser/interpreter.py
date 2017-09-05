@@ -151,7 +151,6 @@ class Interpreter:
 
         """
         if self.current_token and self.current_token.type is Token.INHERITANCE:
-            # Make sure that a class name token follows an inheritance token
             inheritance = InheritanceDiagramPart()
 
             # Process token
@@ -172,44 +171,54 @@ class Interpreter:
 
     def aggregation(self, diagram, include_following_tokens=True):
         """
-        Process an AGGREGATION token
-        # TODO comment and clean up
+        Process any aggregated classes. The class process both the AGGREGATION token and
+        a CLASS_NAME token for the aggregated class.
         """
         if self.current_token and self.current_token.type is Token.AGGREGATION:
+            # Cache the current token
             token = self.current_token
+
+            # Process AGGREGATION Token
             self.process_token(Token.AGGREGATION)
 
+            # Confirm that a CLASS_NAME token follows the AGGREGATION TOKEN
             if not self.next_token_is_class_token():
-                self.error()
+                self.error("There is no class name following the aggregation.")
 
-            if not diagram.main.fields:
-                diagram.main.fields = []
-
-            name = token.value["name"]
-
-            aggregation = AggregationDiagramPart()
-
-            if name:
-                diagram.main.fields.append(name)
-                aggregation.name = name
-            else:
-                # TODO - need to handle missing aggregated value
-                diagram.main.fields.append("MISSING-AGGREGATED-NAME")
-
-            aggregation.left_multiplicity = token.value["left_multi"]
-            aggregation.right_multiplicity = token.value["right_multi"]
-
-            diagram.aggregation = aggregation
-
-            # Create aggregated class
+            # Process aggregated ClassDiagramPart. Optionally include class body
             aggregated = ClassDiagramPart()
             self.class_name(aggregated)
 
-            # Optionally include class body
             if include_following_tokens:
                 self.class_body(aggregated)
 
             diagram.aggregated = aggregated
+
+            # Process AggregationDiagramPart
+            aggregation = AggregationDiagramPart()
+
+            # Create a list for the fields on the main ClassDiagramPart object
+            if not diagram.main.fields:
+                diagram.main.fields = []
+
+            # Check that the AGGREGATION token has a name, if not
+            # default to the aggregated class's name
+            name = token.value["name"]
+            if name:
+                diagram.main.fields.append(name)
+                aggregation.name = name
+            else:
+                # Generate an aggregation name from the aggregated class
+                generated_name = aggregated.name.lower()
+                diagram.main.fields.append(generated_name)
+                aggregation.name = generated_name
+
+            # Add multiplicity values
+            aggregation.left_multiplicity = token.value["left_multi"]
+            aggregation.right_multiplicity = token.value["right_multi"]
+
+            # Save aggregation value to Diagram object
+            diagram.aggregation = aggregation
 
     def evaluate(self):
         diagram = Diagram(main=ClassDiagramPart())

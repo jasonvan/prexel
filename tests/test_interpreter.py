@@ -5,7 +5,8 @@ from prexel.parser.interpreter import Interpreter, InterpreterException
 from prexel.parser.token import Token
 from prexel.models.diagram import (ClassDiagramPart,
                                    InheritanceDiagramPart,
-                                   AggregationDiagramPart)
+                                   AggregationDiagramPart,
+                                   Diagram)
 
 
 class TestInterpreter(unittest.TestCase):
@@ -42,7 +43,8 @@ class TestInterpreter(unittest.TestCase):
         # Test error message is raised when the incorrect token processed
         with self.assertRaises(InterpreterException) as context:
             interpreter.process_token(Token.FIELD)
-            self.assertTrue('Invalid Syntax' in str(context.exception))
+
+        self.assertTrue('Invalid Syntax' in str(context.exception))
 
     def test_start_marker(self):
         """
@@ -90,6 +92,99 @@ class TestInterpreter(unittest.TestCase):
 
         self.assertEqual(class_diagram.fields, ["size", "color"])
         self.assertEqual(class_diagram.methods, ["take_off()"])
+
+    def test_inheritance(self):
+        """
+        Test the inheritance() method, which processes an inheritance relationship
+        """
+        text = "|Kitchen << Room"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        diagram = Diagram(main=ClassDiagramPart())
+
+        interpreter.start_marker()
+        interpreter.class_name(diagram.main)
+        interpreter.inheritance(diagram)
+
+        self.assertEqual(diagram.parent.name, "Room")
+
+    def test_inheritance_with_error(self):
+        """
+        Test the inheritance() method, with an improper syntax
+        """
+        text = "|Kitchen <<"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        diagram = Diagram(main=ClassDiagramPart())
+
+        interpreter.start_marker()
+        interpreter.class_name(diagram.main)
+
+        # Should raise a InterpreterException
+        with self.assertRaises(InterpreterException) as context:
+            interpreter.inheritance(diagram)
+
+        self.assertTrue("Missing parent class after \"<<\"" in str(context.exception))
+
+    def test_aggregation(self):
+        """
+        Test the aggregation() method,
+        """
+        text = "|Kitchen <>-cupboard--> Cupboard"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        diagram = Diagram(main=ClassDiagramPart())
+
+        interpreter.start_marker()
+        interpreter.class_name(diagram.main)
+        interpreter.aggregation(diagram)
+
+        self.assertEqual(diagram.aggregation.name, "cupboard")
+        self.assertEqual(diagram.main.fields, ["cupboard"])
+        self.assertEqual(diagram.aggregated.name, "Cupboard")
+
+    def test_aggregation_with_missing_aggregation_name(self):
+        """
+        Test the aggregation() method,
+        """
+        text = "|Kitchen <>---> Cupboard"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        diagram = Diagram(main=ClassDiagramPart())
+
+        interpreter.start_marker()
+        interpreter.class_name(diagram.main)
+        interpreter.aggregation(diagram)
+
+        self.assertEqual(diagram.aggregation.name, "cupboard")
+        self.assertEqual(diagram.main.fields, ["cupboard"])
+        self.assertEqual(diagram.aggregated.name, "Cupboard")
+
+    def test_aggregation_multi_line(self):
+        """
+        Test the aggregation() method using multi-line syntax
+        """
+        text = """
+|Kitchen <>-cupboard--> Cupboard
+|size
+|color"""
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        diagram = Diagram(main=ClassDiagramPart())
+
+        interpreter.start_marker()
+        interpreter.class_name(diagram.main)
+        interpreter.aggregation(diagram, include_following_tokens=False)
+        interpreter.class_body(diagram.main)
+
+        self.assertEqual(diagram.aggregation.name, "cupboard")
+        self.assertEqual(diagram.main.fields, ["cupboard", "size", "color"])
+        self.assertEqual(diagram.aggregated.name, "Cupboard")
 
     def test_evaluate(self):
         text = "|Kitchen color square_feet show_kitchen()"
@@ -172,4 +267,4 @@ class TestInterpreter(unittest.TestCase):
         with self.assertRaises(InterpreterException) as context:
             interpreter.evaluate()
 
-        self.assertTrue('Invalid Syntax' in str(context.exception))
+        self.assertTrue("There is no class name following the aggregation." in str(context.exception))
