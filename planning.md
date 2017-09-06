@@ -8,7 +8,6 @@ method and I change it alot without an desire to update the source code. Or I ge
 
 ## Next Actions
 
-* Resubmit files to dropbox
 * Right now now single-line and multi-line add aggregated values in different orders [Interpreter]
 * Need to throw an exception if an ignored character is used, this needs to be handled by the plugin [Lexer]
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
@@ -16,6 +15,7 @@ method and I change it alot without an desire to update the source code. Or I ge
     * Lexer will need to parse commas in tokens [Lexer]
     * Encoders will need to be updated to handle multiple main classes
 * need to handle "S" character, and create class variable in source code [Interpreter]
+* Merge multiple PREXEL strings together. [Encoders]
 * Plan out XML fragment implementation [XML Code]
 
 * Comment/Clean up encoder code/tests [Code Quality]
