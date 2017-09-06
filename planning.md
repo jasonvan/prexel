@@ -2,18 +2,18 @@
 
 * Updated syntax
 * Discuss XML fragments
-* As I use PREXEL more, I continue to debate the usefulness of stickly tying the UML generation with
+* As I use PREXEL more, I continue to debate the usefulness of strictly tying the UML generation with
 source code and full class map generation. Right now, I've using it mostly for clariying intentions for a
 method and I change it alot without an desire to update the source code. Or I generate source code first and then generate the pretty-printed code to clarify it. Not the other way around.
 
 ## Next Actions
 
-* Right now now single-line and multi-line add aggregated values in different orders [Interpreter]
-* Need to throw an exception if an ignored character is used, this needs to be handled by the plugin [Lexer]
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
     * Lexer will need to parse commas in tokens [Lexer]
     * Encoders will need to be updated to handle multiple main classes
+* Right now now single-line and multi-line add aggregated values in different orders [Interpreter]
+* Need to throw an exception if an ignored character is used, this needs to be handled by the plugin [Lexer]
 * need to handle "S" character, and create class variable in source code [Interpreter]
 * Merge multiple PREXEL strings together. [Encoders]
 * Plan out XML fragment implementation [XML Code]
