@@ -8,7 +8,7 @@ from prexel.encoders.source_code_encoder import SourceCodeEncoder
 
 class TestIntegration(unittest.TestCase):
     def test_full(self):
-        text = "|Kitchen << Room color square_feet show_kitchen() " \
+        text = "|Room >> Kitchen color square_feet show_kitchen() " \
                "<>*-cupboards--1> Cupboard open()"
         lexer = Lexer(text)
 

@@ -49,7 +49,7 @@ class Interpreter:
     def __init__(self, lexer):
         self.lexer = lexer
         self.current_token = self.lexer.get_token()
-        self.diagram = Diagram(main=ClassDiagramPart())
+        self.diagram = Diagram()
 
     def error(self, message="Invalid Syntax"):
         """
@@ -151,6 +151,8 @@ class Interpreter:
         |___________|                               
 
         """
+        has_inheritance = False
+
         if self.current_token and self.current_token.type is Token.INHERITANCE:
             inheritance = InheritanceDiagramPart()
 
@@ -159,16 +161,19 @@ class Interpreter:
 
             # Check is CLASS_NAME token follows the INHERITANCE token
             if self.next_token_is_class_token():
-                parent = ClassDiagramPart()
+                child = ClassDiagramPart()
 
-                # Determine parent class name
-                self.class_name(parent)
+                # Determine child class name
+                self.class_name(child)
 
                 # Append inheritance diagram and then parent class diagram
                 self.diagram.inheritance = inheritance
-                self.diagram.parent = parent
+                self.diagram.main = child
+                has_inheritance = True
             else:
-                self.error("Missing parent class after \"<<\"")
+                self.error("Missing child class after \">>\"")
+
+        return has_inheritance
 
     def aggregation(self, include_following_tokens=True):
         """
@@ -222,19 +227,26 @@ class Interpreter:
             self.diagram.aggregation = aggregation
 
     def evaluate(self):
-        # diagram = Diagram(main=ClassDiagramPart())
-
         # Create main class diagram part
-        self.diagram.main = ClassDiagramPart()
+        # self.diagram.main = ClassDiagramPart()
 
         # Check for the first PREXEL marker
         self.start_marker()
 
-        # Process main class name
-        self.class_name(self.diagram.main)
+        # Process the first class name
+        # self.class_name(self.diagram.main)
+        first_class_diagram = ClassDiagramPart()
+
+        self.class_name(first_class_diagram)
+
+        # Optionally check for FIELD and METHOD tokens
+        self.class_body(first_class_diagram)
 
         # Optional - Check for inheritance
-        self.inheritance()
+        if self.inheritance():
+            self.diagram.parent = first_class_diagram
+        else:
+            self.diagram.main = first_class_diagram
 
         # Optional - Check for aggregation but don't
         # consider the fields and methods following the aggregation

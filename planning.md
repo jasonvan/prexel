@@ -1,10 +1,13 @@
+## Meeting notes
+
+* Updated syntax
+* As I use PREXEL more, I continue to debate the usefulness of stickly tying the UML generation with
+source code and full class map generation. Right now, I've using it mostly for clariying intentions for a
+method and I change it alot without an desire to update the source code. Or I generate source code first and then generate the pretty-printed code to clarify it. Not the other way around.
 
 ## Next Actions
 
-* Update inheritance to use ">>" instead of "<<" [Lexer]
-* Change Interpreter to handle inheritance differently [Interpreter]
-    * Example: |Room width height >> Kitchen color square_feed show_kitchen() <>*-cupboards--1> Cupboard open() [NA-FIRST]
-    
+* Resubmit files to dropbox
 * Comment/Clean up encoder code/tests [Code Quality]
 * Search for all TODOs in project [Code Quality]
 * Right now now single-line and multi-line add aggregated values in different orders [Interpreter]
@@ -18,6 +21,7 @@
 
 * Review aggregation method. It might be more clear to break this up into 
 separate methods
+* Review evaluate method again
 * Use the left multiplicity value for aggregation
 * Use the right multiplicity value for aggregation
 * need to handle "S" character, and create class variable in source code
@@ -67,9 +71,6 @@ one of these relationships as the main diagram form and other relationships woul
 
 ### Planning
 
-* As I use PREXEL more, I continue to debate the usefulness of stickly tying the UML generation with
-source code and full class map generation. Right now, I've using it mostly for clariying intentions for a
-method and I change it alot without an desire to update the source code. Or I generate source code first and then generate the pretty-printed code to clarify it. Not the other way around.
 * https://drive.google.com/file/d/0B9_FGv0nRq5hSGJlbm5WVC1BMG8/view?usp=sharing
 * Research the structure of XMI
     * https://www.ibm.com/developerworks/library/x-wxxm24/index.html

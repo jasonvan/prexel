@@ -107,38 +107,40 @@ Source code generated:
 
 ### Example 2 - Multiple Classes with Inheritance
 
-Easy-entry single-line (in this syntax Employee is the parent):
-    
-    |Person << Employee name age
+Easy-entry single-line (in this syntax Person is the parent):
+
+    |Person name age >> Employee company
 
 Easy-entry multi-line:
 
-    |Person << Employee
-    |name
-    |age
+    |Person name age >> Employee
+    |company
 
 Pretty-printed UML:
 
-     ________ 
-    |Employee|
-    |________|
-    ∆
-    |______ 
+     ______ 
     |Person|
     |------|
     |name  |
     |age   |
     |______|
+    ∆
+    |________ 
+    |Employee|
+    |--------|
+    |company |
+    |________|
 
 Source code generated (each class in its own file):
 
-    class Employee:
-        pass
-
-    class Person(Employee):
+    class Person:
         def __init__(self, name, age):
             self.name = name
             self.age = age
+
+    class Employee(Person):
+        def __init__(self, company):
+            self.company = company
 
 ### Example 3 - Aggregation
 
@@ -223,11 +225,11 @@ Source code generated (each class in its own file):
 
 Easy-entry single-line:
 
-    |Kitchen << Room color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()
+    |Room >> Kitchen color square_feet show_kitchen() <>*-cupboards--1> Cupboard open()
 
 Easy-entry multi-line (in multi-line, Cupboard can't have fields)
 
-    |Kitchen << Room <>*-cupboards--1> Cupboard
+    |Room >> Kitchen <>*-cupboards--1> Cupboard
     |color
     |square_feet
     |show_kitchen()

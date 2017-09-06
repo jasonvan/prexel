@@ -101,7 +101,7 @@ class TestLexer(unittest.TestCase):
         """
         Test the get_token() method with an inheritance Token
         """
-        text = "|Kitchen << Room"
+        text = "|Kitchen >> Room"
         lexer = Lexer(text)
 
         # Check that the token is a PREXEL marker
@@ -165,13 +165,13 @@ class TestLexer(unittest.TestCase):
         """
         Test the get_token() method with extra PREXEL markers
         """
-        text = "|Kitchen << Room\n|arrange_kitchen()\n|place_floor_cabinet()"
+        text = "|Room >> Kitchen \n|arrange_kitchen()\n|place_floor_cabinet()"
         lexer = Lexer(text)
 
         lexer.get_token()  # PREXEL marker
-        lexer.get_token()  # "Kitchen"
-        lexer.get_token()  # "<<"
         lexer.get_token()  # "Room"
+        lexer.get_token()  # ">>"
+        lexer.get_token()  # "Kitchen"
 
         # Skip extra "|" tokens
         self.assertEqual(lexer.get_token().type, Token.METHOD)
