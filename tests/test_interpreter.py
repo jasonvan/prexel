@@ -68,11 +68,9 @@ class TestInterpreter(unittest.TestCase):
 
         interpreter = Interpreter(lexer)
         interpreter.start_marker()
+        name = interpreter.class_name()
 
-        class_diagram = ClassDiagramPart()
-
-        interpreter.class_name(class_diagram)
-        self.assertEqual(class_diagram.name, "Airplane")
+        self.assertEqual(name, "Airplane")
 
     def test_class_body(self):
         """
@@ -85,8 +83,7 @@ class TestInterpreter(unittest.TestCase):
         interpreter.start_marker()
 
         class_diagram = ClassDiagramPart()
-
-        interpreter.class_name(class_diagram)
+        class_diagram.name = interpreter.class_name()
         interpreter.class_body(class_diagram)
 
         self.assertEqual(class_diagram.fields, ["size", "color"])
@@ -104,7 +101,7 @@ class TestInterpreter(unittest.TestCase):
         class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        interpreter.class_name(class_diagram_part)
+        class_diagram_part.name = interpreter.class_name()
         interpreter.class_body(class_diagram_part)
 
         if interpreter.inheritance():
@@ -127,7 +124,7 @@ class TestInterpreter(unittest.TestCase):
         class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        interpreter.class_name(class_diagram_part)
+        class_diagram_part.name = interpreter.class_name()
 
         # Should raise a InterpreterException
         with self.assertRaises(InterpreterException) as context:
@@ -147,7 +144,7 @@ class TestInterpreter(unittest.TestCase):
         class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        interpreter.class_name(class_diagram_part)
+        class_diagram_part.name = interpreter.class_name()
         diagram.main = class_diagram_part
         interpreter.aggregation()
 
@@ -167,7 +164,7 @@ class TestInterpreter(unittest.TestCase):
         class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        interpreter.class_name(class_diagram_part)
+        class_diagram_part.name = interpreter.class_name()
         diagram.main = class_diagram_part
         interpreter.aggregation()
 
@@ -191,7 +188,7 @@ class TestInterpreter(unittest.TestCase):
         class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        interpreter.class_name(class_diagram_part)
+        class_diagram_part.name = interpreter.class_name()
         diagram.main = class_diagram_part
         interpreter.aggregation(include_following_tokens=False)
         interpreter.class_body(diagram.main)

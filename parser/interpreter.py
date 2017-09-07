@@ -1,6 +1,7 @@
 """
 Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
 """
+from collections import namedtuple
 from prexel.parser.lexer import Token
 from prexel.models.diagram import (Diagram,
                                    ClassDiagramPart,
@@ -75,35 +76,19 @@ class Interpreter:
         """
         self.process_token(Token.START_MARKER)
 
-    def class_name(self, class_diagram_part):
+    def class_name(self):
         """
-        Process a CLASS_NAME token and set the name value on a 
-        ClassDiagramPart object which it inherits from the DiagramPart class.
-
-         ___________ 
-        |DiagramPart|
-        |-----------|
-        |name       |
-        |type       |
-        |___________|
-        ∆
-        |________________ 
-        |ClassDiagramPart|
-        |----------------|
-        |fields          |
-        |methods         |
-        |extends         |
-        |________________|
-
+        Process a CLASS_NAME token and return the name
         """
-        class_diagram_part.name = self.current_token.value
 
         # Process Token
+        name = self.current_token.value
         self.process_token(Token.CLASS_NAME)
+        return name
 
     def class_body(self, class_diagram_part):
         """
-        Process the fields and method for a ClassDiagramPart object.
+        Process the fields and method on a ClassDiagramPart object.
         """
         while self.current_token and self.current_token.type in (Token.FIELD, Token.METHOD):
             token = self.current_token
@@ -164,7 +149,7 @@ class Interpreter:
                 child = ClassDiagramPart()
 
                 # Determine child class name
-                self.class_name(child)
+                child.name = self.class_name()
 
                 # Append inheritance diagram and then parent class diagram
                 self.diagram.inheritance = inheritance
@@ -193,7 +178,7 @@ class Interpreter:
 
             # Process aggregated ClassDiagramPart. Optionally include class body
             aggregated = ClassDiagramPart()
-            self.class_name(aggregated)
+            aggregated.name = self.class_name()
 
             if include_following_tokens:
                 self.class_body(aggregated)
@@ -227,17 +212,12 @@ class Interpreter:
             self.diagram.aggregation = aggregation
 
     def evaluate(self):
-        # Create main class diagram part
-        # self.diagram.main = ClassDiagramPart()
-
         # Check for the first PREXEL marker
         self.start_marker()
 
         # Process the first class name
-        # self.class_name(self.diagram.main)
         first_class_diagram = ClassDiagramPart()
-
-        self.class_name(first_class_diagram)
+        first_class_diagram.name = self.class_name()
 
         # Optionally check for FIELD and METHOD tokens
         self.class_body(first_class_diagram)
