@@ -1,7 +1,6 @@
 """
 Code in this class is based on https://ruslanspivak.com/lsbasi-part6/
 """
-from collections import namedtuple
 from prexel.parser.lexer import Token
 from prexel.models.diagram import (Diagram,
                                    ClassDiagramPart,
