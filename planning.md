@@ -2,11 +2,10 @@
 
 ## Next Actions
 
-* Clean up evaluate method a little more [Interpreter]
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
-    * Lexer will need to parse commas in tokens [Lexer]
     * Encoders will need to be updated to handle multiple main classes
+* Read up on AST
 * Need to determine how to reverse-prexel
     * Option 1 - Create a unique ID for each string and save the original to a file
     * Option 2 - Create a parser that can read the pretty-printed string

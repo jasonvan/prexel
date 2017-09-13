@@ -97,11 +97,42 @@ class TestLexer(unittest.TestCase):
         # Check that the token is a method
         self.assertEqual(lexer.get_token().type, Token.METHOD)
 
+    def test_get_token_with_comma(self):
+        """
+        Test the get_token() method, which turns a token string into a Token object
+        """
+        text = "|Room >> Kitchen, LivingRoom, Bathroom"
+        lexer = Lexer(text)
+
+        # Check that the token is a PREXEL marker
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a inheritance marker
+        self.assertEqual(lexer.get_token().type, Token.INHERITANCE)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a comma
+        self.assertEqual(lexer.get_token().type, Token.COMMA)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a comma
+        self.assertEqual(lexer.get_token().type, Token.COMMA)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
     def test_get_token_with_inheritance(self):
         """
         Test the get_token() method with an inheritance Token
         """
-        text = "|Kitchen >> Room"
+        text = "|Room >> Kitchen"
         lexer = Lexer(text)
 
         # Check that the token is a PREXEL marker
@@ -176,6 +207,34 @@ class TestLexer(unittest.TestCase):
         # Skip extra "|" tokens
         self.assertEqual(lexer.get_token().type, Token.METHOD)
         self.assertEqual(lexer.get_token().type, Token.METHOD)
+
+    def test_get_token_ignore_reserved_characters(self):
+        """
+        Test the get_token() method with reserved characters
+        """
+        text = "|Room >> Kitchen|, arrange_kitchen()||,"
+        lexer = Lexer(text)
+
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+        self.assertEqual(lexer.get_token().type, Token.INHERITANCE)
+
+        # "Kitchen"
+        token = lexer.get_token()
+        self.assertEqual(token.type, Token.CLASS_NAME)
+        self.assertEqual(token.value, "Kitchen")
+
+        # Secondary START_MARKER tokens are ignored, so COMMA token is next
+        self.assertEqual(lexer.get_token().type, Token.COMMA)
+
+        # "arrange_kitchen()"
+        token = lexer.get_token()
+        self.assertEqual(token.type, Token.METHOD)
+        self.assertEqual(token.value, "arrange_kitchen()")
+
+        # Secondary START_MARKER tokens are ignored, so COMMA token is next
+        self.assertEqual(lexer.get_token().type, Token.COMMA)
+
 
 if __name__ == '__main__':
     unittest.main()

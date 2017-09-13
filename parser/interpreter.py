@@ -143,7 +143,7 @@ class Interpreter:
             # Process token
             self.process_token(Token.INHERITANCE)
 
-            # Check is CLASS_NAME token follows the INHERITANCE token
+            # Check CLASS_NAME token follows the INHERITANCE token
             if self.next_token_is_class_token():
                 child = ClassDiagramPart()
 

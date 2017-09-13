@@ -5,7 +5,8 @@ REGEX = {
     "method_signature": re.compile(r'^([^(){}]+)\((.*)\)$'),
     "aggregation": re.compile('^<>([\d*]?)-+(\w*)-*([\d*]?)>$'),
     "inheritance": re.compile('^>>$'),
-    "ignored_characters": ("<<>", "<>>", "<>", "<<>>")
+    "ignored_characters": ("<<>", "<>>", "<>", "<<>>"),
+    "reserved_characters": (",", "|")
 }
 
 
@@ -25,5 +26,9 @@ def is_aggregation(value):
     return REGEX["aggregation"].match(value)
 
 
-def is_ignored_character(value):
+def is_ignored_token(value):
     return value in REGEX["ignored_characters"]
+
+
+def is_reserved_character(value):
+    return value in REGEX["reserved_characters"]
