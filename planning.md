@@ -2,13 +2,16 @@
 
 ## Next Actions
 
+* Reverse PREXEL
+    * Hash the pretty-printed version, with all whitespace removed, as it is displayed to the user
+    * This hash value is then stored a text file (history.txt?)along with the original easy entry
+        * 1ads787iuikds89782:|Room >> Kitchen
+    * When the user highlights the string, it hashes the value again, again removing all whitespace, and searches
+    the history.txt file for the hash and splits the string on the : and returns the easy entry
+    
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
     * Encoders will need to be updated to handle multiple main classes
-* Read up on AST
-* Need to determine how to reverse-prexel
-    * Option 1 - Create a unique ID for each string and save the original to a file
-    * Option 2 - Create a parser that can read the pretty-printed string
 * Right now now single-line and multi-line add aggregated values in different orders [Interpreter]
 * Need to throw an exception if an ignored character is used, this needs to be handled by the plugin [Lexer]
 * need to handle "S" character, and create class variable in source code [Interpreter]
@@ -39,6 +42,7 @@ separate methods
 
 ### Lexer
 
+* Read up on AST
 * Add the following self aggregation, need to determine a shorthand for this
     <>-----
     <------
