@@ -3,11 +3,12 @@
 ## Next Actions
 
 * Reverse PREXEL
-    * Hash the pretty-printed version, with all whitespace removed, as it is displayed to the user
-    * This hash value is then stored a text file (history.txt?)along with the original easy entry
-        * 1ads787iuikds89782:|Room >> Kitchen
-    * When the user highlights the string, it hashes the value again, again removing all whitespace, and searches
-    the history.txt file for the hash and splits the string on the : and returns the easy entry
+    * Need to properly test the initial version of the code
+    * Need handle if the string isn't found. Need to display something to the user
+    * Need to get .history saving in the top level of the plugin directory
+    * Overwrite duplicate id so, only one string is saved inside of .history
+    * Determine more effecient way to search file than looping over all the entries inside of .history
+    * Doesn't currently work for multi-line strings as the \n get input into the file. Perhaps we could escape the string before saving it and than unescape the string when it is retrieved.
     
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]

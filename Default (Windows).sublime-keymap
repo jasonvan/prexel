@@ -1,3 +1,4 @@
 [
-	{ "keys": ["ctrl+shift+g"], "command": "generate_uml"}
+	{ "keys": ["ctrl+shift+g"], "command": "generate_uml"},
+	{ "keys": ["ctrl+shift+p"], "command": "reverse_uml"}
 ]

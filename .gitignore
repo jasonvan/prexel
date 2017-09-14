@@ -103,3 +103,5 @@ ENV/
 
 # PyCharm
 .idea
+
+tests/.history-test
