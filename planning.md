@@ -2,7 +2,10 @@
 
 ## Next Actions
 
+* Research are people are using UML in the agile process? Where does PREXEL fit in to this?
+* Add some more screenshots to the README
 * Reverse PREXEL
+    * CTRL-Z to reverse pretty-print
     * Need to properly test the initial version of the code
     * Need handle if the string isn't found. Need to display something to the user
     * Need to get .history saving in the top level of the plugin directory
