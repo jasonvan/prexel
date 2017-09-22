@@ -104,4 +104,5 @@ ENV/
 # PyCharm
 .idea
 
-tests/.history-test
+# Prexel
+.prexel-history

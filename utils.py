@@ -1,23 +1,49 @@
 import hashlib
+import os
+
+PLUGIN_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
-"""
-TODO - Full develop tests for this
+class Persistence:
+    """
+    TODO
+    - Add comments to this class and test class
+    - Try to optimize the hashcode search
+    """
+    def __init__(self, filename=".prexel-history"):
+        self.filename = filename
 
-"""
+    def save(self, easy_entry, pretty_printed):
+        hashcode = self._generate_hashcode(pretty_printed)
+        self._save_pretty_printed(hashcode, easy_entry)
 
+    def load(self, pretty_printed):
+        hashcode = self._generate_hashcode(pretty_printed)
+        return self._load_easy_entry(hashcode)
 
-def generate_hashcode(value):
-    return hashlib.md5(value.strip().encode('utf-8')).hexdigest()
+    def _save_pretty_printed(self, hashcode, easy_entry_value):
+        easy_entry = self._load_easy_entry(hashcode)
 
+        if not easy_entry:
+            with open(self.history_file_path(), "a") as file:
+                file.write("{}:{}\n".format(hashcode, easy_entry_value))
 
-def save_pretty_printed(hashcode, value, filename):
-    with open(filename, "a") as file:
-        file.write("{}:{}\n".format(hashcode, value))
+    def _load_easy_entry(self, hashcode):
+        easy_entry = None
 
+        try:
+            with open(self.history_file_path()) as file:
+                for line in file:
+                    if hashcode in line:
+                        easy_entry = line.split(":")[1].strip()
+        except FileNotFoundError:
+            pass  # TODO handle error
 
-def load_easy_entry(hashcode, filename):
-    with open(filename) as file:
-        for line in file:
-            if hashcode in line:
-                return line.split(":")[1]
+        return easy_entry
+
+    def history_file_path(self):
+        return os.path.join(PLUGIN_DIR, self.filename)
+
+    @staticmethod
+    def _generate_hashcode(pretty_printed_value):
+        return hashlib.md5(pretty_printed_value.strip().encode('utf-8')).hexdigest()

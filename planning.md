@@ -2,16 +2,14 @@
 
 ## Next Actions
 
-* Research are people are using UML in the agile process? Where does PREXEL fit in to this?
-* Add some more screenshots to the README
 * Reverse PREXEL
-    * CTRL-Z to reverse pretty-print
-    * Need to properly test the initial version of the code
-    * Need handle if the string isn't found. Need to display something to the user
-    * Need to get .history saving in the top level of the plugin directory
-    * Overwrite duplicate id so, only one string is saved inside of .history
     * Determine more effecient way to search file than looping over all the entries inside of .history
-    * Doesn't currently work for multi-line strings as the \n get input into the file. Perhaps we could escape the string before saving it and than unescape the string when it is retrieved.
+    * Doesn't currently work for multi-line strings as the \n get input into the file. 
+    Perhaps we could escape the string before saving it and than unescape the string when it is retrieved.
+    * CTRL-Z to reverse pretty-print
+* Add some more screenshots to the README
+    
+* Research are people are using UML in the agile process? Where does PREXEL fit in to this?
     
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
@@ -60,6 +58,7 @@ this is immediately obvious since Python is not typed
     
 ### Plugin
 
+* Update the option to generate a class to use view.show_popup_menu
 * Allow user the option to specify if they want pretty-print or source code, 
 both, or neither, when running the prexel command
 
