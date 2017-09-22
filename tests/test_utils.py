@@ -37,7 +37,7 @@ class TestUtilsPersistence(unittest.TestCase):
     def test_save_pretty_printed(self):
         hashcode = "23isajkf02"
         easy_entry = "|Room >> Kitchen"
-        self.persistence._save_pretty_printed(hashcode, easy_entry)
+        self.persistence._save_easy_entry(hashcode, easy_entry)
 
         history_file = self.persistence.history_file_path()
 
@@ -46,11 +46,23 @@ class TestUtilsPersistence(unittest.TestCase):
 
         self.assertEqual("23isajkf02:|Room >> Kitchen\n", from_history_file)
 
+    def test_save_pretty_printed_includes_newline(self):
+        hashcode = "23isajkf02"
+        easy_entry = "|Room >> Kitchen\n|field1\n|field2"
+        self.persistence._save_easy_entry(hashcode, easy_entry)
+
+        history_file = self.persistence.history_file_path()
+
+        with open(history_file) as file:
+            from_history_file = file.readline()
+
+        self.assertEqual("23isajkf02:|Room >> Kitchen[!NL]|field1[!NL]|field2\n", from_history_file)
+
     def test_save_pretty_printed_already_exists(self):
         hashcode = "23isajkf02"
         easy_entry = "|Room >> Kitchen"
-        self.persistence._save_pretty_printed(hashcode, easy_entry)
-        self.persistence._save_pretty_printed(hashcode, easy_entry)
+        self.persistence._save_easy_entry(hashcode, easy_entry)
+        self.persistence._save_easy_entry(hashcode, easy_entry)
 
         history_file = self.persistence.history_file_path()
 
@@ -63,7 +75,13 @@ class TestUtilsPersistence(unittest.TestCase):
         hashcode = "23isajkf02"
         easy_entry = "|Room >> Kitchen"
 
-        self.persistence._save_pretty_printed(hashcode, easy_entry)
+        self.persistence._save_easy_entry(hashcode, easy_entry)
+        self.assertEqual(easy_entry, self.persistence._load_easy_entry(hashcode))
+
+    def test_load_easy_entry_includes_newline(self):
+        hashcode = "23isajkf02"
+        easy_entry = "|Room >> Kitchen\n|field1\n|field2"
+        self.persistence._save_easy_entry(hashcode, easy_entry)
         self.assertEqual(easy_entry, self.persistence._load_easy_entry(hashcode))
 
 

@@ -2,13 +2,7 @@
 
 ## Next Actions
 
-* Reverse PREXEL
-    * Determine more effecient way to search file than looping over all the entries inside of .history
-    * Doesn't currently work for multi-line strings as the \n get input into the file. 
-    Perhaps we could escape the string before saving it and than unescape the string when it is retrieved.
-    * CTRL-Z to reverse pretty-print
 * Add some more screenshots to the README
-    
 * Research are people are using UML in the agile process? Where does PREXEL fit in to this?
     
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]

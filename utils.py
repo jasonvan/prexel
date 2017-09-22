@@ -15,16 +15,18 @@ class Persistence:
 
     def save(self, easy_entry, pretty_printed):
         hashcode = self._generate_hashcode(pretty_printed)
-        self._save_pretty_printed(hashcode, easy_entry)
+        self._save_easy_entry(hashcode, easy_entry)
 
     def load(self, pretty_printed):
         hashcode = self._generate_hashcode(pretty_printed)
         return self._load_easy_entry(hashcode)
 
-    def _save_pretty_printed(self, hashcode, easy_entry_value):
+    def _save_easy_entry(self, hashcode, easy_entry_value):
+        # Check if easy_entry string already exists in history file
         easy_entry = self._load_easy_entry(hashcode)
 
         if not easy_entry:
+            easy_entry_value = easy_entry_value.replace("\n", "[!NL]")
             with open(self.history_file_path(), "a") as file:
                 file.write("{}:{}\n".format(hashcode, easy_entry_value))
 
@@ -35,7 +37,7 @@ class Persistence:
             with open(self.history_file_path()) as file:
                 for line in file:
                     if hashcode in line:
-                        easy_entry = line.split(":")[1].strip()
+                        easy_entry = line.split(":")[1].strip().replace("[!NL]", "\n")
         except FileNotFoundError:
             pass  # TODO handle error
 
