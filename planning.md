@@ -2,7 +2,6 @@
 
 ## Next Actions
 
-* Add some more screenshots to the README
 * Research are people are using UML in the agile process? Where does PREXEL fit in to this?
     
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]

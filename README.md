@@ -56,9 +56,17 @@ Once the project has been checked out/downloaded and placed directly inside of t
 
 ## Usage
 
-Place the cursor in a line with a PREXEL string (**SEE next section for examples**) and press CTRL+SHIFT+G (Windows/Linux) or COMMAND+SHIFT+G (MAC) to expand to a pretty-printed version.
+### General Usage - Generating Pretty-Printed UML diagrams
 
-**Source Code Generation**
+Place the cursor in a line with a PREXEL string (**SEE next section for examples**) and press **CTRL+SHIFT+G** (Windows/Linux) or **COMMAND+SHIFT+G** (MAC) to expand to a pretty-printed version.
+
+### General Usage - Reverting Pretty-Printed UML diagrams
+
+Pretty-printed diagram can be reverted back to their original PREXEL string by selecting the generated pretty-printed diagram 
+and pressing **CTRL+SHIFT+P** (Windows/Linux) or **COMMAND+SHIFT+P** (MAC) to revert the diagram. **NOTE if the pretty-printed diagram
+has been modified for the original version you won't be able to revert without changing it back to the original.**
+
+### Generating Source Code
 
 When expanding PREXEL, you have the option of generating source code for the diagram. A dialog box will appear at the bottom of the editor when expanding to specify whether or not source code should be generated.
 
