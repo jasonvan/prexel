@@ -1,4 +1,5 @@
 [
 	{ "keys": ["super+shift+g"], "command": "generate_uml"},
-	{ "keys": ["super+shift+p"], "command": "reverse_uml"}
+	{ "keys": ["super+shift+u"], "command": "reverse_uml"},
+	{ "keys": ["super+option+shift+u"], "command": "undo_uml"}
 ]

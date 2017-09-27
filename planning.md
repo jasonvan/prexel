@@ -2,9 +2,13 @@
 
 ## Next Actions
 
-* Research are people are using UML in the agile process? Where does PREXEL fit in to this?
 * CTRL-something to revert pretty-print
-* Figure how to run my test quite from sublime
+    * Push latest prexel string onto command stack.
+    * When the the command is run, search the file for the string, select it and replace it with the old string
+* Update the option to generate a class to use view.show_popup_menu [Plugin]
+* Allow user the option to specify if they want pretty-print or source code, 
+both, or neither, when running the prexel command [Plugin]
+* Research are people are using UML in the agile process? Where does PREXEL fit 
     
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
@@ -49,18 +53,10 @@ separate methods
 ### Encoders
 
 * Source code - add comment to aggregation, noting the Class name aggregated,
-this is immediately obvious since Python is not typed
+this is not immediately obvious since Python is not typed
     
 ### Plugin
 
-* Update the option to generate a class to use view.show_popup_menu
-* Allow user the option to specify if they want pretty-print or source code, 
-both, or neither, when running the prexel command
-
-* I’ve also been thinking a lot about the “need” to synchorize between 
-generated classes, XML fragment, and pretty-printed diagrams. 
-I believe we still need to synchronize the XML fragment and pretty-printed 
-diagram, but I question whether we need to keep t
 
 ### XML Code
 
@@ -73,7 +69,7 @@ one of these relationships as the main diagram form and other relationships woul
 * Validation of fragments
 * Review presentation of large diagram for all classes in the project 
 
-### Planning
+### Resources
 
 * https://drive.google.com/file/d/0B9_FGv0nRq5hSGJlbm5WVC1BMG8/view?usp=sharing
 * Research the structure of XMI
@@ -87,37 +83,3 @@ one of these relationships as the main diagram form and other relationships woul
     * https://www.sublimetext.com/docs/3/api_reference.html#sublime.Edit
     * https://stackoverflow.com/questions/30443820/insert-text-into-view-in-sublime-3-api
     * /Applications/Sublime Text.app/Contents/MacOS/Packages/default
-
-## Design
-
-### Four top level packages in the project:
-
-**models** - This package contains the domain objects for this plugin. The main class
-is the Diagram class. This represents a single diagram element inside of a selection of PREXEL
-text. 
-
-For instance the PREXEL below contains two diagram elements.
-
-    """
-    |Kitchen color square_feet show_kitchen()  # diagram element 1
-    
-    |Employee  # diagram element 2
-    |job_title
-    
-**parsers** - This manages the parsing and interpretation of easy-entry PREXEL. 
-The parser creates Diagram objects for the easy-entry PREXEL. These are then processed
-by the classes inside of the XML package into XMI fragments.
-
-**xml** - This manages the conversion of Diagram objects to and from XMI fragments.
-It also handles the aggregation of all fragments for the project into one XML file as well
-as validation.
-
-**encoders** - The classes in this package are responsible for taking a Diagram object
-and encoding it into strings for output in the editor. There are two output types:
-Source Code and Pretty printing.
-
-#### Prexel conversion process
-
-[Plugin gets selected string] **=>** [Parser parses string in Diagram objects] **=>** [XMI Adapator converts
-Diagram objects in XMI fragments] **=>** [Diagram objects are encoded into Pretty-printed and Source code
-output] **=>** [Plugin takes the Pretty-printed and source code and outputs them]

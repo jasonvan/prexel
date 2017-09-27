@@ -7,6 +7,7 @@ from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
 from prexel.utils import Persistence
 
+command_stack = []
 
 class GenerateUmlCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -41,12 +42,41 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         source_code = SourceCodeEncoder()
         classes = source_code.generate(diagram)
 
+        command_stack.append(pretty_print)
+
         # Replace selection
         self.view.replace(edit, line, pretty_print)
 
         # Send command to window
         self.view.window().run_command("create_new_file",
                                       {"classes": classes})
+
+class UndoUmlCommand(sublime_plugin.TextCommand):
+    """
+    TODO: comment and clean up
+    1.) Need to the common code for UndoUmlCommand
+    and ReverseUmlCommand one method
+    2.) Need to figure out a way to mark the line that was originally added,
+    because the prexel that is the same gets found by the first one in the file
+    3.) After popup is working confirm if the undo command works
+    """
+    def run(self, edit):
+        if len(command_stack) > 0:
+            last_pretty_print = command_stack[-1]
+
+            persistence = Persistence()
+            easy_entry = persistence.load(last_pretty_print)
+
+            # Replace selection
+            if easy_entry:
+                region = self.view.find(last_pretty_print, 0, sublime.LITERAL)
+                self.view.replace(edit, region, easy_entry)
+                command_stack.pop()
+            else:
+                errorMessage = "Original string not found based on the current diagram."
+                self.view.show_popup(errorMessage,
+                                     sublime.HIDE_ON_MOUSE_MOVE_AWAY)
+
 
 
 class ReverseUmlCommand(sublime_plugin.TextCommand):
@@ -62,7 +92,8 @@ class ReverseUmlCommand(sublime_plugin.TextCommand):
         if easy_entry:
             self.view.replace(edit, line, easy_entry)
         else:
-            self.view.show_popup("Original string not found based on the current diagram.",
+            errorMessage = "Original string not found based on the current diagram."
+            self.view.show_popup(errorMessage,
                                  sublime.HIDE_ON_MOUSE_MOVE_AWAY)
 
 
