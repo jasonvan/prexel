@@ -3,6 +3,8 @@
 ## Next Actions
 
 * Research are people are using UML in the agile process? Where does PREXEL fit in to this?
+* CTRL-something to revert pretty-print
+* Figure how to run my test quite from sublime
     
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
