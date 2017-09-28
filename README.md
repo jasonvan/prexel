@@ -62,13 +62,19 @@ Place the cursor in a line with a PREXEL string (**SEE next section for examples
 
 ### General Usage - Reverting Pretty-Printed UML diagrams
 
+#### Revert by selection
+
 Pretty-printed diagram can be reverted back to their original PREXEL string by selecting the generated pretty-printed diagram 
 and pressing **CTRL+SHIFT+U** (Windows/Linux) or **COMMAND+SHIFT+U** (MAC) to revert the diagram. **NOTE if the pretty-printed diagram
 has been modified for the original version you won't be able to revert without changing it back to the original.**
 
+#### Revert by key-command
+
+If a pretty-printed diagram was just generated and it needs to be reverted, press **CTRL+OPTION+SHIFT+U** (Windows/Linux) or **COMMAND+OPTION+SHIFT+U** to revert it.
+
 ### Generating Source Code
 
-When expanding PREXEL, you have the option of generating source code for the diagram. A dialog box will appear at the bottom of the editor when expanding to specify whether or not source code should be generated.
+When expanding PREXEL, you have the option of generating UML, source code, or both for the diagram. A option box will appear next to the highlighted PREXEL string.
 
 ![ScreenShot](dialog-box.png)
 
@@ -304,12 +310,3 @@ Running the test can be done from the command line, with the following command:
     python3 -m unittest prexel/tests/test_lexer.py
     python3 -m unittest prexel/tests/test_interpreter.py
     python3 -m unittest prexel/tests/test_regex.py
-
-## Improvements and Unimplemented features
-
-* Limited to a single subclass inheriting from a single parent class.
-* A class can only aggregate one other class.
-* A class cannot aggregate itself.
-* No way to convert multiple PREXEL strings at one time. These would need to be merged together.
-
-
