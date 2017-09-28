@@ -1,15 +1,19 @@
-## Meeting notes
-
 ## Next Actions
 
-* CTRL-something to revert pretty-print
-    * Push latest prexel string onto command stack.
-    * When the the command is run, search the file for the string, select it and replace it with the old string
+* Clean up and comment code for ctrl-option-shift-u [Plugin]
 * Update the option to generate a class to use view.show_popup_menu [Plugin]
 * Allow user the option to specify if they want pretty-print or source code, 
 both, or neither, when running the prexel command [Plugin]
+
+* Undo
+    * Comment and clean up
+    * Move common code for UndoUmlCommand and ReverseUmlCommand to one method
+    * Need to figure out a way to handle undoing when two prexel strings are the same. It always finds the first one in the file first
+
 * Research are people are using UML in the agile process? Where does PREXEL fit 
     
+## Backlog
+
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
     * Encoders will need to be updated to handle multiple main classes
@@ -21,8 +25,6 @@ both, or neither, when running the prexel command [Plugin]
 
 * Comment/Clean up encoder code/tests [Code Quality]
 * Search for all TODOs in project [Code Quality]
-
-## Backlog
 
 ### Code Quality
 

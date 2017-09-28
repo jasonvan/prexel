@@ -4,6 +4,23 @@ import os
 PLUGIN_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
+class PrettyPrintStack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, pretty_print):
+        self.stack.append(pretty_print)
+
+    def pop(self):
+        return self.stack.pop()
+
+    def peek(self):
+        return self.stack[-1]
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+
 class Persistence:
     """
     TODO
