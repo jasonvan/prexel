@@ -1,10 +1,7 @@
 ## Next Actions
 
-* Clean up and comment code for ctrl-option-shift-u [Plugin]
-* Update the option to generate a class to use view.show_popup_menu [Plugin]
-* Allow user the option to specify if they want pretty-print or source code, 
-both, or neither, when running the prexel command [Plugin]
-
+* Add space between class and first method, confirm this is accurate according to PEP8
+* Check into issue tracker
 * Undo
     * Comment and clean up
     * Move common code for UndoUmlCommand and ReverseUmlCommand to one method
