@@ -43,7 +43,7 @@ class Persistence:
         easy_entry = self._load_easy_entry(hashcode)
 
         if not easy_entry:
-            easy_entry_value = easy_entry_value.replace("\n", "[!NL]")
+            easy_entry_value = easy_entry_value.strip().replace("\n", "[!NL]")
             with open(self.history_file_path(), "a") as file:
                 file.write("{}:{}\n".format(hashcode, easy_entry_value))
 
@@ -64,5 +64,6 @@ class Persistence:
         return os.path.join(PLUGIN_DIR, self.filename)
 
     @staticmethod
-    def _generate_hashcode(pretty_printed_value):
-        return hashlib.md5(pretty_printed_value.strip().encode('utf-8')).hexdigest()
+    def _generate_hashcode(value):
+        cleaned_value = "".join(value.split()).encode('utf-8')
+        return hashlib.md5(cleaned_value).hexdigest()

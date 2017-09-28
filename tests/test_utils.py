@@ -16,10 +16,6 @@ class TestUtilsPersistence(unittest.TestCase):
         except FileNotFoundError:
             pass  # Don't need to do anything
 
-    def test_generate_hashcode_simple(self):
-        self.assertEqual("b10a8db164e0754105b7a99be72e3fe5",
-                         self.persistence._generate_hashcode("Hello World"))
-
     def test_generate_hashcode_pretty_print(self):
         pretty_print = """
  ____ 
@@ -31,7 +27,21 @@ class TestUtilsPersistence(unittest.TestCase):
 |_______|
         """
 
-        self.assertEqual("38214b075b76fa0d66b439042fbd9e4d",
+        self.assertEqual("8348e2327ecaa4d3370be6dd635e31e1",
+                         self.persistence._generate_hashcode(pretty_print))
+
+    def test_generate_hashcode_pretty_print_with_whitespace(self):
+        pretty_print = """
+     ____ 
+    |Room|
+    |____|
+    ∆
+    |_______ 
+    |Kitchen|
+    |_______|
+        """
+
+        self.assertEqual("8348e2327ecaa4d3370be6dd635e31e1",
                          self.persistence._generate_hashcode(pretty_print))
 
     def test_save_pretty_printed(self):

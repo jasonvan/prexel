@@ -7,10 +7,35 @@ from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
 from prexel.utils import Persistence, PrettyPrintStack
 
-# Used to store the commands so they can be undone
+"""
+Used to store the commands so they can be undone
+ ________________ 
+|PrettyPrintStack|
+|----------------|
+|stack           |
+|push()          |
+|pop()           |
+|peek()          |
+|is_empty()      |
+|________________|
+
+"""
 pretty_print_stack = PrettyPrintStack()
 
 class GenerateUmlCommand(sublime_plugin.TextCommand):
+    """
+    Main Command that generates UML and sources code
+     __________________ 
+    |GenerateUmlCommand|
+    |------------------|
+    |edit              |
+    |diagram           |
+    |easy_entry        |
+    |line              |
+    |run()             |
+    |__________________|
+
+    """
     def run(self, edit):
         # Get the current selection or the line where the cursor is
         line = self.view.line(self.view.sel()[0])
