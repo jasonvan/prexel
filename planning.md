@@ -7,10 +7,10 @@
     * Move common code for UndoUmlCommand and ReverseUmlCommand to one method
     * Need to figure out a way to handle undoing when two prexel strings are the same. It always finds the first one in the file first
 
-* Research are people are using UML in the agile process? Where does PREXEL fit 
     
 ## Backlog
 
+* Plan out XML fragment implementation [XML Code]
 * Allow for multiple subclasses which will be comma-delimited. [Interpreter, Encoders, Lexer, Regex]
     * Interpreter will need to be updated to loop over subclass with optional aggregation multiple times [Interpreter]
     * Encoders will need to be updated to handle multiple main classes
@@ -18,10 +18,11 @@
 * Need to throw an exception if an ignored character is used, this needs to be handled by the plugin [Lexer]
 * need to handle "S" character, and create class variable in source code [Interpreter]
 * Merge multiple PREXEL strings together. [Encoders]
-* Plan out XML fragment implementation [XML Code]
 
 * Comment/Clean up encoder code/tests [Code Quality]
 * Search for all TODOs in project [Code Quality]
+
+* Research are people are using UML in the agile process? Where does PREXEL fit 
 
 ### Code Quality
 
