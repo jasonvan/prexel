@@ -1,5 +1,12 @@
 ## Next Actions
 
+* Import simple sample xmi into other tools and see how they display. Can we use them
+    * If they don't do what we want, perhaps we should write our own
+    * Make export possible to other tools ( using valid UML 2.0 and XMI 2.1 ), but also generate our own
+    * We aren't trying to implement everything
+* Look into the display of diagram
+    * Classes as a circle with all the connections together
+    * Aggregation with a numbered box and numbered correspoding box
 * Add space between class and first method, confirm this is accurate according to PEP8
 * Check into issue tracker
 * Undo
@@ -7,7 +14,6 @@
     * Move common code for UndoUmlCommand and ReverseUmlCommand to one method
     * Need to figure out a way to handle undoing when two prexel strings are the same. It always finds the first one in the file first
 
-    
 ## Backlog
 
 * Plan out XML fragment implementation [XML Code]
