@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="StarUML" exporterVersion="2.0"/>
+	<uml:Model xmi:id="AAAAAAFfCbITa37Ltkk=" xmi:type="uml:Model" name="RootModel">
+		<packagedElement xmi:id="AAAAAAFF+qBWK6M3Z8Y=" name="Model" visibility="public" xmi:type="uml:Model">
+			<packagedElement xmi:id="AAAAAAFfCayFgX6AO1g=" name="Kitchen" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedOperation xmi:id="AAAAAAFfCa0xmH6wwdg=" name="arrange_kitchen" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+				<ownedOperation xmi:id="AAAAAAFfCa19T366rG4=" name="place_floor_cabinet" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+				<ownedOperation xmi:id="AAAAAAFfCa2xsn7Bt60=" name="place_wall_cabinet" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>

@@ -9,6 +9,7 @@ from prexel.models.diagram import (Diagram,
 
 
 class Interpreter:
+
     """
      _____________              _____ 
     | Interpreter |<>-lexer--->|Lexer|
@@ -46,6 +47,7 @@ class Interpreter:
     |_________________|
 
     """
+    
     def __init__(self, lexer):
         self.lexer = lexer
         self.current_token = self.lexer.get_token()

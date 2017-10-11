@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="StarUML" exporterVersion="2.0"/>
+	<uml:Model xmi:id="AAAAAAFfCcFMJw0mOww=" xmi:type="uml:Model" name="RootModel">
+		<packagedElement xmi:id="AAAAAAFF+qBWK6M3Z8Y=" name="Model" visibility="public" xmi:type="uml:Model">
+			<packagedElement xmi:id="AAAAAAFfCcCaYQxVfw8=" name="Airplane" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedAttribute xmi:id="AAAAAAFfCcC0kQx/xf8=" name="color" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<ownedAttribute xmi:id="AAAAAAFfCcDA+gyGFN8=" name="weight" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<ownedAttribute xmi:id="AAAAAAFfCcDMVgyNT0A=" name="wings" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+			</packagedElement>
+			<packagedElement xmi:id="AAAAAAFfCcDlhgyUqHI=" name="Wing" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedMember xmi:id="AAAAAAFfCcDluAy9uhg=" name="wings" visibility="public" xmi:type="uml:Association" isDerived="false">
+					<ownedEnd xmi:id="AAAAAAFfCcDluAy+WAs=" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false" type="AAAAAAFfCcCaYQxVfw8="/>
+					<ownedEnd xmi:id="AAAAAAFfCcDluQy/nQ4=" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="shared" isDerived="false" isID="false" type="AAAAAAFfCcDlhgyUqHI="/>
+					<memberEnd xmi:idref="AAAAAAFfCcDluAy+WAs="/>
+					<memberEnd xmi:idref="AAAAAAFfCcDluQy/nQ4="/>
+				</ownedMember>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>

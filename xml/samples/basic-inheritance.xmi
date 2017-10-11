@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="StarUML" exporterVersion="2.0"/>
+	<uml:Model xmi:id="AAAAAAFfCb8EmQwTnIo=" xmi:type="uml:Model" name="RootModel">
+		<packagedElement xmi:id="AAAAAAFF+qBWK6M3Z8Y=" name="Model" visibility="public" xmi:type="uml:Model">
+			<packagedElement xmi:id="AAAAAAFfCb3k3guZWwY=" name="Person" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedAttribute xmi:id="AAAAAAFfCb4+CwvDejs=" name="name" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<ownedAttribute xmi:id="AAAAAAFfCb5XYgvKwz8=" name="age" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+			</packagedElement>
+			<packagedElement xmi:id="AAAAAAFfCb589gvRn9k=" name="Employee" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedAttribute xmi:id="AAAAAAFfCb6VbwwMoZY=" name="company" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<generalization xmi:id="AAAAAAFfCb59IAv65Aw=" visibility="public" xmi:type="uml:Generalization" specific="AAAAAAFfCb589gvRn9k=" general="AAAAAAFfCb3k3guZWwY="/>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>

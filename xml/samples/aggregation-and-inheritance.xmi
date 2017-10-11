@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="StarUML" exporterVersion="2.0"/>
+	<uml:Model xmi:id="AAAAAAFfCcfdQRKJKDQ=" xmi:type="uml:Model" name="RootModel">
+		<packagedElement xmi:id="AAAAAAFF+qBWK6M3Z8Y=" name="Model" visibility="public" xmi:type="uml:Model">
+			<packagedElement xmi:id="AAAAAAFfCcYdihBMWNI=" name="Room" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<generalization xmi:id="AAAAAAFfCcYtGxCf2uM=" visibility="public" xmi:type="uml:Generalization" specific="AAAAAAFfCcYdihBMWNI=" general="AAAAAAFfCcYsyRB2SN8="/>
+			</packagedElement>
+			<packagedElement xmi:id="AAAAAAFfCcYsyRB2SN8=" name="Class1" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false"/>
+			<packagedElement xmi:id="AAAAAAFfCcZVdBDRVyM=" name="Kitchen" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedAttribute xmi:id="AAAAAAFfCcatixGn1GY=" name="color" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<ownedAttribute xmi:id="AAAAAAFfCca4jBG9tWY=" name="square_feet" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<ownedAttribute xmi:id="AAAAAAFfCcbIwBHTgDE=" name="cupboards" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false"/>
+				<ownedOperation xmi:id="AAAAAAFfCcb8xxIKIZk=" name="show_kitchen" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+				<generalization xmi:id="AAAAAAFfCcZVpBD6/DY=" visibility="public" xmi:type="uml:Generalization" specific="AAAAAAFfCcZVdBDRVyM=" general="AAAAAAFfCcYdihBMWNI="/>
+			</packagedElement>
+			<packagedElement xmi:id="AAAAAAFfCcZxtBEMFLY=" name="Cupboard" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+				<ownedMember xmi:id="AAAAAAFfCcZx+BE18aE=" name="cupboards" visibility="public" xmi:type="uml:Association" isDerived="false">
+					<ownedEnd xmi:id="AAAAAAFfCcZx+BE2YfI=" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="none" isDerived="false" isID="false" type="AAAAAAFfCcZVdBDRVyM=">
+						<lowerValue xmi:id="AAAAAAFfCcfdRhKK36k=" xmi:type="uml:LiteralInteger" value="1"/>
+						<upperValue xmi:id="AAAAAAFfCcfdRhKLqT4=" xmi:type="uml:LiteralInteger" value="1"/>
+					</ownedEnd>
+					<ownedEnd xmi:id="AAAAAAFfCcZx+BE3fhE=" visibility="public" isStatic="false" isLeaf="false" isReadOnly="false" isOrdered="false" isUnique="false" xmi:type="uml:Property" aggregation="shared" isDerived="false" isID="false" type="AAAAAAFfCcZxtBEMFLY=">
+						<lowerValue xmi:id="AAAAAAFfCcfdRhKMkNo=" xmi:type="uml:LiteralUnlimitedNatural" value="*"/>
+						<upperValue xmi:id="AAAAAAFfCcfdRhKNh8o=" xmi:type="uml:LiteralUnlimitedNatural" value="*"/>
+					</ownedEnd>
+					<memberEnd xmi:idref="AAAAAAFfCcZx+BE2YfI="/>
+					<memberEnd xmi:idref="AAAAAAFfCcZx+BE3fhE="/>
+				</ownedMember>
+				<ownedOperation xmi:id="AAAAAAFfCcaR3BGCqrM=" name="open" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>
