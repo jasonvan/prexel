@@ -165,3 +165,15 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("specific"), "AAAAAAFfCb589gvRn9k=")
         self.assertEqual(elem.getAttribute("general"), "AAAAAAFfCb3k3guZWwY=")
+
+
+    def test_owned_member(self):
+        elem_id, elem = self.xmi_adapator.owned_member(
+            "wings",
+            visibility="public",
+            isDerived="false"
+        )
+
+        self.assertEqual(elem.getAttribute("name"), "wings")
+        self.assertEqual(elem.getAttribute("visibility"), "public")
+        self.assertEqual(elem.getAttribute("isDerived"), "false")

@@ -104,7 +104,17 @@ class XMIAdaptor:
                                     **kwargs)
 
     def owned_member(self, name, **kwargs):
-        pass  # TODO
+        valid_attributes = (
+            "visibility",
+            "isDerived",
+        )
+
+        owned_member = self.document.createElement("ownedMember")
+        return self._add_attributes(owned_member,
+                                    "uml:Association",
+                                    valid_attributes,
+                                    name,
+                                    **kwargs)
 
     def owned_end(self, name, **kwargs):
         pass  # TODO
@@ -129,7 +139,6 @@ class XMIAdaptor:
         return self._add_attributes(generalization,
                                     "uml:Generalization",
                                     valid_attributes,
-                                    name="TODO",
                                     **kwargs)
 
     def _add_attributes(self, elem, type, valid_attributes, name="", **kwargs):
