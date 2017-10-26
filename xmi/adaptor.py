@@ -31,15 +31,15 @@ class XMIAdaptor:
         """
         TODO
         """
-        return self.package_element(name, "uml:Model", **kwargs)
+        return self.package_element("uml:Model", name, **kwargs)
 
     def class_element(self, name, **kwargs):
         """
         TODO
         """
-        return self.package_element(name, "uml:Class", **kwargs)
+        return self.package_element("uml:Class", name, **kwargs)
 
-    def package_element(self, name, type, **kwargs):
+    def package_element(self, type, name="", **kwargs):
         """
         TODO
         """
@@ -53,9 +53,9 @@ class XMIAdaptor:
 
         package_element = self.document.createElement("packagedElement")
         return self._add_attributes(package_element,
-                                    name,
                                     type,
                                     valid_attributes, 
+                                    name,
                                     **kwargs)
 
     def owned_attribute(self, name, **kwargs):
@@ -76,9 +76,9 @@ class XMIAdaptor:
 
         owned_attribute = self.document.createElement("ownedAttribute")
         return self._add_attributes(owned_attribute,
-                                    name,
                                     "uml:Property",
                                     valid_attributes, 
+                                    name,
                                     **kwargs)
 
     def owned_operation(self, name, **kwargs):
@@ -86,21 +86,21 @@ class XMIAdaptor:
         TODO
         """
         valid_attributes = (
-            "visibility"
-            "isAbstract"
-            "isFinalSpecialization"
-            "isLeaf"
-            "isActive"
-            "concurrency"
-            "isStatic"
-            "isQuery"
+            "visibility",
+            "isAbstract",
+            "isFinalSpecialization",
+            "isLeaf",
+            "isActive",
+            "concurrency",
+            "isStatic",
+            "isQuery",
         )
 
         owned_operation = self.document.createElement("ownedOperation")
         return self._add_attributes(owned_operation, 
-                                    name,
                                     "uml:Operation",
                                     valid_attributes, 
+                                    name,
                                     **kwargs)
 
     def owned_member(self, name, **kwargs):
@@ -115,17 +115,32 @@ class XMIAdaptor:
     def member_end(self, **kwargs):
         pass  # TODO
 
-    def generalization(self, **kwargs):
-        pass  # TODO
+    def generalization(self, specific, general, **kwargs):
+        valid_attributes = (
+            "visibility",
+            "specific",
+            "general",
+        )
 
-    def _add_attributes(self, elem, name, type, valid_attributes, **kwargs):
+        generalization = self.document.createElement("generalization")
+        generalization.setAttribute("specific", specific)
+        generalization.setAttribute("general", general)
+
+        return self._add_attributes(generalization,
+                                    "uml:Generalization",
+                                    valid_attributes,
+                                    name="TODO",
+                                    **kwargs)
+
+    def _add_attributes(self, elem, type, valid_attributes, name="", **kwargs):
         """
         TODO
         """
         id = self._generate_id()
 
         elem.setAttribute("xmi:id", id)
-        elem.setAttribute("name", name)
+        if name:
+            elem.setAttribute("name", name)
         elem.setAttribute("xmi:type", type)
 
         for key, value in kwargs.items():

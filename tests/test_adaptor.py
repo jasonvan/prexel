@@ -39,9 +39,9 @@ class TestXMIAdapator(unittest.TestCase):
 
         elem_id, elem = self.xmi_adapator._add_attributes(
             package_element, 
-            "Model",
             "uml:Model",
             valid_attributes, 
+            name="Model",
             attr1="attr1",
             attr2="attr2",
             attr3="attr3",
@@ -56,8 +56,8 @@ class TestXMIAdapator(unittest.TestCase):
 
     def test_package_element(self):
         elem_id, elem = self.xmi_adapator.package_element(
-            "Model", 
             "uml:Model", 
+            name="Model", 
             visibility="public")
 
         self.assertEqual(elem.getAttribute("name"), "Model")
@@ -65,8 +65,8 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("visibility"), "public")
 
         elem_id, elem = self.xmi_adapator.package_element(
-            "Kitchen", 
             "uml:Class", 
+            name="Kitchen", 
             visibility="public",
             isAbstract="false",
             isFinalSpecialization="false",
@@ -154,3 +154,14 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("aggregation"), "none")
         self.assertEqual(elem.getAttribute("isDerived"), "false")
         self.assertEqual(elem.getAttribute("isID"), "false")
+
+    def test_generalization(self):
+        elem_id, elem = self.xmi_adapator.generalization(
+            "AAAAAAFfCb589gvRn9k=", 
+            "AAAAAAFfCb3k3guZWwY=",
+            visibility="public"
+        )
+
+        self.assertEqual(elem.getAttribute("visibility"), "public")
+        self.assertEqual(elem.getAttribute("specific"), "AAAAAAFfCb589gvRn9k=")
+        self.assertEqual(elem.getAttribute("general"), "AAAAAAFfCb3k3guZWwY=")
