@@ -177,3 +177,35 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("name"), "wings")
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("isDerived"), "false")
+
+    def test_owned_end(self):
+        elem_id, elem = self.xmi_adapator.owned_end(
+            "AAAAAAFfCcCaYQxVfw8=",
+            visibility="public",
+            isStatic="false",
+            isLeaf="false",
+            isReadOnly="false",
+            isOrdered="false",
+            isUnique="false",
+            aggregation="none",
+            isDerived="false",
+            isID="false"
+        )
+
+        self.assertEqual(elem.getAttribute("xmi:type"), "uml:Property")
+        # TODO fix this
+        # self.assertEqual(elem.getAttribute("type"), "AAAAAAFfCcCaYQxVfw8=")
+
+        self.assertEqual(elem.getAttribute("visibility"), "public")
+        self.assertEqual(elem.getAttribute("isStatic"), "false")
+        self.assertEqual(elem.getAttribute("isLeaf"), "false")
+        self.assertEqual(elem.getAttribute("isReadOnly"), "false")
+        self.assertEqual(elem.getAttribute("isOrdered"), "false")
+        self.assertEqual(elem.getAttribute("isUnique"), "false")
+        self.assertEqual(elem.getAttribute("aggregation"), "none")
+        self.assertEqual(elem.getAttribute("isDerived"), "false")
+        self.assertEqual(elem.getAttribute("isID"), "false")
+
+    def test_member_end(self):
+        elem = self.xmi_adapator.member_end("AAAAAAFfCcDluQy/nQ4=")
+        self.assertEqual(elem.getAttribute("xmi:idref"), "AAAAAAFfCcDluQy/nQ4=")

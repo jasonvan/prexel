@@ -22,6 +22,8 @@ class XMIAdaptor:
     As there are several different schemas for XMI, we want it to fairly 
     straight-forward to switch between them without having to update the 
     parsers or encoder code
+
+    TODO: make name and type part of **kwargs
     """
 
     def __init__(self):
@@ -39,7 +41,7 @@ class XMIAdaptor:
         """
         return self.package_element("uml:Class", name, **kwargs)
 
-    def package_element(self, type, name="", **kwargs):
+    def package_element(self, type, name, **kwargs):
         """
         TODO
         """
@@ -116,14 +118,30 @@ class XMIAdaptor:
                                     name,
                                     **kwargs)
 
-    def owned_end(self, name, **kwargs):
-        pass  # TODO
+    def owned_end(self, reference, **kwargs):
+        valid_attributes = (
+            "visibility",
+            "isStatic",
+            "isLeaf",
+            "isReadOnly",
+            "isOrdered",
+            "isUnique",
+            "aggregation",
+            "isDerived",
+            "isID",
+        )
 
-    def member_end(self, **kwargs):
-        pass  # TODO
+        owned_end = self.document.createElement("ownedEnd")
+        owned_end.setAttribute("type", reference)
+        return self._add_attributes(owned_end,
+                                    "uml:Property",
+                                    valid_attributes,
+                                    **kwargs)
 
-    def member_end(self, **kwargs):
-        pass  # TODO
+    def member_end(self, idref):
+        member_end = self.document.createElement("memberEnd")
+        member_end.setAttribute("xmi:idref", idref)
+        return member_end
 
     def generalization(self, specific, general, **kwargs):
         valid_attributes = (
