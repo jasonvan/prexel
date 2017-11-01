@@ -3,7 +3,7 @@ from xml.dom.minidom import Document
 from prexel.xmi.adaptor import XMIAdaptor
 
 
-class TestXMIAdapator(unittest.TestCase):
+class TestXMIAdaptor(unittest.TestCase):
     """
     Main methods of XMIAdaptor class
      _________________ 
@@ -15,8 +15,6 @@ class TestXMIAdapator(unittest.TestCase):
     |owned_attribute()|
     |owned_operation()|
     |_________________|
-
-    TODO add more comments
 
     """
     def setUp(self):
@@ -33,7 +31,7 @@ class TestXMIAdapator(unittest.TestCase):
             "attr5",
         )
 
-        elem_id, elem = self.xmi_adapator._add_attributes(
+        self.xmi_adapator._add_attributes(
             package_element, 
             valid_attributes,
             name="Model",
@@ -43,13 +41,13 @@ class TestXMIAdapator(unittest.TestCase):
             attr6="attr6"
         )
 
-        self.assertEqual(elem.getAttribute("name"), "Model")
-        self.assertEqual(elem.getAttribute("attr1"), "attr1")
-        self.assertEqual(elem.getAttribute("attr2"), "attr2")
-        self.assertEqual(elem.getAttribute("attr6"), "")
+        self.assertEqual(package_element.getAttribute("name"), "Model")
+        self.assertEqual(package_element.getAttribute("attr1"), "attr1")
+        self.assertEqual(package_element.getAttribute("attr2"), "attr2")
+        self.assertEqual(package_element.getAttribute("attr6"), "")
 
     def test_package_element(self):
-        elem_id, elem = self.xmi_adapator.package_element(
+        elem = self.xmi_adapator.package_element(
             "uml:Model", 
             name="Model", 
             visibility="public")
@@ -58,7 +56,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Model")
         self.assertEqual(elem.getAttribute("visibility"), "public")
 
-        elem_id, elem = self.xmi_adapator.package_element(
+        elem = self.xmi_adapator.package_element(
             "uml:Class", 
             name="Kitchen", 
             visibility="public",
@@ -76,7 +74,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isActive"), "false")
 
     def test_model_element(self):
-        elem_id, elem = self.xmi_adapator.model_element(
+        elem = self.xmi_adapator.model_element(
             name="Model",
             visibility="public")
 
@@ -85,7 +83,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("visibility"), "public")
 
     def test_class_element(self):
-        elem_id, elem = self.xmi_adapator.class_element(
+        elem = self.xmi_adapator.class_element(
             name="Kitchen",
             visibility="public",
             isAbstract="false",
@@ -102,7 +100,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isActive"), "false")
 
     def test_owned_operation(self):
-        elem_id, elem = self.xmi_adapator.owned_operation(
+        elem = self.xmi_adapator.owned_operation(
             name="arrange_kitchen",
             visibility="public",
             isStatic="false",
@@ -122,7 +120,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isAbstract"), "false")
 
     def test_owned_attribute(self):
-        elem_id, elem = self.xmi_adapator.owned_attribute(
+        elem = self.xmi_adapator.owned_attribute(
             name="age",
             visibility="public",
             isStatic="false",
@@ -132,8 +130,7 @@ class TestXMIAdapator(unittest.TestCase):
             isUnique="false",
             aggregation="none",
             isDerived="false",
-            isID="false"
-        )
+            isID="false")
 
         self.assertEqual(elem.getAttribute("name"), "age")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Property")
@@ -149,7 +146,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isID"), "false")
 
     def test_generalization(self):
-        elem_id, elem = self.xmi_adapator.generalization(
+        elem = self.xmi_adapator.generalization(
             "AAAAAAFfCb589gvRn9k=", 
             "AAAAAAFfCb3k3guZWwY=",
             visibility="public"
@@ -160,7 +157,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("general"), "AAAAAAFfCb3k3guZWwY=")
 
     def test_owned_member(self):
-        elem_id, elem = self.xmi_adapator.owned_member(
+        elem = self.xmi_adapator.owned_member(
             name="wings",
             visibility="public",
             isDerived="false"
@@ -172,7 +169,7 @@ class TestXMIAdapator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isDerived"), "false")
 
     def test_owned_end(self):
-        elem_id, elem = self.xmi_adapator.owned_end(
+        elem = self.xmi_adapator.owned_end(
             type="AAAAAAFfCcCaYQxVfw8=",
             visibility="public",
             isStatic="false",
@@ -185,8 +182,7 @@ class TestXMIAdapator(unittest.TestCase):
             isID="false"
         )
 
-        # TODO fix this. setting type overrides xmi:type
-        # self.assertEqual(elem.getAttribute("xmi:type"), "uml:Association")
+        self.assertEqual(elem.getAttribute("xmi-type"), "uml:Association")
         self.assertEqual(elem.getAttribute("type"), "AAAAAAFfCcCaYQxVfw8=")
 
         self.assertEqual(elem.getAttribute("visibility"), "public")

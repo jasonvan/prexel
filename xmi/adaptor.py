@@ -48,9 +48,10 @@ class XMIAdaptor:
         package_element = self.document.createElement("packagedElement")
         package_element.setAttribute("xmi:type", xmi_type)
 
-        return self._add_attributes(package_element,
-                                    valid_attributes, 
-                                    **kwargs)
+        self._add_id(package_element)
+        self._add_attributes(package_element, valid_attributes, **kwargs)
+
+        return package_element
 
     def owned_attribute(self, **kwargs):
         valid_attributes = (
@@ -69,9 +70,10 @@ class XMIAdaptor:
         owned_attribute = self.document.createElement("ownedAttribute")
         owned_attribute.setAttribute("xmi:type", "uml:Property")
 
-        return self._add_attributes(owned_attribute,
-                                    valid_attributes,
-                                    **kwargs)
+        self._add_attributes(owned_attribute, valid_attributes, **kwargs)
+        self._add_id(owned_attribute)
+
+        return owned_attribute
 
     def owned_operation(self, **kwargs):
         valid_attributes = (
@@ -89,9 +91,10 @@ class XMIAdaptor:
         owned_operation = self.document.createElement("ownedOperation")
         owned_operation.setAttribute("xmi:type", "uml:Operation")
 
-        return self._add_attributes(owned_operation, 
-                                    valid_attributes,
-                                    **kwargs)
+        self._add_id(owned_operation)
+        self._add_attributes(owned_operation, valid_attributes, **kwargs)
+
+        return owned_operation
 
     def owned_member(self, **kwargs):
         valid_attributes = (
@@ -103,9 +106,10 @@ class XMIAdaptor:
         owned_member = self.document.createElement("ownedMember")
         owned_member.setAttribute("xmi:type", "uml:Association")
 
-        return self._add_attributes(owned_member,
-                                    valid_attributes,
-                                    **kwargs)
+        self._add_attributes(owned_member, valid_attributes, **kwargs)
+        self._add_id(owned_member)
+
+        return owned_member
 
     def owned_end(self, **kwargs):
         valid_attributes = (
@@ -122,11 +126,18 @@ class XMIAdaptor:
         )
 
         owned_end = self.document.createElement("ownedEnd")
-        owned_end.setAttribute("xmi:type", "uml:Association")
+        # The attribute "xmi-type" below isn't actually correct, but
+        # the DOM library used (MiniDOM) overwrites any attribute name that
+        # already exists even if it proceeded by an XML namespace.
+        # Example: xmi:type is replace with the type attribute value
+        # Using "xmi-type" allows for this to be replace with "xmi:type" after
+        # the XML is converted to a string
+        owned_end.setAttribute("xmi-type", "uml:Association")
 
-        return self._add_attributes(owned_end,
-                                    valid_attributes,
-                                    **kwargs)
+        self._add_attributes(owned_end, valid_attributes, **kwargs)
+        self._add_id(owned_end)
+
+        return owned_end
 
     def member_end(self, idref):
         member_end = self.document.createElement("memberEnd")
@@ -145,20 +156,19 @@ class XMIAdaptor:
         generalization.setAttribute("general", general)
         generalization.setAttribute("xmi:type", "uml:Generalization")
 
-        return self._add_attributes(generalization,
-                                    valid_attributes,
-                                    **kwargs)
+        self._add_attributes(generalization, valid_attributes, **kwargs)
+
+        return generalization
+
+    def _add_id(self, elem):
+        generated_id = self._generate_id()
+        elem.setAttribute("xmi:id", generated_id)
+        return generated_id
 
     def _add_attributes(self, elem, valid_attributes, **kwargs):
-        id = self._generate_id()
-
-        elem.setAttribute("xmi:id", id)
-
         for key, value in kwargs.items():
             if key in valid_attributes:
                 elem.setAttribute(key, value)
-
-        return (id, elem)
 
     def _generate_id(self):
         """
