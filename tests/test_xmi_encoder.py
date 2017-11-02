@@ -1,9 +1,60 @@
 import unittest
-from xml.dom.minidom import Document
-from prexel.xmi.adaptor import XMIAdaptor
+
+from prexel.models.diagram import (Diagram,
+                                   ClassDiagramPart,
+                                   InheritanceDiagramPart,
+                                   AggregationDiagramPart)
+from prexel.encoders.xmi_encoder import XMIEncoder, XMIDocumentGenerator
 
 
-class TestXMIAdaptor(unittest.TestCase):
+class TestXMIEncoder(unittest.TestCase):
+    def test_convert_simple(self):
+        """
+        No assertions, just for debugging
+        """
+        # Create a complex diagram object
+        simple_class = ClassDiagramPart(
+            "SimpleClass",
+            methods=[
+                "method1()",
+                "method2()"
+            ],
+            fields=[
+                "field1",
+                "field2"
+            ]
+        )
+
+        diagram = Diagram(main=simple_class)
+        xmi_encoder = XMIEncoder()
+        xml = xmi_encoder.generate(diagram)
+        print(xml)
+
+    def test_generate_with_inheritance(self):
+        """
+        No assertions, just for debugging
+        """
+        person = ClassDiagramPart("Person", fields=[
+            "name",
+            "age"
+        ])
+
+        inheritance = InheritanceDiagramPart()
+
+        employee = ClassDiagramPart("Employee", fields=[
+            "job_title"
+        ])
+
+        diagram = Diagram(employee,
+                          parent=person,
+                          inheritance=inheritance)
+
+        encoder = XMIEncoder()
+        actual = encoder.generate(diagram)
+        print(actual)
+
+
+class TestXMIDocumentGenerator(unittest.TestCase):
     """
     Main methods of XMIAdaptor class
      _________________ 
@@ -18,10 +69,10 @@ class TestXMIAdaptor(unittest.TestCase):
 
     """
     def setUp(self):
-        self.xmi_adapator = XMIAdaptor()
+        self.xmi_adapator = XMIDocumentGenerator()
 
     def test_add_attributes(self):
-        package_element = Document().createElement("packagedElement")
+        package_element = self.xmi_adapator.document.createElement("packagedElement")
         valid_attributes = (
             "name",
             "attr1",
