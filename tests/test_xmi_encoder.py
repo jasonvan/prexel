@@ -14,21 +14,38 @@ class TestXMIEncoder(unittest.TestCase):
         """
         # Create a complex diagram object
         simple_class = ClassDiagramPart(
-            "SimpleClass",
+            "Kitchen",
             methods=[
-                "method1()",
-                "method2()"
+                "arrange_kitchen()",
+                "place_floor_cabinet()",
+                "place_wall_cabinet()"
             ],
             fields=[
-                "field1",
-                "field2"
+                "field1"
             ]
         )
 
+        expected = """<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
+	<uml:Model xmi:id="" xmi:type="uml:Model" name="RootModel">
+		<packagedElement xmi:id="" name="Kitchen" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
+			<ownedOperation xmi:id="" name="arrange_kitchen" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+			<ownedOperation xmi:id="" name="place_floor_cabinet" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+			<ownedOperation xmi:id="" name="place_wall_cabinet" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
+			<ownedAttribute name="field1" xmi:id="" xmi:type="uml:Property"/>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>
+"""
+
         diagram = Diagram(main=simple_class)
+        self.maxDiff = 10000
         xmi_encoder = XMIEncoder()
-        xml = xmi_encoder.generate(diagram)
-        print(xml)
+        actual = xmi_encoder.generate(diagram, display_id=False)
+        print(expected)
+        print(actual)
+        self.assertEqual(expected, actual)
 
     def test_generate_with_inheritance(self):
         """
@@ -48,6 +65,23 @@ class TestXMIEncoder(unittest.TestCase):
         diagram = Diagram(employee,
                           parent=person,
                           inheritance=inheritance)
+
+        encoder = XMIEncoder()
+        actual = encoder.generate(diagram)
+        print(actual)
+
+    def test_generate_with_aggregation(self):
+        task_list_diagram = ClassDiagramPart("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ], fields=["the_tasks"])
+
+        task_list_aggregation = AggregationDiagramPart("the_tasks")
+        task_diagram = ClassDiagramPart("Task")
+
+        diagram = Diagram(task_list_diagram,
+                          aggregation=task_list_aggregation,
+                          aggregated=task_diagram)
 
         encoder = XMIEncoder()
         actual = encoder.generate(diagram)

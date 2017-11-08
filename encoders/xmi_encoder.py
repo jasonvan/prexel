@@ -1,5 +1,6 @@
 import random
 import string
+from collections import OrderedDict
 from prexel.regex import REGEX
 from xml.dom.minidom import Document
 from prexel.encoders.encoder import Encoder
@@ -18,13 +19,15 @@ class XMIEncoder(Encoder):
     |__________|
 
     """
-    def generate(self, diagram):
-        generator = XMIDocumentGenerator()
+    def generate(self, diagram, display_id=True):
+        generator = XMIDocumentGenerator(display_id)
         document = generator.document
 
         # Diagram values
         main = diagram.main
         parent = diagram.parent
+        aggregated = diagram.aggregated
+        aggregation = diagram.aggregation
 
         # Create the base elements
         xmi_element = generator.xmi_element()
@@ -46,11 +49,12 @@ class XMIEncoder(Encoder):
                 visibility="public"
             )
 
-            parent_id = parent_class.getAttribute("xmi:id")
+            parent_id = self._get_id(parent_class)
 
             if parent.fields:
                 for field in parent.fields:
-                    parent_class.appendChild(generator.owned_attribute(name=field))
+                    parent_class.appendChild(generator.owned_attribute(
+                        name=field))
 
             uml_element.appendChild(parent_class)
 
@@ -58,10 +62,14 @@ class XMIEncoder(Encoder):
             # Create the main class element
             main_class = generator.class_element(
                 name=main.name,
-                visibility="public"
+                visibility="public",
+                isAbstract="false",
+                isFinalSpecialization="false",
+                isLeaf="false",
+                isActive="false"
             )
 
-            main_id = main_class.getAttribute("xmi:id")
+            main_id = self._get_id(main_class)
 
             # Append the methods
             if main.methods:
@@ -71,12 +79,14 @@ class XMIEncoder(Encoder):
                     if m.group(1):
                         method = m.group(1)
 
-                    main_class.appendChild(generator.owned_operation(name=method))
+                    main_class.appendChild(generator.owned_operation(
+                        name=method))
 
             # Append the fields
             if main.fields:
                 for field in main.fields:
-                    main_class.appendChild(generator.owned_attribute(name=field))
+                    main_class.appendChild(generator.owned_attribute(
+                        name=field))
 
             if parent and parent_id:
                 main_class.appendChild(generator.generalization(main_id,
@@ -85,7 +95,67 @@ class XMIEncoder(Encoder):
             # Add the main_class the UML element
             uml_element.appendChild(main_class)
 
+        if aggregated and aggregation:
+            aggregated_class = generator.class_element(
+                name=aggregated.name,
+                visibility="public",
+                isAbstract="false",
+                isFinalSpecialization="false",
+                isLeaf="false",
+                isActive="false"
+            )
+
+            aggregated_class_id = self._get_id(aggregated_class)
+
+            owned_member = generator.owned_member(
+                name=aggregation.name,
+                visibility="public",
+                isDerived="false"
+            )
+
+            owned_end_none = generator.owned_end(
+                visibility="public",
+                isStatic="false",
+                isLeaf="false",
+                isReadOnly="false",
+                isOrdered="false",
+                isUnique="false",
+                aggregation="none",
+                isDerived="false",
+                isID="false",
+                type=main_id
+            )
+
+            owned_end_shared = generator.owned_end(
+                visibility="public",
+                isStatic="false",
+                isLeaf="false",
+                isReadOnly="false",
+                isOrdered="false",
+                isUnique="false",
+                aggregation="shared",
+                isDerived="false",
+                isID="false",
+                type=aggregated_class_id
+            )
+
+            member_end_first = generator.member_end(
+                self._get_id(owned_end_none))
+            member_end_second = generator.member_end(
+                self._get_id(owned_end_shared))
+
+            owned_member.appendChild(owned_end_none)
+            owned_member.appendChild(owned_end_shared)
+            owned_member.appendChild(member_end_first)
+            owned_member.appendChild(member_end_second)
+
+            aggregated_class.appendChild(owned_member)
+            uml_element.appendChild(aggregated_class)
+
         return document.toprettyxml(encoding="UTF-8").decode()
+
+    def _get_id(self, element):
+        return element.getAttribute("xmi:id")
 
 
 class XMIDocumentGenerator:
@@ -110,7 +180,8 @@ class XMIDocumentGenerator:
 
     """
 
-    def __init__(self):
+    def __init__(self, display_id):
+        self.display_id = display_id
         self.document = Document()
 
     def xmi_element(self):
@@ -279,5 +350,8 @@ class XMIDocumentGenerator:
 
     def generate_id(self):
         char_set = string.ascii_letters + string.digits
-        generate_id = "AAAAAAF" + ''.join([random.choice(char_set) for n in range(10)])
+        if self.display_id:
+            generate_id = "AAAAAAF" + ''.join([random.choice(char_set) for n in range(10)])
+        else:
+            generate_id = ""
         return generate_id
