@@ -8,11 +8,10 @@ from prexel.encoders.xmi_encoder import XMIEncoder, XMIDocumentGenerator
 
 
 class TestXMIEncoder(unittest.TestCase):
+    def setUp(self):
+        self.maxDiff = 10000
+
     def test_convert_simple(self):
-        """
-        No assertions, just for debugging
-        """
-        # Create a complex diagram object
         simple_class = ClassDiagramPart(
             "Kitchen",
             methods=[
@@ -28,29 +27,23 @@ class TestXMIEncoder(unittest.TestCase):
         expected = """<?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
 	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
-	<uml:Model xmi:id="" xmi:type="uml:Model" name="RootModel">
-		<packagedElement xmi:id="" name="Kitchen" visibility="public" isAbstract="false" isFinalSpecialization="false" isLeaf="false" xmi:type="uml:Class" isActive="false">
-			<ownedOperation xmi:id="" name="arrange_kitchen" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
-			<ownedOperation xmi:id="" name="place_floor_cabinet" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
-			<ownedOperation xmi:id="" name="place_wall_cabinet" visibility="public" isStatic="false" isLeaf="false" concurrency="sequential" isQuery="false" isAbstract="false" xmi:type="uml:Operation"/>
-			<ownedAttribute name="field1" xmi:id="" xmi:type="uml:Property"/>
+	<uml:Model name="RootModel" xmi:id="" xmi:type="uml:Model">
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Kitchen" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="arrange_kitchen" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
+			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="place_floor_cabinet" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
+			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="place_wall_cabinet" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="field1" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 		</packagedElement>
 	</uml:Model>
 </xmi:XMI>
 """
 
         diagram = Diagram(main=simple_class)
-        self.maxDiff = 10000
         xmi_encoder = XMIEncoder()
         actual = xmi_encoder.generate(diagram, display_id=False)
-        print(expected)
-        print(actual)
         self.assertEqual(expected, actual)
 
     def test_generate_with_inheritance(self):
-        """
-        No assertions, just for debugging
-        """
         person = ClassDiagramPart("Person", fields=[
             "name",
             "age"
@@ -62,13 +55,30 @@ class TestXMIEncoder(unittest.TestCase):
             "job_title"
         ])
 
+        expected = """<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
+	<uml:Model name="RootModel" xmi:id="" xmi:type="uml:Model">
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Person" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="name" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="age" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+		</packagedElement>
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Employee" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="job_title" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+			<generalization general="" specific="" xmi:type="uml:Generalization"/>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>
+"""
+
         diagram = Diagram(employee,
                           parent=person,
                           inheritance=inheritance)
 
         encoder = XMIEncoder()
-        actual = encoder.generate(diagram)
-        print(actual)
+        actual = encoder.generate(diagram, display_id=False)
+        self.assertEqual(expected, actual)
+
 
     def test_generate_with_aggregation(self):
         task_list_diagram = ClassDiagramPart("TaskList", methods=[
@@ -79,13 +89,34 @@ class TestXMIEncoder(unittest.TestCase):
         task_list_aggregation = AggregationDiagramPart("the_tasks")
         task_diagram = ClassDiagramPart("Task")
 
+        expected = """<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
+	<uml:Model name="RootModel" xmi:id="" xmi:type="uml:Model">
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="TaskList" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="get_the_tasks" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
+			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="prioritize" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+		</packagedElement>
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Task" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedMember isDerived="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Association">
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id=""/>
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id=""/>
+				<memberEnd xmi:idref=""/>
+				<memberEnd xmi:idref=""/>
+			</ownedMember>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>
+"""
+
         diagram = Diagram(task_list_diagram,
                           aggregation=task_list_aggregation,
                           aggregated=task_diagram)
 
         encoder = XMIEncoder()
-        actual = encoder.generate(diagram)
-        print(actual)
+        actual = encoder.generate(diagram, display_id=False)
+        self.assertEqual(expected, actual)
 
 
 class TestXMIDocumentGenerator(unittest.TestCase):
@@ -103,7 +134,7 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     """
     def setUp(self):
-        self.xmi_adapator = XMIDocumentGenerator()
+        self.xmi_adapator = XMIDocumentGenerator(display_id=True)
 
     def test_add_attributes(self):
         package_element = self.xmi_adapator.document.createElement("packagedElement")
@@ -119,11 +150,11 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         self.xmi_adapator._add_attributes(
             package_element, 
             valid_attributes,
-            name="Model",
-            attr1="attr1",
-            attr2="attr2",
-            attr3="attr3",
-            attr6="attr6"
+            ("name", "Model"),
+            ("attr1", "attr1"),
+            ("attr2", "attr2"),
+            ("attr3", "attr3"),
+            ("attr6", "attr6")
         )
 
         self.assertEqual(package_element.getAttribute("name"), "Model")
@@ -134,8 +165,9 @@ class TestXMIDocumentGenerator(unittest.TestCase):
     def test_package_element(self):
         elem = self.xmi_adapator.package_element(
             "uml:Model", 
-            name="Model", 
-            visibility="public")
+            ("name", "Model"),
+            ("visibility", "public")
+        )
 
         self.assertEqual(elem.getAttribute("name"), "Model")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Model")
@@ -143,12 +175,13 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
         elem = self.xmi_adapator.package_element(
             "uml:Class", 
-            name="Kitchen", 
-            visibility="public",
-            isAbstract="false",
-            isFinalSpecialization="false",
-            isLeaf="false",
-            isActive="false")
+            ("name", "Kitchen"),
+            ("visibility", "public"),
+            ("isAbstract", "false"),
+            ("isFinalSpecialization", "false"),
+            ("isLeaf", "false"),
+            ("isActive", "false")
+        )
 
         self.assertEqual(elem.getAttribute("name"), "Kitchen")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Class")
@@ -160,8 +193,9 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     def test_model_element(self):
         elem = self.xmi_adapator.model_element(
-            name="Model",
-            visibility="public")
+            ("name", "Model"),
+            ("visibility", "public"),
+        )
 
         self.assertEqual(elem.getAttribute("name"), "Model")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Model")
@@ -169,12 +203,13 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     def test_class_element(self):
         elem = self.xmi_adapator.class_element(
-            name="Kitchen",
-            visibility="public",
-            isAbstract="false",
-            isFinalSpecialization="false",
-            isLeaf="false",
-            isActive="false")
+            ("name", "Kitchen"),
+            ("visibility", "public"),
+            ("isAbstract", "false"),
+            ("isFinalSpecialization", "false"),
+            ("isLeaf", "false"),
+            ("isActive", "false")
+        )
 
         self.assertEqual(elem.getAttribute("name"), "Kitchen")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Class")
@@ -186,13 +221,14 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     def test_owned_operation(self):
         elem = self.xmi_adapator.owned_operation(
-            name="arrange_kitchen",
-            visibility="public",
-            isStatic="false",
-            isLeaf="false",
-            concurrency="sequential",
-            isQuery="false",
-            isAbstract="false")
+            ("name", "arrange_kitchen"),
+            ("visibility", "public"),
+            ("isStatic", "false"),
+            ("isLeaf", "false"),
+            ("concurrency", "sequential"),
+            ("isQuery", "false"),
+            ("isAbstract", "false")
+        )
 
         self.assertEqual(elem.getAttribute("name"), "arrange_kitchen")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Operation")
@@ -206,16 +242,17 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     def test_owned_attribute(self):
         elem = self.xmi_adapator.owned_attribute(
-            name="age",
-            visibility="public",
-            isStatic="false",
-            isLeaf="false",
-            isReadOnly="false",
-            isOrdered="false",
-            isUnique="false",
-            aggregation="none",
-            isDerived="false",
-            isID="false")
+            ("name", "age"),
+            ("visibility", "public"),
+            ("isStatic", "false"),
+            ("isLeaf", "false"),
+            ("isReadOnly", "false"),
+            ("isOrdered", "false"),
+            ("isUnique", "false"),
+            ("aggregation", "none"),
+            ("isDerived", "false"),
+            ("isID", "false")
+        )
 
         self.assertEqual(elem.getAttribute("name"), "age")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Property")
@@ -234,7 +271,7 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         elem = self.xmi_adapator.generalization(
             "AAAAAAFfCb589gvRn9k=", 
             "AAAAAAFfCb3k3guZWwY=",
-            visibility="public"
+            ("visibility", "public")
         )
 
         self.assertEqual(elem.getAttribute("visibility"), "public")
@@ -243,9 +280,9 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     def test_owned_member(self):
         elem = self.xmi_adapator.owned_member(
-            name="wings",
-            visibility="public",
-            isDerived="false"
+            ("name", "wings"),
+            ("visibility", "public"),
+            ("isDerived", "false")
         )
 
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Association")
@@ -255,16 +292,16 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     def test_owned_end(self):
         elem = self.xmi_adapator.owned_end(
-            type="AAAAAAFfCcCaYQxVfw8=",
-            visibility="public",
-            isStatic="false",
-            isLeaf="false",
-            isReadOnly="false",
-            isOrdered="false",
-            isUnique="false",
-            aggregation="none",
-            isDerived="false",
-            isID="false"
+            ("type", "AAAAAAFfCcCaYQxVfw8="),
+            ("visibility", "public"),
+            ("isStatic", "false"),
+            ("isLeaf", "false"),
+            ("isReadOnly", "false"),
+            ("isOrdered", "false"),
+            ("isUnique", "false"),
+            ("aggregation", "none"),
+            ("isDerived", "false"),
+            ("isID", "false")
         )
 
         self.assertEqual(elem.getAttribute("xmi-type"), "uml:Association")
