@@ -5,6 +5,7 @@ from prexel.parser.lexer import Lexer
 from prexel.parser.interpreter import Interpreter, InterpreterException
 from prexel.encoders.pretty_print_encoder import PrettyPrintEncoder
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
+from prexel.encoders.xmi_encoder import XMIEncoder
 from prexel.utils import Persistence, PrettyPrintStack
 
 """
@@ -21,6 +22,7 @@ Used to store the commands so they can be undone
 
 """
 pretty_print_stack = PrettyPrintStack()
+
 
 class GenerateUmlCommand(sublime_plugin.TextCommand):
     """
@@ -66,6 +68,7 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
     def on_done(self, index):
         pretty_print = PrettyPrintEncoder().generate(self.diagram)
         source_code = SourceCodeEncoder().generate(self.diagram)
+        xmi = XMIEncoder().generate(self.diagram)
 
         if index == 0:
             self.output_pretty_print(pretty_print)
@@ -74,6 +77,9 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         elif index == 2:
             self.output_pretty_print(pretty_print)
             self.create_files(source_code)
+
+        xmi_files = ("sample-1", xmi)
+        self.create_files([xmi_files], ".xmi")
 
     def output_pretty_print(self, pretty_print):
         # Save the easy_entry string for recall later
@@ -85,10 +91,15 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         # Replace easy-entry with pretty-print
         self.view.replace(self.edit, self.line, pretty_print)
 
-    def create_files(self, source_code):
+    def create_files(self, source_code, extension=".py"):
         # Call the CreateNewFileCommand object, sending the source code
-        self.view.window().run_command("create_new_file",
-                                      {"source_code": source_code})
+        self.view.window().run_command(
+            "create_new_file",
+            {
+                "source_code": source_code,
+                "extension": extension
+            }
+        )
 
 
 class UndoUmlCommand(sublime_plugin.TextCommand):
@@ -130,18 +141,24 @@ class ReverseUmlCommand(sublime_plugin.TextCommand):
 
 
 class CreateNewFileCommand(sublime_plugin.WindowCommand):
-    def run(self, source_code):
+    def run(self, source_code, extension):
         for file in source_code:
             file_name, file_contents = file
             view = self.window.new_file()
-            view.run_command("add_text_to_new_file",
-                {"file_name": file_name, "file_contents": file_contents})
+            view.run_command(
+                "add_text_to_new_file",
+                {
+                    "file_name": file_name, 
+                    "file_contents": file_contents,
+                    "extension": extension
+                }
+            )
 
 
 class AddTextToNewFileCommand(sublime_plugin.TextCommand):
-    def run(self, edit, file_name, file_contents):
+    def run(self, edit, file_name, file_contents, extension):
         self.view.insert(edit, 0, file_contents)
-        self.view.set_name(file_name + ".py")
+        self.view.set_name(file_name + extension)
         self.view.run_command('save')
 
 

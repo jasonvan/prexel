@@ -71,5 +71,6 @@ class TestRegex(unittest.TestCase):
         self.assertTrue(inheritance_regex.match(">>"))
         self.assertFalse(inheritance_regex.match("> >"))
 
+
 if __name__ == '__main__':
     unittest.main()

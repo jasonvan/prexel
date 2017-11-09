@@ -179,5 +179,6 @@ class SourceCodeEncoder(Encoder):
 
         return indentation
 
+
 class SourceCodeEncoderException(Exception):
     pass

@@ -5,8 +5,9 @@ REGEX = {
     "method_signature": re.compile(r'^([^(){}]+)\((.*)\)$'),
     "aggregation": re.compile('^<>([\d*]?)-+(\w*)-*([\d*]?)>$'),
     "inheritance": re.compile('^>>$'),
+    "valid_multiplicity": re.compile('([0-9]+|\*)'),
     "ignored_characters": ("<<>", "<>>", "<>", "<<>>"),
-    "reserved_characters": (",", "|")
+    "reserved_characters": (",", "|"),
 }
 
 

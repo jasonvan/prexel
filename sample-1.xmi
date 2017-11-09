@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
+	<uml:Model name="RootModel" xmi:id="AAAAAAFc8VrE5QqHM" xmi:type="uml:Model">
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Airplace" visibility="public" xmi:id="AAAAAAFUUJn39TbeU" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="color" visibility="public" xmi:id="AAAAAAFJnWwmfbDUg" xmi:type="uml:Property"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="weight" visibility="public" xmi:id="AAAAAAF1d4cgpcE3r" xmi:type="uml:Property"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="wings" visibility="public" xmi:id="AAAAAAFtzmZ1DE88C" xmi:type="uml:Property"/>
+		</packagedElement>
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Wing" visibility="public" xmi:id="AAAAAAFp1ctXSxhsx" xmi:type="uml:Class">
+			<ownedMember isDerived="false" name="wings" visibility="public" xmi:id="AAAAAAFUi4FzcAkLC" xmi:type="uml:Association">
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="AAAAAAFUUJn39TbeU" visibility="public" xmi:type="uml:Association" xmi:id="AAAAAAF16WEvDOW63"/>
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="AAAAAAFp1ctXSxhsx" visibility="public" xmi:type="uml:Association" xmi:id="AAAAAAFCcKey19IIO"/>
+				<memberEnd xmi:idref="AAAAAAF16WEvDOW63"/>
+				<memberEnd xmi:idref="AAAAAAFCcKey19IIO"/>
+			</ownedMember>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>

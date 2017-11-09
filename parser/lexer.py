@@ -59,7 +59,8 @@ class Lexer:
                 self.step()
 
                 # Check and see if the PREXEL marker has already been found.
-                # Only the first PREXEL marker will be tokenized. The rest will be ignored.
+                # Only the first PREXEL marker will be tokenized.
+                # The rest will be ignored.
                 if not self.marker_found:
                     self.marker_found = True
                     return Token(Token.START_MARKER, "|")
