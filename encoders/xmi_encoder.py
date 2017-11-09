@@ -405,7 +405,7 @@ class XMIDocumentGenerator:
         # Example: "xmi:type" attribute is replaced with the "type" attribute
         # value. Using "xmi-type" allows for this to be replaced with
         # "xmi:type" after the XML is converted to a string.
-        owned_end.setAttribute("xmi-type", "uml:Association")
+        owned_end.setAttribute("xmi-type", "uml:Property")
 
         self._add_attributes(owned_end, valid_attributes, **kwargs)
         self._add_id(owned_end)

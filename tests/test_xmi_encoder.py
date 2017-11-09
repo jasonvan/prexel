@@ -353,7 +353,7 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
         # See owned_end method for an explanation of why "xmi-type" is used
         # instead of "xmi:type"
-        self.assertEqual(elem.getAttribute("xmi-type"), "uml:Association")
+        self.assertEqual(elem.getAttribute("xmi-type"), "uml:Property")
         self.assertEqual(elem.getAttribute("type"), "AAAAAAFfCcCaYQxVfw8=")
 
         self.assertEqual(elem.getAttribute("visibility"), "public")
