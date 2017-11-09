@@ -100,8 +100,8 @@ class TestXMIEncoder(unittest.TestCase):
 		</packagedElement>
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Task" visibility="public" xmi:id="" xmi:type="uml:Class">
 			<ownedMember isDerived="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Association">
-				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id=""/>
-				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id=""/>
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id=""/>
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id=""/>
 				<memberEnd xmi:idref=""/>
 				<memberEnd xmi:idref=""/>
 			</ownedMember>
@@ -141,11 +141,11 @@ class TestXMIEncoder(unittest.TestCase):
 		</packagedElement>
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Employee" visibility="public" xmi:id="" xmi:type="uml:Class">
 			<ownedMember isDerived="false" name="employees" visibility="public" xmi:id="" xmi:type="uml:Association">
-				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id="">
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id="">
 					<lowerValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
 					<upperValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
 				</ownedEnd>
-				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id="">
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id="">
 					<lowerValue value="*" xmi:id="" xmi:type="uml:LiteralUnlimitedNatural"/>
 					<upperValue value="*" xmi:id="" xmi:type="uml:LiteralUnlimitedNatural"/>
 				</ownedEnd>
@@ -351,6 +351,8 @@ class TestXMIDocumentGenerator(unittest.TestCase):
             isID="false"
         )
 
+        # See owned_end method for an explanation of why "xmi-type" is used
+        # instead of "xmi:type"
         self.assertEqual(elem.getAttribute("xmi-type"), "uml:Association")
         self.assertEqual(elem.getAttribute("type"), "AAAAAAFfCcCaYQxVfw8=")
 

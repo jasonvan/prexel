@@ -242,7 +242,12 @@ class XMIEncoder(Encoder):
             aggregated_class.appendChild(owned_member)
             uml_element.appendChild(aggregated_class)
 
-        return document.toprettyxml(encoding="UTF-8").decode()
+        xmi = document.toprettyxml(encoding="UTF-8").decode()
+        # Need to replace all instances of "xmi-type".
+        # See XMIDocumentGenearator#owned_end for more info
+        xmi = xmi.replace("xmi-type", "xmi:type")
+
+        return xmi
 
     def _get_id(self, element):
         return element.getAttribute("xmi:id")
@@ -396,10 +401,10 @@ class XMIDocumentGenerator:
         owned_end = self.document.createElement("ownedEnd")
         # The attribute "xmi-type" below isn't actually correct, but
         # the DOM library used (MiniDOM) overwrites any attribute name that
-        # already exists even if it proceeded by an XML namespace.
-        # Example: xmi:type is replace with the type attribute value
-        # Using "xmi-type" allows for this to be replace with "xmi:type" after
-        # the XML is converted to a string
+        # already exists even if it proceeded by a XML namespace.
+        # Example: "xmi:type" attribute is replaced with the "type" attribute
+        # value. Using "xmi-type" allows for this to be replaced with
+        # "xmi:type" after the XML is converted to a string.
         owned_end.setAttribute("xmi-type", "uml:Association")
 
         self._add_attributes(owned_end, valid_attributes, **kwargs)
