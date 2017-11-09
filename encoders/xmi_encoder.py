@@ -1,6 +1,5 @@
 import random
 import string
-from collections import OrderedDict
 from prexel.regex import REGEX
 from xml.dom.minidom import Document
 from prexel.encoders.encoder import Encoder
@@ -195,6 +194,41 @@ class XMIEncoder(Encoder):
                 type=aggregated_class_id
             )
 
+            # Check for multiplicity
+            left_multi = aggregation.left_multiplicity
+            right_multi = aggregation.right_multiplicity
+            if left_multi:
+                if REGEX["valid_multiplicity"].match(left_multi):
+                    if left_multi == "*":
+                        lower_value = generator.lower_value(
+                            "uml:LiteralUnlimitedNatural", left_multi)
+                        upper_value = generator.upper_value(
+                            "uml:LiteralUnlimitedNatural", left_multi)
+                    else:
+                        lower_value = generator.lower_value(
+                            "uml:LiteralInteger", left_multi)
+                        upper_value = generator.upper_value(
+                            "uml:LiteralInteger", left_multi)
+
+                    owned_end_none.appendChild(lower_value)
+                    owned_end_none.appendChild(upper_value)
+
+            if right_multi:
+                if REGEX["valid_multiplicity"].match(right_multi):
+                    if right_multi == "*":
+                        lower_value = generator.lower_value(
+                            "uml:LiteralUnlimitedNatural", right_multi)
+                        upper_value = generator.upper_value(
+                            "uml:LiteralUnlimitedNatural", right_multi)
+                    else:
+                        lower_value = generator.lower_value(
+                            "uml:LiteralInteger", right_multi)
+                        upper_value = generator.upper_value(
+                            "uml:LiteralInteger", right_multi)
+
+                    owned_end_shared.appendChild(lower_value)
+                    owned_end_shared.appendChild(upper_value)
+
             member_end_first = generator.member_end(
                 self._get_id(owned_end_none))
             member_end_second = generator.member_end(
@@ -378,6 +412,22 @@ class XMIDocumentGenerator:
         member_end.setAttribute("xmi:idref", idref)
         return member_end
 
+    def upper_value(self, type, value):
+        upper_value = self.document.createElement("upperValue")
+        upper_value.setAttribute("xmi:type", type)
+        upper_value.setAttribute("value", value)
+        self._add_id(upper_value)
+
+        return upper_value
+
+    def lower_value(self, type, value):
+        lower_value = self.document.createElement("lowerValue")
+        lower_value.setAttribute("xmi:type", type)
+        lower_value.setAttribute("value", value)
+        self._add_id(lower_value)
+
+        return lower_value
+
     def generalization(self, specific, general, **kwargs):
         valid_attributes = (
             "visibility",
@@ -403,10 +453,6 @@ class XMIDocumentGenerator:
         for key, value in kwargs.items():
             if key in valid_attributes:
                 elem.setAttribute(key, value)
-        # for attribute in args:
-        #     if len(attribute) == 2:
-        #         if attribute[0] in valid_attributes:
-        #             elem.setAttribute(attribute[0], attribute[1])
 
     def generate_id(self):
         char_set = string.ascii_letters + string.digits

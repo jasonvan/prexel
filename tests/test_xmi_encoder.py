@@ -118,6 +118,53 @@ class TestXMIEncoder(unittest.TestCase):
         actual = encoder.generate(diagram, display_id=False)
         self.assertEqual(expected, actual)
 
+    def test_generate_with_aggregation_with_multiplicity(self):
+        employer_diagram = ClassDiagramPart("Employer", fields=[
+            "name",
+            "age",
+            "employees"
+        ])
+
+        employees_aggregation = AggregationDiagramPart("employees",
+                                                       left_multiplicity="1",
+                                                       right_multiplicity="*")
+        employee_diagram = ClassDiagramPart("Employee", fields=["position"])
+
+        expected = """<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.0" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
+	<uml:Model name="RootModel" xmi:id="" xmi:type="uml:Model">
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Employer" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="name" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="age" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="employees" visibility="public" xmi:id="" xmi:type="uml:Property"/>
+		</packagedElement>
+		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Employee" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedMember isDerived="false" name="employees" visibility="public" xmi:id="" xmi:type="uml:Association">
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id="">
+					<lowerValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
+					<upperValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
+				</ownedEnd>
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi-type="uml:Association" xmi:id="">
+					<lowerValue value="*" xmi:id="" xmi:type="uml:LiteralUnlimitedNatural"/>
+					<upperValue value="*" xmi:id="" xmi:type="uml:LiteralUnlimitedNatural"/>
+				</ownedEnd>
+				<memberEnd xmi:idref=""/>
+				<memberEnd xmi:idref=""/>
+			</ownedMember>
+		</packagedElement>
+	</uml:Model>
+</xmi:XMI>
+"""
+
+        diagram = Diagram(employer_diagram,
+                          aggregation=employees_aggregation,
+                          aggregated=employee_diagram)
+
+        encoder = XMIEncoder()
+        actual = encoder.generate(diagram, display_id=False)
+        self.assertEqual(expected, actual)
+
 
 class TestXMIDocumentGenerator(unittest.TestCase):
     """
@@ -320,3 +367,15 @@ class TestXMIDocumentGenerator(unittest.TestCase):
     def test_member_end(self):
         elem = self.xmi_adapator.member_end("AAAAAAFfCcDluQy/nQ4=")
         self.assertEqual(elem.getAttribute("xmi:idref"), "AAAAAAFfCcDluQy/nQ4=")
+
+    def test_lower_value(self):
+        elem = self.xmi_adapator.lower_value("uml:LiteralInteger", "1")
+
+        self.assertEqual(elem.getAttribute("xmi:type"), "uml:LiteralInteger")
+        self.assertEqual(elem.getAttribute("value"), "1")
+
+    def test_upper_value(self):
+        elem = self.xmi_adapator.lower_value("uml:LiteralUnlimitedNatural", "*")
+
+        self.assertEqual(elem.getAttribute("xmi:type"), "uml:LiteralUnlimitedNatural")
+        self.assertEqual(elem.getAttribute("value"), "*")
