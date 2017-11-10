@@ -100,8 +100,8 @@ class TestXMIEncoder(unittest.TestCase):
 		</packagedElement>
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Task" visibility="public" xmi:id="" xmi:type="uml:Class">
 			<ownedMember isDerived="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Association">
-				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id=""/>
-				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id=""/>
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Property" xmi:id=""/>
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Property" xmi:id=""/>
 				<memberEnd xmi:idref=""/>
 				<memberEnd xmi:idref=""/>
 			</ownedMember>
@@ -141,11 +141,11 @@ class TestXMIEncoder(unittest.TestCase):
 		</packagedElement>
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Employee" visibility="public" xmi:id="" xmi:type="uml:Class">
 			<ownedMember isDerived="false" name="employees" visibility="public" xmi:id="" xmi:type="uml:Association">
-				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id="">
+				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Property" xmi:id="">
 					<lowerValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
 					<upperValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
 				</ownedEnd>
-				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Association" xmi:id="">
+				<ownedEnd aggregation="shared" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Property" xmi:id="">
 					<lowerValue value="*" xmi:id="" xmi:type="uml:LiteralUnlimitedNatural"/>
 					<upperValue value="*" xmi:id="" xmi:type="uml:LiteralUnlimitedNatural"/>
 				</ownedEnd>
@@ -209,57 +209,51 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         self.assertEqual(package_element.getAttribute("attr2"), "attr2")
         self.assertEqual(package_element.getAttribute("attr6"), "")
 
-    def test_package_element(self):
-        elem = self.xmi_adapator.package_element(
-            "uml:Model", 
-            name="Model",
-            visibility="public"
-        )
-
-        self.assertEqual(elem.getAttribute("name"), "Model")
-        self.assertEqual(elem.getAttribute("xmi:type"), "uml:Model")
-        self.assertEqual(elem.getAttribute("visibility"), "public")
-
-        elem = self.xmi_adapator.package_element(
-            "uml:Class", 
-            name="Kitchen",
-            visibility="public",
-            isAbstract="false",
-            isFinalSpecialization="false",
-            isLeaf="false",
-            isActive="false"
-        )
+    def test_package_element_with_defaults(self):
+        elem = self.xmi_adapator.package_element("uml:Class", "Kitchen")
 
         self.assertEqual(elem.getAttribute("name"), "Kitchen")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Class")
+
+        # Default attributes applied
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("isAbstract"), "false")
         self.assertEqual(elem.getAttribute("isFinalSpecialization"), "false")
         self.assertEqual(elem.getAttribute("isLeaf"), "false")
         self.assertEqual(elem.getAttribute("isActive"), "false")
 
-    def test_model_element(self):
-        elem = self.xmi_adapator.model_element(
-            name="Model",
-            visibility="public"
+    def test_package_element_with_user_specified(self):
+        elem = self.xmi_adapator.package_element(
+            "uml:Class",
+            "Kitchen",
+            visibility="private",
+            isLeaf="true"
         )
+
+        self.assertEqual(elem.getAttribute("name"), "Kitchen")
+        self.assertEqual(elem.getAttribute("xmi:type"), "uml:Class")
+
+        # User-specified attributes
+        self.assertEqual(elem.getAttribute("visibility"), "private")
+        self.assertEqual(elem.getAttribute("isLeaf"), "true")
+
+        # This attribute wasn't specified so it shouldn't be present
+        self.assertNotEqual(elem.getAttribute("isActive"), "true")
+
+    def test_model_element(self):
+        elem = self.xmi_adapator.model_element("Model")
 
         self.assertEqual(elem.getAttribute("name"), "Model")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Model")
         self.assertEqual(elem.getAttribute("visibility"), "public")
 
     def test_class_element(self):
-        elem = self.xmi_adapator.class_element(
-            name="Kitchen",
-            visibility="public",
-            isAbstract="false",
-            isFinalSpecialization="false",
-            isLeaf="false",
-            isActive="false",
-        )
+        elem = self.xmi_adapator.class_element("Kitchen")
 
         self.assertEqual(elem.getAttribute("name"), "Kitchen")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Class")
+
+        # Default attributes applied
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("isAbstract"), "false")
         self.assertEqual(elem.getAttribute("isFinalSpecialization"), "false")
@@ -267,19 +261,12 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isActive"), "false")
 
     def test_owned_operation(self):
-        elem = self.xmi_adapator.owned_operation(
-            name="arrange_kitchen",
-            visibility="public",
-            isStatic="false",
-            isLeaf="false",
-            concurrency="sequential",
-            isQuery="false",
-            isAbstract="false"
-        )
+        elem = self.xmi_adapator.owned_operation("arrange_kitchen")
 
         self.assertEqual(elem.getAttribute("name"), "arrange_kitchen")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Operation")
 
+        # Default attributes applied
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("isStatic"), "false")
         self.assertEqual(elem.getAttribute("isLeaf"), "false")
@@ -288,22 +275,12 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isAbstract"), "false")
 
     def test_owned_attribute(self):
-        elem = self.xmi_adapator.owned_attribute(
-            name="age",
-            visibility="public",
-            isStatic="false",
-            isLeaf="false",
-            isReadOnly="false",
-            isOrdered="false",
-            isUnique="false",
-            aggregation="none",
-            isDerived="false",
-            isID="false"
-        )
+        elem = self.xmi_adapator.owned_attribute("age")
 
         self.assertEqual(elem.getAttribute("name"), "age")
         self.assertEqual(elem.getAttribute("xmi:type"), "uml:Property")
 
+        # Default attributes applied
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("isStatic"), "false")
         self.assertEqual(elem.getAttribute("isLeaf"), "false")
@@ -314,9 +291,44 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("isDerived"), "false")
         self.assertEqual(elem.getAttribute("isID"), "false")
 
+    def test_owned_member(self):
+        elem = self.xmi_adapator.owned_member("wings")
+
+        self.assertEqual(elem.getAttribute("xmi:type"), "uml:Association")
+        self.assertEqual(elem.getAttribute("name"), "wings")
+
+        # Default attributes applied
+        self.assertEqual(elem.getAttribute("visibility"), "public")
+        self.assertEqual(elem.getAttribute("isDerived"), "false")
+
+    def test_owned_end(self):
+        elem = self.xmi_adapator.owned_end("AAAAAAFfCcCaYQxVfw8=")
+
+        # See owned_end method for an explanation of why "xmi-type" is used
+        # instead of "xmi:type"
+        self.assertEqual(elem.getAttribute("xmi-type"), "uml:Property")
+        self.assertEqual(elem.getAttribute("type"), "AAAAAAFfCcCaYQxVfw8=")
+
+        # Default attributes applied
+        self.assertEqual(elem.getAttribute("visibility"), "public")
+        self.assertEqual(elem.getAttribute("isStatic"), "false")
+        self.assertEqual(elem.getAttribute("isLeaf"), "false")
+        self.assertEqual(elem.getAttribute("isReadOnly"), "false")
+        self.assertEqual(elem.getAttribute("isOrdered"), "false")
+        self.assertEqual(elem.getAttribute("isUnique"), "false")
+        self.assertEqual(elem.getAttribute("aggregation"), "none")
+        self.assertEqual(elem.getAttribute("isDerived"), "false")
+        self.assertEqual(elem.getAttribute("isID"), "false")
+
+    def test_owned_end_shared(self):
+        elem = self.xmi_adapator.owned_end("AAAAAAFfCcCaYQxVfw8=",
+                                           shared=True)
+
+        self.assertEqual(elem.getAttribute("aggregation"), "shared")
+
     def test_generalization(self):
         elem = self.xmi_adapator.generalization(
-            "AAAAAAFfCb589gvRn9k=", 
+            "AAAAAAFfCb589gvRn9k=",
             "AAAAAAFfCb3k3guZWwY=",
             visibility="public"
         )
@@ -324,47 +336,6 @@ class TestXMIDocumentGenerator(unittest.TestCase):
         self.assertEqual(elem.getAttribute("visibility"), "public")
         self.assertEqual(elem.getAttribute("specific"), "AAAAAAFfCb589gvRn9k=")
         self.assertEqual(elem.getAttribute("general"), "AAAAAAFfCb3k3guZWwY=")
-
-    def test_owned_member(self):
-        elem = self.xmi_adapator.owned_member(
-            name="wings",
-            visibility="public",
-            isDerived="false"
-        )
-
-        self.assertEqual(elem.getAttribute("xmi:type"), "uml:Association")
-        self.assertEqual(elem.getAttribute("name"), "wings")
-        self.assertEqual(elem.getAttribute("visibility"), "public")
-        self.assertEqual(elem.getAttribute("isDerived"), "false")
-
-    def test_owned_end(self):
-        elem = self.xmi_adapator.owned_end(
-            type="AAAAAAFfCcCaYQxVfw8=",
-            visibility="public",
-            isStatic="false",
-            isLeaf="false",
-            isReadOnly="false",
-            isOrdered="false",
-            isUnique="false",
-            aggregation="none",
-            isDerived="false",
-            isID="false"
-        )
-
-        # See owned_end method for an explanation of why "xmi-type" is used
-        # instead of "xmi:type"
-        self.assertEqual(elem.getAttribute("xmi-type"), "uml:Property")
-        self.assertEqual(elem.getAttribute("type"), "AAAAAAFfCcCaYQxVfw8=")
-
-        self.assertEqual(elem.getAttribute("visibility"), "public")
-        self.assertEqual(elem.getAttribute("isStatic"), "false")
-        self.assertEqual(elem.getAttribute("isLeaf"), "false")
-        self.assertEqual(elem.getAttribute("isReadOnly"), "false")
-        self.assertEqual(elem.getAttribute("isOrdered"), "false")
-        self.assertEqual(elem.getAttribute("isUnique"), "false")
-        self.assertEqual(elem.getAttribute("aggregation"), "none")
-        self.assertEqual(elem.getAttribute("isDerived"), "false")
-        self.assertEqual(elem.getAttribute("isID"), "false")
 
     def test_member_end(self):
         elem = self.xmi_adapator.member_end("AAAAAAFfCcDluQy/nQ4=")
