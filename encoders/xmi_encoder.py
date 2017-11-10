@@ -80,63 +80,39 @@ class XMIEncoder(Encoder):
                                          aggregated_class,
                                          generator)
 
-            # Add owned_member
+            # Create owned_member
             owned_member = generator.owned_member(aggregation.name)
 
-            # Add owned ends
+            # Create owned ends
             owned_end_none = generator.owned_end(main_id)
             owned_end_shared = generator.owned_end(aggregated_class_id,
                                                    shared=True)
+            # Add multiplicity to owned ends
+            self._add_multiplicity_values(aggregation.left_multiplicity,
+                                          owned_end_none,
+                                          generator)
 
-            # Check for multiplicity
-            left_multi = aggregation.left_multiplicity
-            right_multi = aggregation.right_multiplicity
-            if left_multi:
-                if REGEX["valid_multiplicity"].match(left_multi):
-                    if left_multi == "*":
-                        lower_value = generator.lower_value(
-                            "uml:LiteralUnlimitedNatural", left_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralUnlimitedNatural", left_multi)
-                    else:
-                        lower_value = generator.lower_value(
-                            "uml:LiteralInteger", left_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralInteger", left_multi)
+            self._add_multiplicity_values(aggregation.right_multiplicity,
+                                          owned_end_shared,
+                                          generator)
 
-                    owned_end_none.appendChild(lower_value)
-                    owned_end_none.appendChild(upper_value)
+            # Generate member_ends
+            owned_end_none_id = self._get_id(owned_end_none)
+            owned_end_shared_id = self._get_id(owned_end_shared)
+            member_end_first = generator.member_end(owned_end_none_id)
+            member_end_second = generator.member_end(owned_end_shared_id)
 
-            if right_multi:
-                if REGEX["valid_multiplicity"].match(right_multi):
-                    if right_multi == "*":
-                        lower_value = generator.lower_value(
-                            "uml:LiteralUnlimitedNatural", right_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralUnlimitedNatural", right_multi)
-                    else:
-                        lower_value = generator.lower_value(
-                            "uml:LiteralInteger", right_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralInteger", right_multi)
-
-                    owned_end_shared.appendChild(lower_value)
-                    owned_end_shared.appendChild(upper_value)
-
-            member_end_first = generator.member_end(
-                self._get_id(owned_end_none))
-            member_end_second = generator.member_end(
-                self._get_id(owned_end_shared))
-
+            # Append all the generated elements
             owned_member.appendChild(owned_end_none)
             owned_member.appendChild(owned_end_shared)
             owned_member.appendChild(member_end_first)
             owned_member.appendChild(member_end_second)
-
             aggregated_class.appendChild(owned_member)
             uml_element.appendChild(aggregated_class)
 
+        # Convert DOM model to string
         xmi = document.toprettyxml(encoding="UTF-8").decode()
+
         # Need to replace all instances of "xmi-type".
         # See XMIDocumentGenearator#owned_end for more info
         xmi = xmi.replace("xmi-type", "xmi:type")
@@ -158,6 +134,31 @@ class XMIEncoder(Encoder):
 
                 owned_operation = generator.owned_operation(method)
                 class_element.appendChild(owned_operation)
+
+    def _add_multiplicity_values(self, multiplicity, owned_end, generator):
+        if multiplicity:
+            if REGEX["valid_multiplicity"].match(multiplicity):
+                if multiplicity == "*":
+                    lower_value = generator.lower_value(
+                        "uml:LiteralUnlimitedNatural",
+                        multiplicity
+                    )
+                    upper_value = generator.upper_value(
+                        "uml:LiteralUnlimitedNatural",
+                        multiplicity
+                    )
+                else:
+                    lower_value = generator.lower_value(
+                        "uml:LiteralInteger",
+                        multiplicity
+                    )
+                    upper_value = generator.upper_value(
+                        "uml:LiteralInteger",
+                        multiplicity
+                    )
+
+                owned_end.appendChild(lower_value)
+                owned_end.appendChild(upper_value)
 
     def _get_id(self, element):
         return element.getAttribute("xmi:id")
