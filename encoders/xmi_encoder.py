@@ -38,111 +38,31 @@ class XMIEncoder(Encoder):
         xmi_element.appendChild(uml_element)
         document.appendChild(xmi_element)
 
-        main_id = None
-        parent_id = None
-
-        # Add in the Diagram specific elements
+        # Add parent class to XMI if present
         if parent:
-            parent_class = generator.class_element(
-                name=parent.name,
-                visibility="public",
-                isAbstract="false",
-                isFinalSpecialization="false",
-                isLeaf="false",
-                isActive="false"
-            )
-
+            parent_class = generator.class_element(parent.name)
             parent_id = self._get_id(parent_class)
 
-            if parent.fields:
-                for field in parent.fields:
-                    parent_class.appendChild(
-                        generator.owned_attribute(
-                            name=field,
-                            visibility="public",
-                            isStatic="false",
-                            isLeaf="false",
-                            isReadOnly="false",
-                            isOrdered="false",
-                            isUnique="false",
-                            aggregation="none",
-                            isDerived="false",
-                            isID="false"
-                        )
-                    )
-
-            if parent.methods:
-                for method in parent.methods:
-                    # Remove the method signature
-                    m = REGEX["method_signature"].match(method)
-                    if m.group(1):
-                        method = m.group(1)
-
-                    parent_class.appendChild(
-                        generator.owned_operation(
-                            name=method,
-                            visibility="public",
-                            isStatic="false",
-                            isLeaf="false",
-                            concurrency="sequential",
-                            isQuery="false",
-                            isAbstract="false"
-                        )
-                    )
+            # Add fields and methods
+            self._add_fields_and_methods(parent.fields,
+                                         parent.methods,
+                                         parent_class,
+                                         generator)
 
             uml_element.appendChild(parent_class)
 
+        # Add main class to XMI
         if main:
-            # Create the main class element
-            main_class = generator.class_element(
-                name=main.name,
-                visibility="public",
-                isAbstract="false",
-                isFinalSpecialization="false",
-                isLeaf="false",
-                isActive="false"
-            )
-
+            main_class = generator.class_element(main.name)
             main_id = self._get_id(main_class)
 
-            # Append the methods
-            if main.methods:
-                for method in main.methods:
-                    # Remove the method signature
-                    m = REGEX["method_signature"].match(method)
-                    if m.group(1):
-                        method = m.group(1)
+            # Add fields and methods
+            self._add_fields_and_methods(main.fields,
+                                         main.methods,
+                                         main_class,
+                                         generator)
 
-                    main_class.appendChild(
-                        generator.owned_operation(
-                            name=method,
-                            visibility="public",
-                            isStatic="false",
-                            isLeaf="false",
-                            concurrency="sequential",
-                            isQuery="false",
-                            isAbstract="false"
-                        )
-                    )
-
-            # Append the fields
-            if main.fields:
-                for field in main.fields:
-                    main_class.appendChild(
-                        generator.owned_attribute(
-                            name=field,
-                            visibility="public",
-                            isStatic="false",
-                            isLeaf="false",
-                            isReadOnly="false",
-                            isOrdered="false",
-                            isUnique="false",
-                            aggregation="none",
-                            isDerived="false",
-                            isID="false"
-                        )
-                    )
-
+            # Create inheritance connection if parent class exists
             if parent:
                 main_class.appendChild(generator.generalization(main_id,
                                                                 parent_id))
@@ -151,103 +71,94 @@ class XMIEncoder(Encoder):
             uml_element.appendChild(main_class)
 
         if aggregated and aggregation:
-            aggregated_class = generator.class_element(
-                name=aggregated.name,
-                visibility="public",
-                isAbstract="false",
-                isFinalSpecialization="false",
-                isLeaf="false",
-                isActive="false"
-            )
-
+            aggregated_class = generator.class_element(aggregated.name)
             aggregated_class_id = self._get_id(aggregated_class)
 
-            owned_member = generator.owned_member(
-                name=aggregation.name,
-                visibility="public",
-                isDerived="false"
-            )
+            # Add fields and methods for class
+            self._add_fields_and_methods(aggregated.fields,
+                                         aggregated.methods,
+                                         aggregated_class,
+                                         generator)
 
-            owned_end_none = generator.owned_end(
-                visibility="public",
-                isStatic="false",
-                isLeaf="false",
-                isReadOnly="false",
-                isOrdered="false",
-                isUnique="false",
-                aggregation="none",
-                isDerived="false",
-                isID="false",
-                type=main_id
-            )
+            # Create owned_member
+            owned_member = generator.owned_member(aggregation.name)
 
-            owned_end_shared = generator.owned_end(
-                visibility="public",
-                isStatic="false",
-                isLeaf="false",
-                isReadOnly="false",
-                isOrdered="false",
-                isUnique="false",
-                aggregation="shared",
-                isDerived="false",
-                isID="false",
-                type=aggregated_class_id
-            )
+            # Create owned ends
+            owned_end_none = generator.owned_end(main_id)
+            owned_end_shared = generator.owned_end(aggregated_class_id,
+                                                   shared=True)
+            # Add multiplicity to owned ends
+            self._add_multiplicity_values(aggregation.left_multiplicity,
+                                          owned_end_none,
+                                          generator)
 
-            # Check for multiplicity
-            left_multi = aggregation.left_multiplicity
-            right_multi = aggregation.right_multiplicity
-            if left_multi:
-                if REGEX["valid_multiplicity"].match(left_multi):
-                    if left_multi == "*":
-                        lower_value = generator.lower_value(
-                            "uml:LiteralUnlimitedNatural", left_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralUnlimitedNatural", left_multi)
-                    else:
-                        lower_value = generator.lower_value(
-                            "uml:LiteralInteger", left_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralInteger", left_multi)
+            self._add_multiplicity_values(aggregation.right_multiplicity,
+                                          owned_end_shared,
+                                          generator)
 
-                    owned_end_none.appendChild(lower_value)
-                    owned_end_none.appendChild(upper_value)
+            # Generate member_ends
+            owned_end_none_id = self._get_id(owned_end_none)
+            owned_end_shared_id = self._get_id(owned_end_shared)
+            member_end_first = generator.member_end(owned_end_none_id)
+            member_end_second = generator.member_end(owned_end_shared_id)
 
-            if right_multi:
-                if REGEX["valid_multiplicity"].match(right_multi):
-                    if right_multi == "*":
-                        lower_value = generator.lower_value(
-                            "uml:LiteralUnlimitedNatural", right_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralUnlimitedNatural", right_multi)
-                    else:
-                        lower_value = generator.lower_value(
-                            "uml:LiteralInteger", right_multi)
-                        upper_value = generator.upper_value(
-                            "uml:LiteralInteger", right_multi)
-
-                    owned_end_shared.appendChild(lower_value)
-                    owned_end_shared.appendChild(upper_value)
-
-            member_end_first = generator.member_end(
-                self._get_id(owned_end_none))
-            member_end_second = generator.member_end(
-                self._get_id(owned_end_shared))
-
+            # Append all the generated elements
             owned_member.appendChild(owned_end_none)
             owned_member.appendChild(owned_end_shared)
             owned_member.appendChild(member_end_first)
             owned_member.appendChild(member_end_second)
-
             aggregated_class.appendChild(owned_member)
             uml_element.appendChild(aggregated_class)
 
+        # Convert DOM model to string
         xmi = document.toprettyxml(encoding="UTF-8").decode()
+
         # Need to replace all instances of "xmi-type".
         # See XMIDocumentGenearator#owned_end for more info
         xmi = xmi.replace("xmi-type", "xmi:type")
 
         return xmi
+
+    def _add_fields_and_methods(self, fields, methods, class_element, generator):
+        if fields:
+            for field in fields:
+                owned_attribute = generator.owned_attribute(field)
+                class_element.appendChild(owned_attribute)
+
+        if methods:
+            for method in methods:
+                # Remove the method signature
+                m = REGEX["method_signature"].match(method)
+                if m.group(1):
+                    method = m.group(1)
+
+                owned_operation = generator.owned_operation(method)
+                class_element.appendChild(owned_operation)
+
+    def _add_multiplicity_values(self, multiplicity, owned_end, generator):
+        if multiplicity:
+            if REGEX["valid_multiplicity"].match(multiplicity):
+                if multiplicity == "*":
+                    lower_value = generator.lower_value(
+                        "uml:LiteralUnlimitedNatural",
+                        multiplicity
+                    )
+                    upper_value = generator.upper_value(
+                        "uml:LiteralUnlimitedNatural",
+                        multiplicity
+                    )
+                else:
+                    lower_value = generator.lower_value(
+                        "uml:LiteralInteger",
+                        multiplicity
+                    )
+                    upper_value = generator.upper_value(
+                        "uml:LiteralInteger",
+                        multiplicity
+                    )
+
+                owned_end.appendChild(lower_value)
+                owned_end.appendChild(upper_value)
 
     def _get_id(self, element):
         return element.getAttribute("xmi:id")
@@ -302,16 +213,15 @@ class XMIDocumentGenerator:
 
         return element
 
-    def model_element(self, **kwargs):
-        return self.package_element("uml:Model", **kwargs)
+    def model_element(self, name, **kwargs):
+        return self.package_element("uml:Model", name, **kwargs)
 
-    def class_element(self, **kwargs):
-        return self.package_element("uml:Class", **kwargs)
+    def class_element(self, name, **kwargs):
+        return self.package_element("uml:Class", name, **kwargs)
 
-    def package_element(self, xmi_type, **kwargs):
+    def package_element(self, xmi_type, name, **kwargs):
         valid_attributes = (
-            "name",
-            "visibility", 
+            "visibility",
             "isAbstract",
             "isFinalSpecialization",
             "isLeaf",
@@ -320,15 +230,24 @@ class XMIDocumentGenerator:
 
         package_element = self.document.createElement("packagedElement")
         package_element.setAttribute("xmi:type", xmi_type)
-
+        package_element.setAttribute("name", name)
         self._add_id(package_element)
-        self._add_attributes(package_element, valid_attributes, **kwargs)
 
+        # Set default attributes if not provided
+        if not kwargs:
+            kwargs = {
+                "visibility": "public",
+                "isAbstract": "false",
+                "isFinalSpecialization": "false",
+                "isLeaf": "false",
+                "isActive": "false"
+            }
+
+        self._add_attributes(package_element, valid_attributes, **kwargs)
         return package_element
 
-    def owned_attribute(self, **kwargs):
+    def owned_attribute(self, name, **kwargs):
         valid_attributes = (
-            "name",
             "visibility",
             "isStatic",
             "isLeaf",
@@ -342,15 +261,28 @@ class XMIDocumentGenerator:
 
         owned_attribute = self.document.createElement("ownedAttribute")
         owned_attribute.setAttribute("xmi:type", "uml:Property")
-
-        self._add_attributes(owned_attribute, valid_attributes, **kwargs)
+        owned_attribute.setAttribute("name", name)
         self._add_id(owned_attribute)
 
+        # Set default attributes if not provided
+        if not kwargs:
+            kwargs = {
+                "visibility": "public",
+                "isStatic": "false",
+                "isLeaf": "false",
+                "isReadOnly": "false",
+                "isOrdered": "false",
+                "isUnique": "false",
+                "aggregation": "none",
+                "isDerived": "false",
+                "isID": "false"
+            }
+
+        self._add_attributes(owned_attribute, valid_attributes, **kwargs)
         return owned_attribute
 
-    def owned_operation(self, **kwargs):
+    def owned_operation(self, name, **kwargs):
         valid_attributes = (
-            "name",
             "visibility",
             "isAbstract",
             "isFinalSpecialization",
@@ -363,13 +295,24 @@ class XMIDocumentGenerator:
 
         owned_operation = self.document.createElement("ownedOperation")
         owned_operation.setAttribute("xmi:type", "uml:Operation")
-
+        owned_operation.setAttribute("name", name)
         self._add_id(owned_operation)
-        self._add_attributes(owned_operation, valid_attributes, **kwargs)
 
+        # Set default attributes if not provided
+        if not kwargs:
+            kwargs = {
+                "visibility": "public",
+                "isStatic": "false",
+                "isLeaf": "false",
+                "concurrency": "sequential",
+                "isQuery": "false",
+                "isAbstract": "false"
+            }
+
+        self._add_attributes(owned_operation, valid_attributes, **kwargs)
         return owned_operation
 
-    def owned_member(self, **kwargs):
+    def owned_member(self, name, **kwargs):
         valid_attributes = (
             "name",
             "visibility",
@@ -378,13 +321,20 @@ class XMIDocumentGenerator:
 
         owned_member = self.document.createElement("ownedMember")
         owned_member.setAttribute("xmi:type", "uml:Association")
-
-        self._add_attributes(owned_member, valid_attributes, **kwargs)
+        owned_member.setAttribute("name", name)
         self._add_id(owned_member)
 
+        # Set default attributes if not provided
+        if not kwargs:
+            kwargs = {
+                "visibility": "public",
+                "isDerived": "false"
+            }
+
+        self._add_attributes(owned_member, valid_attributes, **kwargs)
         return owned_member
 
-    def owned_end(self, **kwargs):
+    def owned_end(self, type, shared=False, **kwargs):
         valid_attributes = (
             "type",
             "visibility",
@@ -399,6 +349,7 @@ class XMIDocumentGenerator:
         )
 
         owned_end = self.document.createElement("ownedEnd")
+
         # The attribute "xmi-type" below isn't actually correct, but
         # the DOM library used (MiniDOM) overwrites any attribute name that
         # already exists even if it proceeded by a XML namespace.
@@ -406,10 +357,27 @@ class XMIDocumentGenerator:
         # value. Using "xmi-type" allows for this to be replaced with
         # "xmi:type" after the XML is converted to a string.
         owned_end.setAttribute("xmi-type", "uml:Property")
-
-        self._add_attributes(owned_end, valid_attributes, **kwargs)
+        owned_end.setAttribute("type", type)
         self._add_id(owned_end)
 
+        # Set default attributes if not provided
+        if not kwargs:
+            kwargs = {
+                "visibility": "public",
+                "isStatic": "false",
+                "isLeaf": "false",
+                "isReadOnly": "false",
+                "isOrdered": "false",
+                "isUnique": "false",
+                "aggregation": "none",
+                "isDerived": "false",
+                "isID": "false",
+            }
+
+            if shared:
+                kwargs["aggregation"] = "shared"
+
+        self._add_attributes(owned_end, valid_attributes, **kwargs)
         return owned_end
 
     def member_end(self, idref):
