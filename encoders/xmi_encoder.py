@@ -38,53 +38,31 @@ class XMIEncoder(Encoder):
         xmi_element.appendChild(uml_element)
         document.appendChild(xmi_element)
 
-        main_id = None
-        parent_id = None
-
-        # Add in the Diagram specific elements
+        # Add parent class to XMI if present
         if parent:
             parent_class = generator.class_element(parent.name)
             parent_id = self._get_id(parent_class)
 
-            if parent.fields:
-                for field in parent.fields:
-                    owned_attribute = generator.owned_attribute(field)
-                    parent_class.appendChild(owned_attribute)
-
-            if parent.methods:
-                for method in parent.methods:
-                    # Remove the method signature
-                    m = REGEX["method_signature"].match(method)
-                    if m.group(1):
-                        method = m.group(1)
-
-                    owned_operation = generator.owned_operation(method)
-                    parent_class.appendChild(owned_operation)
+            # Add fields and methods
+            self._add_fields_and_methods(parent.fields,
+                                         parent.methods,
+                                         parent_class,
+                                         generator)
 
             uml_element.appendChild(parent_class)
 
+        # Add main class to XMI
         if main:
-            # Create the main class element
             main_class = generator.class_element(main.name)
             main_id = self._get_id(main_class)
 
-            # Append the methods
-            if main.methods:
-                for method in main.methods:
-                    # Remove the method signature
-                    m = REGEX["method_signature"].match(method)
-                    if m.group(1):
-                        method = m.group(1)
+            # Add fields and methods
+            self._add_fields_and_methods(main.fields,
+                                         main.methods,
+                                         main_class,
+                                         generator)
 
-                    owned_operation = generator.owned_operation(method)
-                    main_class.appendChild(owned_operation)
-
-            # Append the fields
-            if main.fields:
-                for field in main.fields:
-                    owned_attribute = generator.owned_attribute(field)
-                    main_class.appendChild(owned_attribute)
-
+            # Create inheritance connection if parent class exists
             if parent:
                 main_class.appendChild(generator.generalization(main_id,
                                                                 parent_id))
@@ -96,8 +74,16 @@ class XMIEncoder(Encoder):
             aggregated_class = generator.class_element(aggregated.name)
             aggregated_class_id = self._get_id(aggregated_class)
 
+            # Add fields and methods for class
+            self._add_fields_and_methods(aggregated.fields,
+                                         aggregated.methods,
+                                         aggregated_class,
+                                         generator)
+
+            # Add owned_member
             owned_member = generator.owned_member(aggregation.name)
 
+            # Add owned ends
             owned_end_none = generator.owned_end(main_id)
             owned_end_shared = generator.owned_end(aggregated_class_id,
                                                    shared=True)
@@ -156,6 +142,22 @@ class XMIEncoder(Encoder):
         xmi = xmi.replace("xmi-type", "xmi:type")
 
         return xmi
+
+    def _add_fields_and_methods(self, fields, methods, class_element, generator):
+        if fields:
+            for field in fields:
+                owned_attribute = generator.owned_attribute(field)
+                class_element.appendChild(owned_attribute)
+
+        if methods:
+            for method in methods:
+                # Remove the method signature
+                m = REGEX["method_signature"].match(method)
+                if m.group(1):
+                    method = m.group(1)
+
+                owned_operation = generator.owned_operation(method)
+                class_element.appendChild(owned_operation)
 
     def _get_id(self, element):
         return element.getAttribute("xmi:id")

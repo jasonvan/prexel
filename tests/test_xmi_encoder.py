@@ -29,10 +29,10 @@ class TestXMIEncoder(unittest.TestCase):
 	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
 	<uml:Model name="RootModel" xmi:id="" xmi:type="uml:Model">
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Kitchen" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="field1" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="arrange_kitchen" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
 			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="place_floor_cabinet" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
 			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="place_wall_cabinet" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
-			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="field1" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 		</packagedElement>
 	</uml:Model>
 </xmi:XMI>
@@ -94,9 +94,9 @@ class TestXMIEncoder(unittest.TestCase):
 	<xmi:Documentation exporter="Prexel" exporterVersion="1.0"/>
 	<uml:Model name="RootModel" xmi:id="" xmi:type="uml:Model">
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="TaskList" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="get_the_tasks" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
 			<ownedOperation concurrency="sequential" isAbstract="false" isLeaf="false" isQuery="false" isStatic="false" name="prioritize" visibility="public" xmi:id="" xmi:type="uml:Operation"/>
-			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 		</packagedElement>
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Task" visibility="public" xmi:id="" xmi:type="uml:Class">
 			<ownedMember isDerived="false" name="the_tasks" visibility="public" xmi:id="" xmi:type="uml:Association">
@@ -140,6 +140,7 @@ class TestXMIEncoder(unittest.TestCase):
 			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="employees" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 		</packagedElement>
 		<packagedElement isAbstract="false" isActive="false" isFinalSpecialization="false" isLeaf="false" name="Employee" visibility="public" xmi:id="" xmi:type="uml:Class">
+			<ownedAttribute aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" name="position" visibility="public" xmi:id="" xmi:type="uml:Property"/>
 			<ownedMember isDerived="false" name="employees" visibility="public" xmi:id="" xmi:type="uml:Association">
 				<ownedEnd aggregation="none" isDerived="false" isID="false" isLeaf="false" isOrdered="false" isReadOnly="false" isStatic="false" isUnique="false" type="" visibility="public" xmi:type="uml:Property" xmi:id="">
 					<lowerValue value="1" xmi:id="" xmi:type="uml:LiteralInteger"/>
