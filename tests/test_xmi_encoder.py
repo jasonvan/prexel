@@ -241,7 +241,7 @@ class TestXMIDocumentGenerator(unittest.TestCase):
     def test_model_element(self):
         elem = self.xmi_adapator.model_element(
             name="Model",
-            visibility="public",
+            visibility="public"
         )
 
         self.assertEqual(elem.getAttribute("name"), "Model")
