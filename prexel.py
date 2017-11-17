@@ -79,7 +79,7 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
             self.create_files(source_code)
 
         xmi_files = ("sample-1", xmi)
-        self.create_files([xmi_files], ".xmi")
+        # self.create_files([xmi_files], ".xmi")
 
     def output_pretty_print(self, pretty_print):
         # Save the easy_entry string for recall later
