@@ -47,7 +47,6 @@ class Lexer:
     def get_token(self):
         """
         Create a Token object for next token.
-        :return: Token
         """
         while self.current is not None:
             # Skip any white space

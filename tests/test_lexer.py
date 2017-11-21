@@ -62,7 +62,8 @@ class TestLexer(unittest.TestCase):
 
     def test_generate_token_string(self):
         """
-        Test the generate_token_string() method, which creates strings that will be turned into Token object
+        Test the generate_token_string() method, which creates strings that
+        will be turned into Token object
         """
         text = "|Kitchen color square_feet show_kitchen()"
         lexer = Lexer(text)
@@ -77,7 +78,8 @@ class TestLexer(unittest.TestCase):
 
     def test_get_token(self):
         """
-        Test the get_token() method, which turns a token string into a Token object
+        Test the get_token() method, which turns a token string
+        into a Token object
         """
         text = "|Kitchen color square_feet show_kitchen()"
         lexer = Lexer(text)
@@ -99,7 +101,8 @@ class TestLexer(unittest.TestCase):
 
     def test_get_token_with_comma(self):
         """
-        Test the get_token() method, which turns a token string into a Token object
+        Test the get_token() method, which turns a token string
+        into a Token object
         """
         text = "|Room >> Kitchen, LivingRoom, Bathroom"
         lexer = Lexer(text)
@@ -121,6 +124,55 @@ class TestLexer(unittest.TestCase):
 
         # Check that the token is a class name
         self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a comma
+        self.assertEqual(lexer.get_token().type, Token.COMMA)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+    def test_get_token_with_multiple_sub_classes(self):
+        """
+        Test the get_token() method, which turns a token string
+        into a Token object
+        """
+        text = "|Room width height >> Kitchen has_oven open_fridge(), " \
+               "LivingRoom turn_on_tv(), Bathroom"
+
+        lexer = Lexer(text)
+
+        # Check that the token is a PREXEL marker
+        self.assertEqual(lexer.get_token().type, Token.START_MARKER)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.FIELD)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.FIELD)
+
+        # Check that the token is a inheritance marker
+        self.assertEqual(lexer.get_token().type, Token.INHERITANCE)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.FIELD)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.METHOD)
+
+        # Check that the token is a comma
+        self.assertEqual(lexer.get_token().type, Token.COMMA)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.CLASS_NAME)
+
+        # Check that the token is a class name
+        self.assertEqual(lexer.get_token().type, Token.METHOD)
 
         # Check that the token is a comma
         self.assertEqual(lexer.get_token().type, Token.COMMA)
