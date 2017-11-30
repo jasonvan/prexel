@@ -3,9 +3,6 @@ import unittest
 from prexel.parser.lexer import Lexer
 from prexel.parser.interpreter import Interpreter, InterpreterException
 from prexel.parser.token import Token
-from prexel.models.diagram import (ClassDiagramPart,
-                                   InheritanceDiagramPart,
-                                   AggregationDiagramPart)
 
 
 class TestInterpreter(unittest.TestCase):
@@ -82,36 +79,27 @@ class TestInterpreter(unittest.TestCase):
         interpreter = Interpreter(lexer)
         interpreter.start_marker()
 
-        class_diagram = ClassDiagramPart()
-        class_diagram.name = interpreter.class_name()
-        interpreter.class_body(class_diagram)
+        interpreter.class_name()
+        fields, methods = interpreter.class_body()
 
-        self.assertEqual(class_diagram.fields, ["size", "color"])
-        self.assertEqual(class_diagram.methods, ["take_off()"])
+        self.assertEqual(fields, ["size", "color"])
+        self.assertEqual(methods, ["take_off()"])
 
     def test_inheritance(self):
         """
-        Test the inheritance() method, which processes an inheritance relationship
+        Test the inheritance() method, which processes an inheritance
+        relationship.
         """
         text = "|Room height width >> Kitchen"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = interpreter.diagram
-        class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        class_diagram_part.name = interpreter.class_name()
-        interpreter.class_body(class_diagram_part)
+        interpreter.class_name()
+        interpreter.class_body()
 
-        if interpreter.inheritance():
-            diagram.parent = class_diagram_part
-        else:
-            diagram.main = class_diagram_part
-
-        self.assertEqual(diagram.parent.name, "Room")
-        self.assertEqual(diagram.parent.fields, ["height", "width"])
-        self.assertEqual(diagram.main.name, "Kitchen")
+        self.assertTrue(interpreter.inheritance())
 
     def test_inheritance_with_error(self):
         """
@@ -121,16 +109,16 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        class_diagram_part.name = interpreter.class_name()
+        interpreter.class_name()
 
         # Should raise a InterpreterException
         with self.assertRaises(InterpreterException) as context:
             interpreter.inheritance()
 
-        self.assertEqual(context.exception.args[0], "Missing child class after \">>\"")
+        self.assertEqual(context.exception.args[0], "Missing child class "
+                                                    "after \">>\"")
 
     def test_aggregation(self):
         """
@@ -140,17 +128,12 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = interpreter.diagram
-        class_diagram_part = ClassDiagramPart()
-
         interpreter.start_marker()
-        class_diagram_part.name = interpreter.class_name()
-        diagram.main = class_diagram_part
-        interpreter.aggregation()
+        interpreter.class_name()
+        aggregation = interpreter.aggregation()
 
-        self.assertEqual(diagram.aggregation.name, "cupboard")
-        self.assertEqual(diagram.main.fields, ["cupboard"])
-        self.assertEqual(diagram.aggregated.name, "Cupboard")
+        self.assertEqual(aggregation["name"], "Cupboard")
+        self.assertEqual(aggregation["instance_name"], "cupboard")
 
     def test_aggregation_with_missing_aggregation_name(self):
         """
@@ -160,17 +143,13 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = interpreter.diagram
-        class_diagram_part = ClassDiagramPart()
 
         interpreter.start_marker()
-        class_diagram_part.name = interpreter.class_name()
-        diagram.main = class_diagram_part
-        interpreter.aggregation()
+        interpreter.class_name()
+        aggregation = interpreter.aggregation()
 
-        self.assertEqual(diagram.aggregation.name, "cupboard")
-        self.assertEqual(diagram.main.fields, ["cupboard"])
-        self.assertEqual(diagram.aggregated.name, "Cupboard")
+        self.assertEqual(aggregation["name"], "Cupboard")
+        self.assertEqual(aggregation["instance_name"], "cupboard")
 
     def test_aggregation_multi_line(self):
         """
@@ -183,123 +162,127 @@ class TestInterpreter(unittest.TestCase):
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = interpreter.diagram
+        interpreter.start_marker()
+        interpreter.class_name()
+        aggregation = interpreter.aggregation(include_following_tokens=False)
+        fields, methods = interpreter.class_body()
 
-        class_diagram_part = ClassDiagramPart()
+        self.assertEqual(aggregation["instance_name"], "cupboard")
+        self.assertEqual(aggregation["name"], "Cupboard")
+        self.assertEqual(fields, ["size", "color"])
+
+    def test_aggregation_single_class_aggregation(self):
+        """
+        Test the aggregation() method using multi-line syntax
+        """
+        text = "|Class1 <>-> Class2 class_2_field class_2_method()"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+        interpreter.start_marker()
+        interpreter.class_name()
+        interpreter.class_body()
+        aggregation = interpreter.aggregation()
+
+        self.assertEqual(aggregation["instance_name"], "class2")
+        self.assertEqual(aggregation["name"], "Class2")
+        self.assertEqual(aggregation["fields"], ["class_2_field"])
+        self.assertEqual(aggregation["methods"], ["class_2_method()"])
+
+    def test_class_delimiter(self):
+        """
+        Test the inheritance() method, which processes an inheritance
+        relationship.
+        """
+        text = "|Room height width >> Kitchen, Bathroom"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
 
         interpreter.start_marker()
-        class_diagram_part.name = interpreter.class_name()
-        diagram.main = class_diagram_part
-        interpreter.aggregation(include_following_tokens=False)
-        interpreter.class_body(diagram.main)
+        interpreter.class_name()
+        interpreter.class_body()
+        interpreter.inheritance()
+        interpreter.class_name()
 
-        self.assertEqual(diagram.aggregation.name, "cupboard")
-        self.assertEqual(diagram.main.fields, ["cupboard", "size", "color"])
-        self.assertEqual(diagram.aggregated.name, "Cupboard")
+        self.assertTrue(interpreter.class_delimiter())
+
+    def test_class_delimiter_with_error(self):
+        """
+        Test the inheritance() method, which processes an inheritance
+        relationship.
+        """
+        text = "|Room height width >> Kitchen,"
+        lexer = Lexer(text)
+
+        interpreter = Interpreter(lexer)
+
+        interpreter.start_marker()
+        interpreter.class_name()
+        interpreter.class_body()
+        interpreter.inheritance()
+        interpreter.class_name()
+
+        # Should raise a InterpreterException
+        with self.assertRaises(InterpreterException) as context:
+            interpreter.class_delimiter()
+
+        self.assertEqual(context.exception.args[0], "The is no following "
+                                                    "class name.")
 
     def test_evaluate(self):
-        text = "|Kitchen color square_feet show_kitchen()"
+        text = "|Kitchen color square_feet show_kitchen() >> Room width " \
+               "height <>--> Door turn_handle(), AnotherRoom field1 " \
+               "field2 <>1--*> Cupboard"
         lexer = Lexer(text)
 
         interpreter = Interpreter(lexer)
-        diagram = interpreter.evaluate()
+        main_class = interpreter.evaluate()
 
-        main = diagram.main
-        self.assertIsInstance(main, ClassDiagramPart)
+        # Main Class
+        self.assertEqual(main_class.name, "Kitchen")
+        self.assertEqual(main_class.fields, ["color", "square_feet"])
+        self.assertEqual(main_class.methods, ["show_kitchen()"])
+        self.assertEqual(len(main_class.sub_classes), 2)
 
-        self.assertEqual(main.name, "Kitchen")
-        self.assertEqual(main.methods, ["show_kitchen()"])
-        self.assertEqual(main.fields, ["color", "square_feet"])
+        # Room subclass and its aggregated class
+        room = main_class.sub_classes[0]
+        door = room.aggregated_classes[0]
 
-    def test_evaluate_advanced(self):
-        text = "|Room size >> Kitchen color square_feet show_kitchen() " \
-               "<>*-cupboards--1> Cupboard open()"
-        lexer = Lexer(text)
+        self.assertEqual(room.name, "Room")
+        self.assertEqual(room.fields, ["width", "height"])
+        self.assertEqual(door.name, "Door")
+        self.assertEqual(door.methods, ["turn_handle()"])
 
-        interpreter = Interpreter(lexer)
-        diagram = interpreter.evaluate()
+        # AnotherRoom subclass and its aggregated class
+        another_room = main_class.sub_classes[1]
+        cupboard = another_room.aggregated_classes[0]
 
-        # Main class diagram
-        main = diagram.main
-        self.assertEqual(main.name, "Kitchen")
-        self.assertEqual(main.methods, ["show_kitchen()"])
-        self.assertEqual(main.fields, ["color", "square_feet", "cupboards"])
+        self.assertEqual(another_room.name, "AnotherRoom")
+        self.assertEqual(another_room.fields, ["field1", "field2"])
+        self.assertEqual(cupboard.name, "Cupboard")
 
-        # Inheritance diagram
-        inheritance = diagram.inheritance
-        self.assertIsInstance(inheritance, InheritanceDiagramPart)
-
-        # Inherited class diagram
-        parent = diagram.parent
-        self.assertEqual(parent.name, "Room")
-        self.assertIsInstance(parent, ClassDiagramPart)
-
-        # Aggregation diagram
-        aggregation = diagram.aggregation
-        self.assertIsInstance(aggregation, AggregationDiagramPart)
-        self.assertEqual(aggregation.left_multiplicity, "*")
-        self.assertEqual(aggregation.right_multiplicity, "1")
-
-        # Aggregated class diagram
-        aggregated = diagram.aggregated
-        self.assertEqual(aggregated.name, "Cupboard")
-        self.assertEqual(aggregated.methods, ["open()"])
-
-    def test_evaluate_aggregation_first_with_inheritance(self):
-        text = """
-|Room size >> Kitchen <>-cupboard--> Cupboard
-|color
-|show_kitchen()
-"""
-        lexer = Lexer(text)
-        interpreter = Interpreter(lexer)
-        diagram = interpreter.evaluate()
-
-        # Main class diagram
-        main = diagram.main
-        self.assertEqual(main.name, "Kitchen")
-        self.assertEqual(main.methods, ["show_kitchen()"])
-        self.assertEqual(main.fields, ["cupboard", "color"])
-
-        # Parent class diagram
-        parent = diagram.parent
-        self.assertEqual(parent.name, "Room")
-        self.assertEqual(parent.fields, ["size"])
-
-        # Aggregation diagram
-        aggregation = diagram.aggregation
-        self.assertIsInstance(aggregation, AggregationDiagramPart)
-        self.assertEqual(aggregation.name, "cupboard")
-        self.assertEqual(aggregation.left_multiplicity, "")
-        self.assertEqual(aggregation.right_multiplicity, "")
-
-        # Aggregated class diagram
-        aggregated = diagram.aggregated
-        self.assertIsInstance(aggregated, ClassDiagramPart)
-        self.assertEqual(aggregated.name, "Cupboard")
-
-    def test_evaluate_aggregation_first(self):
-        text = "|TaskList <>-tasks----*> Task \n |get_the_tasks()"
+    def test_evaluate_extra(self):
+        text = "|Room size >> Kitchen color show_kitchen()" \
+               " <>-cupboard--> Cupboard"
 
         lexer = Lexer(text)
         interpreter = Interpreter(lexer)
-        diagram = interpreter.evaluate()
+        main_class = interpreter.evaluate()
 
-        # Main class diagram
-        main = diagram.main
-        self.assertEqual(main.name, "TaskList")
-        self.assertEqual(main.methods, ["get_the_tasks()"])
+        # Main class
+        self.assertEqual(main_class.name, "Room")
+        self.assertEqual(main_class.fields, ["size"])
 
-        # Aggregation diagram
-        aggregation = diagram.aggregation
-        self.assertIsInstance(aggregation, AggregationDiagramPart)
-        self.assertEqual(aggregation.left_multiplicity, "")
-        self.assertEqual(aggregation.right_multiplicity, "*")
+        # Kitchen subclass and its aggregated class
+        kitchen = main_class.sub_classes[0]
+        cupboard = kitchen.aggregated_classes[0]
 
-        # Aggregated class diagram
-        aggregated = diagram.aggregated
-        self.assertIsInstance(aggregated, ClassDiagramPart)
-        self.assertEqual(aggregated.name, "Task")
+        self.assertEqual(kitchen.name, "Kitchen")
+        self.assertEqual(kitchen.fields, ["color"])
+        self.assertEqual(kitchen.methods, ["show_kitchen()"])
+        self.assertEqual(cupboard.name, "Cupboard")
+        self.assertEqual(cupboard.instance_name, "cupboard")
 
     def test_evaluate_error(self):
         text = "|Kitchen color square_feet show_kitchen() <>-cupboards-->"
@@ -311,4 +294,4 @@ class TestInterpreter(unittest.TestCase):
         with self.assertRaises(InterpreterException) as context:
             interpreter.evaluate()
 
-        self.assertEqual(context.exception.args[0], "There is no class name following the aggregation.")
+        self.assertEqual(context.exception.args[0], "Invalid Syntax")

@@ -9,7 +9,8 @@ class TestLexer(unittest.TestCase):
     """
     def test_step(self):
         """
-        Test the step() method, which steps forward in the string one character.
+        Test the step() method, which steps forward in the string one
+        character.
         """
         text = "|Kitchen get_cabinet()"
         lexer = Lexer(text)
@@ -33,8 +34,9 @@ class TestLexer(unittest.TestCase):
 
     def test_skip_whitespace(self):
         """
-        Test the skip_whitespace() method, which will advance the self.current pointer past
-        all whitespace character until the next non-whitespace character.
+        Test the skip_whitespace() method, which will advance the self.current
+        pointer past all whitespace character until the next non-whitespace
+        character.
         """
         text = "|Kitchen    color \n\n size"
         lexer = Lexer(text)

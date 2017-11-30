@@ -186,7 +186,7 @@ class XMIDocumentGenerator:
 
     """
 
-    def __init__(self, display_id):
+    def __init__(self, display_id=True):
         self.display_id = display_id
         self.document = Document()
 

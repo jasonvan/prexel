@@ -182,7 +182,7 @@ class TestXMIDocumentGenerator(unittest.TestCase):
 
     """
     def setUp(self):
-        self.xmi_adapator = XMIDocumentGenerator(display_id=True)
+        self.xmi_adapator = XMIDocumentGenerator()
 
     def test_add_attributes(self):
         package_element = self.xmi_adapator.document.createElement("packagedElement")
