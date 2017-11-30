@@ -21,15 +21,15 @@ class Interpreter:
     The Interpreter class processes the token stream received from the 
     Lexer class. A diagram object is returned from the evaluate() method 
     of this class.
-     ___________ 
-    |  Diagram  |
-    |-----------|
-    |main       |
-    |parent     |
-    |inheritance|
-    |aggregated |
-    |aggregation|
-    |___________|
+     ___________________
+    |      Diagram      |
+    |-------------------|
+    |name               |
+    |fields             |
+    |methods            |
+    |sub_classes        |
+    |aggregated_classes |
+    |___________________|
 
     A Diagram object is used by the encoders to generate pretty-printed, and 
     optionally, source code versions of the diagram.
@@ -182,6 +182,7 @@ class Interpreter:
             # Aggregated Class name
             aggregation["name"] = self.class_name()
 
+            # TODO do we still need multiline syntax?
             # Multi-line with aggregation
             # |Class1 <>-> Class2
             # |class_1_field
@@ -201,27 +202,25 @@ class Interpreter:
                 aggregation["instance_name"] = generated_name
 
             # Add multiplicity values
-            # TODO readin multiple values
-            aggregation["left_multiplicity"] = token.value["left_multi"]
-            aggregation["right_multiplicity"] = token.value["right_multi"]
+            aggregation["left_multi"] = token.value["left_multi"]
+            aggregation["right_multi"] = token.value["right_multi"]
 
         return aggregation
 
     def evaluate(self):
         """
-        Main evaluation method
-        TODO document
+        Main evaluation method. This methods processes the tokens based on
+        set grammar.
         """
         # Check for the first PREXEL marker
         self.start_marker()
 
-        # Process the first class name
+        # Process class name, fields, and methods
         name = self.class_name()
-
-        # Optionally check for FIELD and METHOD tokens
         fields, methods = self.class_body()
 
-        main_class = Diagram(name, fields, methods)
+        # Create main Diagram object
+        main_diagram = Diagram(name, fields, methods)
 
         # Optional - Check for inheritance
         if self.inheritance():
@@ -232,59 +231,58 @@ class Interpreter:
         # Process the rest of the possible classes
         while self.current_token:
             if not self.class_delimiter():
-                # Process class name
-                class_name = self.class_name()
-
-                # Process fields and methods for current class
+                # Process class name, fields, and methods
+                name = self.class_name()
                 fields, methods = self.class_body()
 
-                diagram = Diagram(class_name, fields, methods)
+                # Create Diagram object for current class
+                diagram = Diagram(name, fields, methods)
 
-                # Optional - Check for aggregation
+                # Check aggregation values
                 aggregation = self.aggregation()
-
                 if aggregation:
-                    name = aggregation["name"]
-                    aggregated_class = AggregationDiagram(name)
+                    aggregated_diagram = AggregationDiagram()
+
+                    try:
+                        name = aggregation["name"]
+                        aggregated_diagram.name = name
+                    except KeyError:
+                        pass
 
                     try:
                         fields = aggregation["fields"]
-                        aggregated_class.add_fields(fields)
+                        aggregated_diagram.add_fields(fields)
                     except KeyError:
                         pass
 
                     try:
                         methods = aggregation["methods"]
-                        aggregated_class.add_methods(methods)
+                        aggregated_diagram.add_methods(methods)
                     except KeyError:
                         pass
 
                     try:
                         instance_name = aggregation["instance_name"]
-                        aggregated_class.instance_name = instance_name
+                        aggregated_diagram.instance_name = instance_name
                     except KeyError:
                         pass
 
                     try:
-                        # TODO clean this up
-                        lower_value = aggregation["left_multiplicity"]
-                        upper_value = aggregation["right_multiplicity"]
+                        left_multi = aggregation["left_multi"]
+                        right_multi = aggregation["right_multi"]
 
-                        right_multi = AggregationMultiplicity(lower_value,
-                                                              lower_value)
-
-                        left_multi = AggregationMultiplicity(upper_value,
-                                                             upper_value)
-
-                        aggregated_class.left_multiplicity = left_multi
-                        aggregated_class.right_multiplicity = right_multi
+                        aggregated_diagram.left_multiplicity = left_multi
+                        aggregated_diagram.right_multiplicity = right_multi
                     except KeyError:
                         pass
 
-                    diagram.add_aggregated_class(aggregated_class)
+                    # Add the aggregated class to current class diagram
+                    diagram.add_aggregated_class(aggregated_diagram)
 
+                # If there is a parent class add the current class
+                # as a subclass
                 if has_parent_class:
-                    main_class.add_sub_class(diagram)
+                    main_diagram.add_sub_class(diagram)
 
         # TODO discuss what we should do with this
         # Optional - Check for aggregation but don't
@@ -293,7 +291,7 @@ class Interpreter:
         # they belong to the main class
         # self.aggregation(include_following_tokens=False)
 
-        return main_class
+        return main_diagram
 
 
 class InterpreterException(Exception):

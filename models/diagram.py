@@ -1,8 +1,3 @@
-"""
-TODO
-3 Change name of class
-4 make all params optional
-"""
 class Diagram:
     def __init__(self, name, fields=[], methods=[]):
         self.name = name
@@ -31,7 +26,7 @@ class Diagram:
 
 
 class AggregationDiagram(Diagram):
-    def __init__(self, name, instance_name=None,
+    def __init__(self, name=None, instance_name=None,
                  left_multiplicity=None, right_multiplicity=None,
                  fields=[], methods=[]):
         super().__init__(name, fields, methods)

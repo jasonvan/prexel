@@ -13,14 +13,20 @@ class Token:
     |_____|
 
     """
-    START_MARKER, CLASS_NAME, FIELD, METHOD, AGGREGATION, INHERITANCE, COMMA = (
-        "START_MARKER",
-        "CLASS_NAME",
-        "FIELD",
-        "METHOD",
-        "AGGREGATION",
-        "INHERITANCE",
-        "COMMA"
+    START_MARKER, \
+        CLASS_NAME, \
+        FIELD, \
+        METHOD, \
+        AGGREGATION, \
+        INHERITANCE, \
+        COMMA = (
+            "START_MARKER",
+            "CLASS_NAME",
+            "FIELD",
+            "METHOD",
+            "AGGREGATION",
+            "INHERITANCE",
+            "COMMA"
     )
 
     def __init__(self, type, value):

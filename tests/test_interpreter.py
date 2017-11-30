@@ -264,7 +264,7 @@ class TestInterpreter(unittest.TestCase):
 
     def test_evaluate_extra(self):
         text = "|Room size >> Kitchen color show_kitchen()" \
-               " <>-cupboard--> Cupboard"
+               " <>1-cupboard--*> Cupboard"
 
         lexer = Lexer(text)
         interpreter = Interpreter(lexer)
@@ -283,6 +283,8 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(kitchen.methods, ["show_kitchen()"])
         self.assertEqual(cupboard.name, "Cupboard")
         self.assertEqual(cupboard.instance_name, "cupboard")
+        self.assertEqual(cupboard.left_multiplicity, "1")
+        self.assertEqual(cupboard.right_multiplicity, "*")
 
     def test_evaluate_error(self):
         text = "|Kitchen color square_feet show_kitchen() <>-cupboards-->"
