@@ -53,7 +53,7 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
                                  sublime.HIDE_ON_MOUSE_MOVE_AWAY)
         else:
             # Cache some values that are needed by other methods
-            self.edit = edit
+            # self.edit = edit
             self.diagram = diagram
             self.easy_entry = easy_entry
             self.line = line
@@ -81,15 +81,27 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         xmi_files = ("sample-1", xmi)
         # self.create_files([xmi_files], ".xmi")
 
+    """
+    |Room >> Kitchen my_method()
+    """
+
     def output_pretty_print(self, pretty_print):
-        # Save the easy_entry string for recall later
-        Persistence().save(self.easy_entry, pretty_print)
+        beginning = self.line.begin()
+        end = self.line.end()
+        self.view.window().run_command("output_pretty_print", {
+            "easy_entry": self.easy_entry,
+            "beginning": beginning,
+            "end": end,
+            "pretty_print": pretty_print
+        })
+        # # Save the easy_entry string for recall later
+        # Persistence().save(self.easy_entry, pretty_print)
 
-        # Push the last pretty_print value on stack, so we can undo if needed
-        pretty_print_stack.push(pretty_print)
+        # # Push the last pretty_print value on stack, so we can undo if needed
+        # pretty_print_stack.push(pretty_print)
 
-        # Replace easy-entry with pretty-print
-        self.view.replace(self.edit, self.line, pretty_print)
+        # # Replace easy-entry with pretty-print
+        # self.view.replace(None, self.line, pretty_print)
 
     def create_files(self, source_code, extension=".py"):
         # Call the CreateNewFileCommand object, sending the source code
@@ -100,6 +112,19 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
                 "extension": extension
             }
         )
+
+
+class OutputPrettyPrintCommand(sublime_plugin.TextCommand):
+    def run(self, edit, easy_entry, beginning, end, pretty_print):
+        Persistence().save(easy_entry, pretty_print)
+
+        # Push the last pretty_print value on stack, so we can undo if needed
+        pretty_print_stack.push(pretty_print)
+
+        region = sublime.Region(beginning, end)
+
+        # Replace easy-entry with pretty-print
+        self.view.replace(edit, region, pretty_print)
 
 
 class UndoUmlCommand(sublime_plugin.TextCommand):
