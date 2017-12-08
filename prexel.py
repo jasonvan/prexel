@@ -53,7 +53,7 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
                                  sublime.HIDE_ON_MOUSE_MOVE_AWAY)
         else:
             # Cache some values that are needed by other methods
-            self.edit = edit
+            # self.edit = edit
             self.diagram = diagram
             self.easy_entry = easy_entry
             self.line = line
@@ -82,14 +82,12 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
         # self.create_files([xmi_files], ".xmi")
 
     def output_pretty_print(self, pretty_print):
-        # Save the easy_entry string for recall later
-        Persistence().save(self.easy_entry, pretty_print)
-
-        # Push the last pretty_print value on stack, so we can undo if needed
-        pretty_print_stack.push(pretty_print)
-
-        # Replace easy-entry with pretty-print
-        self.view.replace(self.edit, self.line, pretty_print)
+        # Run new text command to replace the selection with pretty print
+        self.view.window().run_command("output_pretty_print", {
+            "easy_entry": self.easy_entry,
+            "line": [self.line.begin(), self.line.end()],
+            "pretty_print": pretty_print
+        })
 
     def create_files(self, source_code, extension=".py"):
         # Call the CreateNewFileCommand object, sending the source code
@@ -100,6 +98,22 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
                 "extension": extension
             }
         )
+
+
+class OutputPrettyPrintCommand(sublime_plugin.TextCommand):
+    def run(self, edit, easy_entry, line, pretty_print):
+        # Cache the original easy entry string so it can
+        # be recalled later.
+        Persistence().save(easy_entry, pretty_print)
+
+        # Push the last pretty_print value on stack, so we can undo if needed
+        pretty_print_stack.push(pretty_print)
+
+        # Create a Region object for the current selection
+        region = sublime.Region(line[0], line[1])
+
+        # Replace easy-entry with pretty-print
+        self.view.replace(edit, region, pretty_print)
 
 
 class UndoUmlCommand(sublime_plugin.TextCommand):
