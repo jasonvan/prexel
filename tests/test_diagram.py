@@ -42,12 +42,14 @@ class TestDiagram(unittest.TestCase):
 
     def test_merge_fields(self):
         to_merge = Diagram(name="Kitchen", fields=["field1", "field2"])
+        self.kitchen.add_field("field1")
         self.kitchen.merge(to_merge)
         self.assertEqual(self.kitchen.fields, ["field1", "field2"])
 
     def test_merge_methods(self):
         to_merge = Diagram(name="Kitchen",
                            methods=["method_1()", "method_2()"])
+        self.kitchen.add_method("method_1()")
         self.kitchen.merge(to_merge)
         self.assertEqual(self.kitchen.methods, ["method_1()", "method_2()"])
 

@@ -29,10 +29,14 @@ class Diagram:
             return
 
         # Add fields
-        self.fields.extend(other.fields)
+        for field in other.fields:
+            if field not in self.fields:
+                self.fields.append(field)
 
         # Add methods
-        self.methods.extend(other.methods)
+        for method in other.methods:
+            if method not in self.methods:
+                self.methods.append(method)
 
         # Subclasses TODO could be cleaned up
         if other.sub_classes:
