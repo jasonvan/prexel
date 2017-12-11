@@ -37,25 +37,40 @@ class SourceCodeEncoder(Encoder):
         TODO comment this code
         """
         classes = []
-        parent_name = None
 
-        if diagram.parent:
-            parent = SourceCodeEncoder.create_class(diagram.parent)
-            parent_name = diagram.parent.name
-            parent_tup = (parent_name.lower(), parent)
-            classes.append(parent_tup)
+        classes.append(
+            (diagram.name.lower(), SourceCodeEncoder.create_class(diagram))
+        )
 
-        if diagram.aggregated and diagram.aggregation:
-            aggregated = SourceCodeEncoder.create_class(diagram.aggregated)
-            aggregated_tup = (diagram.aggregated.name.lower(),aggregated)
-            classes.append(aggregated_tup)
+        if diagram.sub_classes:
+            for sub_class in diagram.sub_classes:
+                classes.append(
+                    (sub_class.name.lower(), SourceCodeEncoder.create_class(sub_class, diagram.name))
+                )
 
-        main = SourceCodeEncoder.create_class(diagram.main, parent_name)
-        main_tup = (diagram.main.name.lower(), main)
+                self.generate_aggregated_classes(sub_class, classes)
+                #
+                # if sub_class.aggregated_classes:
+                #     for aggregated_class in diagram.aggregated_classes:
+                #         classes.append(
+                #             (aggregated_class.name.lower(), SourceCodeEncoder.create_class(aggregated_class))
+                #         )
 
-        classes.append(main_tup)
+        self.generate_aggregated_classes(diagram, classes)
+        # if diagram.aggregated_classes:
+        #     for aggregated_class in diagram.aggregated_classes:
+        #         classes.append(
+        #             (aggregated_class.name.lower(), SourceCodeEncoder.create_class(aggregated_class))
+        #         )
 
         return classes
+
+    def generate_aggregated_classes(self, diagram, class_list):
+        if diagram.aggregated_classes:
+            for aggregated_class in diagram.aggregated_classes:
+                class_list.append(
+                    (aggregated_class.name.lower(), SourceCodeEncoder.create_class(aggregated_class))
+                )
 
     @staticmethod
     def create_class(diagram, extends=None):

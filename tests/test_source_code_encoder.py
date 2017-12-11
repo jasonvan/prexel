@@ -1,10 +1,7 @@
 import unittest
 
 from prexel.encoders.source_code_encoder import SourceCodeEncoder
-from prexel.models.diagram import (Diagram,
-                                   ClassDiagramPart,
-                                   InheritanceDiagramPart,
-                                   AggregationDiagramPart)
+from prexel.models.diagram import Diagram, AggregationDiagram, AggregationMultiplicity
 
 
 class TestSourceCodeEncoderMain(unittest.TestCase):
@@ -12,9 +9,7 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
     Tests related to main generate method
     """
     def test_generate_empty_class(self):
-        wing = ClassDiagramPart("Wing")
-
-        diagram = Diagram(wing)
+        diagram = Diagram(name="Wing")
 
         expected = ("class Wing:\n"
                     "    pass\n")
@@ -26,20 +21,16 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         self.assertEqual(expected, actual[0][1])
 
     def test_generate_with_inheritance(self):
-        person = ClassDiagramPart("Person", fields=[
+        person = Diagram("Person", fields=[
             "name",
             "age"
         ])
 
-        inheritance = InheritanceDiagramPart()
-
-        employee = ClassDiagramPart("Employee", fields=[
+        employee = Diagram("Employee", fields=[
             "job_title"
         ])
 
-        diagram = Diagram(employee,
-                          parent=person,
-                          inheritance=inheritance)
+        person.add_sub_class(employee)
 
         # TODO Employee should contain call to super().__init__() with value
 
@@ -53,7 +44,7 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
                           "        self.job_title = job_title\n")
 
         encoder = SourceCodeEncoder()
-        actual = encoder.generate(diagram)  # Returns and array of classes
+        actual = encoder.generate(person)  # Returns and array of classes
 
         self.assertEqual("person", actual[0][0])
         self.assertEqual(person_class, actual[0][1])
@@ -61,19 +52,20 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
         self.assertEqual(employee_class, actual[1][1])
 
     def test_generate_with_aggregation(self):
-        task_list_diagram = ClassDiagramPart("TaskList", methods=[
+        task_list_diagram = Diagram("TaskList", methods=[
             "get_the_tasks()",
             "prioritize()"
         ], fields=["the_tasks"])
 
-        task_list_aggregation = AggregationDiagramPart("the_tasks",
-                                                       right_multiplicity="*")
+        left_multi = AggregationMultiplicity("*", "1")
+        right_multi = AggregationMultiplicity("1", "*")
 
-        task_diagram = ClassDiagramPart("Task")
+        task = AggregationDiagram("Task",
+                                  "the_tasks",
+                                  left_multi,
+                                  right_multi)
 
-        diagram = Diagram(task_list_diagram,
-                          aggregation=task_list_aggregation,
-                          aggregated=task_diagram)
+        task_list_diagram.add_aggregated_class(task)
 
         task_list_class = ("class TaskList:\n"
                            "    def __init__(self, the_tasks):\n"
@@ -89,31 +81,15 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
                       "    pass\n")
 
         encoder = SourceCodeEncoder()
-        actual = encoder.generate(diagram)
+        actual = encoder.generate(task_list_diagram)
 
-        self.assertEqual("tasklist", actual[1][0])
-        self.assertEqual(task_list_class, actual[1][1])
-        self.assertEqual("task", actual[0][0])
-        self.assertEqual(task_class, actual[0][1])
+        self.assertEqual("tasklist", actual[0][0])
+        self.assertEqual(task_list_class, actual[0][1])
+        self.assertEqual("task", actual[1][0])
+        self.assertEqual(task_class, actual[1][1])
 
     def test_generate_full(self):
-        task_list_diagram = ClassDiagramPart("TaskList", methods=[
-            "get_the_tasks()",
-            "prioritize()"
-        ])
-
-        task_list_aggregation = AggregationDiagramPart("name",
-                                                       right_multiplicity="*")
-
-        task_diagram = ClassDiagramPart("Task", fields=[
-            "name",
-            "description"
-        ], methods=[
-            "complete()",
-            "delete()"
-        ])
-
-        parent = ClassDiagramPart("Manager", fields=[
+        parent = Diagram("Manager", fields=[
             "field1",
             "field2"
         ], methods=[
@@ -121,20 +97,37 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
             "method2()"
         ])
 
-        inheritance = InheritanceDiagramPart()
+        task_list_diagram = Diagram("TaskList", methods=[
+            "get_the_tasks()",
+            "prioritize()"
+        ])
 
-        diagram = Diagram(task_list_diagram,
-                          parent=parent,
-                          inheritance=inheritance,
-                          aggregation=task_list_aggregation,
-                          aggregated=task_diagram)
+        left_multi = AggregationMultiplicity("*", "1")
+        right_multi = AggregationMultiplicity("1", "*")
+
+        task = AggregationDiagram("Task",
+                                  "name",
+                                  left_multi,
+                                  right_multi,
+                                  fields=[
+                                      "name",
+                                      "description",
+                                  ],
+                                  methods=[
+                                      "complete()",
+                                      "delete()",
+                                  ])
+
+        task_list_diagram.add_aggregated_class(task)
+
+        parent.add_sub_class(task_list_diagram)
 
         encoder = SourceCodeEncoder()
-        actual = encoder.generate(diagram)
+        actual = encoder.generate(parent)
 
-        # NOT TESTING ANYTHING, JUST CHECKING OUTPUT
-        print(actual[0][1])
-        print(actual[1][1])
+        self.assertEqual("manager", actual[0][0])
+        self.assertEqual("tasklist", actual[1][0])
+        self.assertEqual("task", actual[2][0])
 
 
 class TestSourceCodeEncoderMainHelpers(unittest.TestCase):
@@ -142,7 +135,7 @@ class TestSourceCodeEncoderMainHelpers(unittest.TestCase):
     Helper tests
     """
     def test_create_class(self):
-        diagram = ClassDiagramPart("Kitchen", methods=[
+        diagram = Diagram("Kitchen", methods=[
             "arrange_kitchen()",
             "place_floor_cabinet()",
             "place_wall_cabinet()"
@@ -172,11 +165,11 @@ class TestSourceCodeEncoderMainHelpers(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_method_params_as_object(self):
-        style_diagram = ClassDiagramPart("Style", methods=[
+        style_diagram = Diagram("Style", methods=[
             {"signature": "get_cabinet(height)", "body": "return XCabinet()"}
         ])
 
-        xcabinet_diagram = ClassDiagramPart("XCabinet")
+        xcabinet_diagram = Diagram("XCabinet")
 
         expected = ("class Style:\n"
                     "    def get_cabinet(self, height):\n"
@@ -194,7 +187,7 @@ class TestSourceCodeEncoderMainHelpers(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_generate_class_with_method_params(self):
-        diagram = ClassDiagramPart("MyClass", methods=[
+        diagram = Diagram("MyClass", methods=[
             "crazy_method2Name(param1, param2)"
         ])
 
