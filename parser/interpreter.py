@@ -207,6 +207,47 @@ class Interpreter:
 
         return aggregation
 
+    def add_optional_aggregation(self, diagram):
+        aggregation = self.aggregation()
+        if aggregation:
+            aggregated_diagram = AggregationDiagram()
+
+            try:
+                name = aggregation["name"]
+                aggregated_diagram.name = name
+            except KeyError:
+                pass
+
+            try:
+                fields = aggregation["fields"]
+                aggregated_diagram.add_fields(fields)
+            except KeyError:
+                pass
+
+            try:
+                methods = aggregation["methods"]
+                aggregated_diagram.add_methods(methods)
+            except KeyError:
+                pass
+
+            try:
+                instance_name = aggregation["instance_name"]
+                aggregated_diagram.instance_name = instance_name
+            except KeyError:
+                pass
+
+            try:
+                left_multi = aggregation["left_multi"]
+                right_multi = aggregation["right_multi"]
+
+                aggregated_diagram.left_multiplicity = left_multi
+                aggregated_diagram.right_multiplicity = right_multi
+            except KeyError:
+                pass
+
+            # Add the aggregated class to current class diagram
+            diagram.add_aggregated_class(aggregated_diagram)
+
     def evaluate(self):
         """
         Main evaluation method. This methods processes the tokens based on
@@ -229,6 +270,8 @@ class Interpreter:
             has_parent_class = False
 
         # Process the rest of the possible classes
+        self.add_optional_aggregation(main_diagram)
+
         while self.current_token:
             if not self.class_delimiter():
                 # Process class name, fields, and methods
@@ -239,45 +282,7 @@ class Interpreter:
                 diagram = Diagram(name, fields, methods)
 
                 # Check aggregation values
-                aggregation = self.aggregation()
-                if aggregation:
-                    aggregated_diagram = AggregationDiagram()
-
-                    try:
-                        name = aggregation["name"]
-                        aggregated_diagram.name = name
-                    except KeyError:
-                        pass
-
-                    try:
-                        fields = aggregation["fields"]
-                        aggregated_diagram.add_fields(fields)
-                    except KeyError:
-                        pass
-
-                    try:
-                        methods = aggregation["methods"]
-                        aggregated_diagram.add_methods(methods)
-                    except KeyError:
-                        pass
-
-                    try:
-                        instance_name = aggregation["instance_name"]
-                        aggregated_diagram.instance_name = instance_name
-                    except KeyError:
-                        pass
-
-                    try:
-                        left_multi = aggregation["left_multi"]
-                        right_multi = aggregation["right_multi"]
-
-                        aggregated_diagram.left_multiplicity = left_multi
-                        aggregated_diagram.right_multiplicity = right_multi
-                    except KeyError:
-                        pass
-
-                    # Add the aggregated class to current class diagram
-                    diagram.add_aggregated_class(aggregated_diagram)
+                self.add_optional_aggregation(diagram)
 
                 # If there is a parent class add the current class
                 # as a subclass

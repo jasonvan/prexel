@@ -296,4 +296,5 @@ class TestInterpreter(unittest.TestCase):
         with self.assertRaises(InterpreterException) as context:
             interpreter.evaluate()
 
-        self.assertEqual(context.exception.args[0], "Invalid Syntax")
+        self.assertEqual(context.exception.args[0],
+                         "There is no class name following the aggregation.")
