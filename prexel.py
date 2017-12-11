@@ -45,16 +45,25 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
 
         # Parse and interpret the tokens and create a diagram object
         try:
-            lexer = Lexer(easy_entry)
-            interpreter = Interpreter(lexer)
-            diagram = interpreter.evaluate()
+            full_diagram = None
+
+            for item in easy_entry.split("\n\n"):
+                if item:
+                    lexer = Lexer(item)
+                    interpreter = Interpreter(lexer)
+                    current_diagram = interpreter.evaluate()
+
+                    if full_diagram:
+                        full_diagram.merge(current_diagram)
+                    else:
+                        full_diagram = current_diagram
+
         except InterpreterException as e:
             self.view.show_popup("Invalid PREXEL syntax - {}".format(e),
                                  sublime.HIDE_ON_MOUSE_MOVE_AWAY)
         else:
             # Cache some values that are needed by other methods
-            # self.edit = edit
-            self.diagram = diagram
+            self.diagram = full_diagram
             self.easy_entry = easy_entry
             self.line = line
 
@@ -66,19 +75,26 @@ class GenerateUmlCommand(sublime_plugin.TextCommand):
             ], self.on_done)
 
     def on_done(self, index):
-        pretty_print = PrettyPrintEncoder().generate(self.diagram)
+        # TODO - uncomment this
+        # pretty_print = PrettyPrintEncoder().generate(self.diagram)
         source_code = SourceCodeEncoder().generate(self.diagram)
-        xmi = XMIEncoder().generate(self.diagram)
+        # TODO - uncomment this
+        # xmi = XMIEncoder().generate(self.diagram)
 
         if index == 0:
-            self.output_pretty_print(pretty_print)
+            # TODO - uncomment this
+            # self.output_pretty_print(pretty_print)
+            pass
         elif index == 1:
             self.create_files(source_code)
         elif index == 2:
-            self.output_pretty_print(pretty_print)
-            self.create_files(source_code)
+            pass
+            # TODO - uncomment this
+            # self.output_pretty_print(pretty_print)
+            # self.create_files(source_code)
 
-        xmi_files = ("sample-1", xmi)
+        # TODO - uncomment this
+        # xmi_files = ("sample-1", xmi)
         # self.create_files([xmi_files], ".xmi")
 
     def output_pretty_print(self, pretty_print):

@@ -31,11 +31,6 @@ class SourceCodeEncoder(Encoder):
 
     """
     def generate(self, diagram):
-        """
-        TODO change this to return an array of tuples,
-        with class_name, and contents
-        TODO comment this code
-        """
         classes = []
 
         classes.append(
@@ -45,23 +40,15 @@ class SourceCodeEncoder(Encoder):
         if diagram.sub_classes:
             for sub_class in diagram.sub_classes:
                 classes.append(
-                    (sub_class.name.lower(), SourceCodeEncoder.create_class(sub_class, diagram.name))
+                    (
+                        sub_class.name.lower(),
+                        SourceCodeEncoder.create_class(sub_class, diagram.name)
+                    )
                 )
 
                 self.generate_aggregated_classes(sub_class, classes)
-                #
-                # if sub_class.aggregated_classes:
-                #     for aggregated_class in diagram.aggregated_classes:
-                #         classes.append(
-                #             (aggregated_class.name.lower(), SourceCodeEncoder.create_class(aggregated_class))
-                #         )
 
         self.generate_aggregated_classes(diagram, classes)
-        # if diagram.aggregated_classes:
-        #     for aggregated_class in diagram.aggregated_classes:
-        #         classes.append(
-        #             (aggregated_class.name.lower(), SourceCodeEncoder.create_class(aggregated_class))
-        #         )
 
         return classes
 
@@ -69,7 +56,10 @@ class SourceCodeEncoder(Encoder):
         if diagram.aggregated_classes:
             for aggregated_class in diagram.aggregated_classes:
                 class_list.append(
-                    (aggregated_class.name.lower(), SourceCodeEncoder.create_class(aggregated_class))
+                    (
+                        aggregated_class.name.lower(),
+                        SourceCodeEncoder.create_class(aggregated_class)
+                    )
                 )
 
     @staticmethod
