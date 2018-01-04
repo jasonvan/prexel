@@ -56,7 +56,7 @@ class Persistence:
                     if hashcode in line:
                         easy_entry = line.split(":")[1].strip().replace("[!NL]", "\n")
         except FileNotFoundError:
-            pass  # TODO handle error
+            pass
 
         return easy_entry
 

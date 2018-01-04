@@ -41,8 +41,6 @@ class TestSourceCodeEncoderMain(unittest.TestCase):
                           parent=person,
                           inheritance=inheritance)
 
-        # TODO Employee should contain call to super().__init__() with value
-
         person_class = ("class Person:\n"
                         "    def __init__(self, name, age):\n"
                         "        self.name = name\n"
