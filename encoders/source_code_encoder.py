@@ -34,7 +34,7 @@ class SourceCodeEncoder(Encoder):
         classes = []
 
         classes.append(
-            (diagram.name.lower(), SourceCodeEncoder.create_class(diagram))
+            (diagram.name.lower(), self.create_class(diagram))
         )
 
         if diagram.sub_classes:
@@ -42,7 +42,7 @@ class SourceCodeEncoder(Encoder):
                 classes.append(
                     (
                         sub_class.name.lower(),
-                        SourceCodeEncoder.create_class(sub_class, diagram.name)
+                        self.create_class(sub_class, diagram.name)
                     )
                 )
 
@@ -58,12 +58,11 @@ class SourceCodeEncoder(Encoder):
                 class_list.append(
                     (
                         aggregated_class.name.lower(),
-                        SourceCodeEncoder.create_class(aggregated_class)
+                        self.create_class(aggregated_class)
                     )
                 )
 
-    @staticmethod
-    def create_class(diagram, extends=None):
+    def create_class(self, diagram, extends=None):
         """
         Generate a class from the provided diagram.
         Returns: a class string

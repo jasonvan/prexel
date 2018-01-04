@@ -212,6 +212,11 @@ class Interpreter:
         if aggregation:
             aggregated_diagram = AggregationDiagram()
 
+            # Need to clear out the fields and methods arrays as
+            # Sublime Text keeps the objects around
+            aggregated_diagram.fields = []
+            aggregated_diagram.methods = []
+
             try:
                 name = aggregation["name"]
                 aggregated_diagram.name = name
